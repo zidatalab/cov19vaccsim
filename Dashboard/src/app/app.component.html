@@ -1,0 +1,90 @@
+<mat-sidenav-container autosize="true" scrollable="false">
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button (click)="drawer.toggle()" mat-icon-button class="example-icon"
+        aria-label="Example icon-button with menu icon">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span>My Dashboard</span>
+      <span class="example-spacer"></span>
+      <a href="https://www.zi.de">
+        <img src="https://ziwebstorage.blob.core.windows.net/appradar/assets/logo_zi_small_grey_transparent.png"
+          style="height: 1.2rem;filter:brightness(120%);">
+      </a>
+
+    </mat-toolbar>
+    <main>
+      <section class="mat-typography">
+        <mat-drawer-container autosize>
+          <mat-drawer #drawer mode="push" position="end" autoFocus="false">
+            <div class="menucontainer">
+
+              <ng-container>
+                <p style="color:#1d96f3"><strong>Navigation</strong></p>
+              </ng-container>
+
+
+
+              <div>
+
+                <a mat-icon-button (click)="drawer.toggle()" href="/">
+                  <mat-icon class="icon">home</mat-icon>
+                  <span>Startseite</span>
+                </a>
+
+              </div>
+
+
+            </div>
+          </mat-drawer>
+          <mat-drawer-content>
+            <!-- Offline message-->
+            <div class="offlinemsg" *ngIf="false"><strong>Keine Internetverbindung</strong><br>Dieses Portal benötigt
+              eine aktive Internetverbindung.</div>
+            <router-outlet></router-outlet>
+          </mat-drawer-content>
+        </mat-drawer-container>
+      </section>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+
+<!-- Footer nur für Desktop Screen -->
+<footer>
+  <div class="darkbg">
+    <div fxLayout="column" fxLayoutGap="0.5rem">
+
+      <div fxLayout="column wrap" fxLayoutAlign="space-around start">
+        <div fxflex=28 fxHide.xs>
+          <p>
+            <mat-list style="color:white;">
+              <mat-list-item>
+                <p style="color:white;"><strong>Navigation</strong></p>
+              </mat-list-item>
+              <mat-list-item><a style="color:white;" href="https://www.zi.de/meta/impressum">Impressum</a>
+              </mat-list-item>
+              <mat-list-item><a style="color:white;"
+                  href="https://www.zi.de/footer/datenschutzhinweis">Datenschutzhinweise</a></mat-list-item>
+            </mat-list>
+
+          </p>
+
+        </div>
+
+        <div fxFlex fxLayout="column" fxLayoutAlign="space-between end">
+          <div fxFlex>
+            <br>
+          </div>
+          <div style="padding:0.5rem;text-align: center;">
+            <p>© 2020 Zentralinstitut für die kassenärztliche Versorgung in der Bundesrepublik
+              Deutschland</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+  </div>
+</footer>
