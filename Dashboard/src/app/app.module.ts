@@ -7,6 +7,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StartComponent } from './pages/start/start.component';
 import * as PlotlyJS from 'plotly.js/dist/plotly.js';
 import { PlotlyModule } from 'angular-plotly.js';
+import { FlexLayoutModule } from '@angular/flex-layout';
+
 
 PlotlyModule.plotlyjs = PlotlyJS;
 
@@ -20,7 +22,9 @@ PlotlyModule.plotlyjs = PlotlyJS;
     AppRoutingModule,
     MaterialModule,
     BrowserAnimationsModule,
-    PlotlyModule
+    PlotlyModule,
+    FlexLayoutModule
+    
   ],
   providers: [],
   bootstrap: [AppComponent]
