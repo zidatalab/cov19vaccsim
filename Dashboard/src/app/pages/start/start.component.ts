@@ -1,3 +1,5 @@
+import { HttpClient } from '@angular/common/http';
+import { ValueTransformer } from '@angular/compiler/src/util';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,25 +9,39 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StartComponent implements OnInit {
 
-  constructor() { }
+  constructor(private http:HttpClient) { }
 
   testlayout : any;
+  testconfig={};
   testdata :any;
+  testtable:any;
   colorblue = "#1d96f3";
   colorgreen = "#8bc34a";
   colororange = "#ff7043";
 
 
   ngOnInit(): void {
-this.testdata=[
-  { name: 'Testname 1', x: [1, 2, 3], y: [2, 6, 3], type: 'scatter', mode: 'lines+points', 
-  marker: {color: this.colorgreen} },
-  { name: 'Testname 2', x: [1, 2, 3], y: [2, 5, 3], type: 'bar' ,marker: {    color: this.colorblue  } },
-  { name: 'Testname 3', x: [1, 2, 3], y: [2.3, 3, 2], type: 'bar' , marker: {    color: this.colororange  } },
-];
+
+this.http.get('https://www.zidatasciencelab.de/covid19dashboard/data/tabledata/bundeslaender_table.json')
+.subscribe(data=>{this.testtable=data;
+  console.log(this.testtable);
+  this.testdata=[
+    { name: 'R-Wert', x: this.getValues(this.testtable,"Bundesland") , y: this.getValues(this.testtable,"R(t)"), type: 'bar' ,marker: {    color: this.colorblue  } },
+  ];
+})
+
 
 this.testlayout= {title: 'A Fancy Plot' };
   
   }
+
+getValues(array, key) {
+   let values = [];
+   for (let item of array){
+     values.push(item[key]);
+   }
+   return values;
+}
+
 
 }

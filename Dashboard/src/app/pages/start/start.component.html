@@ -1,13 +1,17 @@
 
 
 
-<div class="container" fxLayout="row wrap" fxLayoutGap="10px" fxLayoutAllign="space-between stretch">
-    <div fxFlex=50>
-    <plotly-plot [data]="this.testdata" [layout]="this.testlayout"></plotly-plot>
+<div class="container" fxLayout="row wrap" fxLayoutGap="10px" fxLayoutAllign="space-around">
+    <div fxFlex=40 fxFlex.lt-md=100>
+        <div style="display: inline-flexbox;">
+    <plotly-plot [data]="this.testdata" [layout]="this.testlayout" [config]="this.testconfig" ></plotly-plot>
     </div>
-    <div fxFlex>
+    </div>
+    <div fxFlex=40 fxFlex.lt-md=100 >
+        <div style="min-width: 300px;">
         <h2>Fancy Description</h2>
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Id deleniti facilis unde nihil error aliquam cum, inventore quo omnis eum dolores doloribus est ad dolore provident voluptate consectetur quae non blanditiis. Qui commodi officiis molestias et pariatur maxime eveniet, sint earum quia voluptate natus nulla provident autem amet eum asperiores vitae. Dolores inventore reiciendis quas culpa explicabo aliquam labore ad recusandae non officiis, impedit tempora iste in optio asperiores amet atque nesciunt delectus error modi veritatis maxime odio? Aliquid vero nihil deleniti accusamus praesentium veritatis, ratione ipsa, ullam perferendis aut minus quaerat voluptatum tempore earum suscipit ab? Ipsam, modi voluptatem.</p>
+        </div>
     </div>
 </div>
 
