@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { ValueTransformer } from '@angular/compiler/src/util';
 import { Component, OnInit } from '@angular/core';
+// import {Observable} from 'rxjs/Observable'
 
 @Component({
   selector: 'app-start',
@@ -21,17 +22,27 @@ export class StartComponent implements OnInit {
 
 
   ngOnInit(): void {
-
+this.testconfig = {displayModeBar: false,
+responsive:true};
 this.http.get('https://www.zidatasciencelab.de/covid19dashboard/data/tabledata/bundeslaender_table.json')
 .subscribe(data=>{this.testtable=data;
   console.log(this.testtable);
   this.testdata=[
-    { name: 'R-Wert', x: this.getValues(this.testtable,"Bundesland") , y: this.getValues(this.testtable,"R(t)"), type: 'bar' ,marker: {    color: this.colorblue  } },
+    { name: 'R-Wert', 
+    y: this.getValues(this.testtable,"Bundesland") , 
+    x: this.getValues(this.testtable,"R(t)"), type: 'bar' ,marker: {    color: this.colorblue  } ,
+    orientation: 'h'
+  },
   ];
 })
 
 
-this.testlayout= {title: 'A Fancy Plot' };
+this.testlayout= {title: 'R-Wert COVID-19 nach Bundesland',
+yaxis: {
+  type: 'category',
+  title: '',
+  automargin: true
+}, };
   
   }
 

@@ -79,3 +79,8 @@
  ::ng-deep .mat-drawer-inner-container {
    overflow: hidden!important;
 }
+
+.mat-toolbar.mat-primary {
+  background: #000000!important;
+  color: white;
+}
