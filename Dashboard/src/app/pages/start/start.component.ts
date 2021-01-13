@@ -18,6 +18,7 @@ export class StartComponent implements OnInit {
   testtimeseriesdata:any;
   testplot1:any;
   testplot2:any;
+  testplot3:any;
   barlayout:any;
   hbarlayout:any;
   mainconfig:any;
@@ -57,7 +58,7 @@ this.hbarlayout= {
 
 this.http.get('https://www.zidatasciencelab.de/covid19dashboard/data/tabledata/bundeslaender_table.json')
 .subscribe(data=>{this.testtable=data;
-  this.wert = this.filterArray(this.testtable,"Bundesland","Gesamt");
+  this.wert = this.filterArray(this.testtable,"Bundesland","Gesamt")[0];
   console.log("Wert",this.wert)  
   console.log("Table",this.testtable)  
   this.testplot1 = this.make_plotdata(this.testtable,"Bundesland",["R(t)"],"bar");
@@ -71,7 +72,8 @@ this.http.get('https://www.zidatasciencelab.de/covid19dashboard/data/tabledata/b
 
 this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/plotdata/plot_rwert_bund.json')
 .subscribe(data=>{this.testtimeseriesdata=data;
-  console.log("Plot",this.testtimeseriesdata); 
+  console.log("Plot",this.filterArray(this.testtimeseriesdata,"name","Gesamt")); 
+  this.testplot3 = this.make_plotdata(this.filterArray(this.testtimeseriesdata,"name","Gesamt"),"date",["R"],"lines");
 })
 
 
@@ -88,8 +90,7 @@ this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/mast
     }
   }
 
-make_plotdata(source=[], xaxis="",ylist=[],type="bar"){
-
+make_plotdata(source=[], xaxis="",ylist=[],type="bar",colors=["#004c8c","#0277bd","#00b248","#00e676","7f0000","#b71c1c"]){
   let xdata = this.getValues(source,xaxis)
   let list = []
   let i = 0 
@@ -97,8 +98,14 @@ make_plotdata(source=[], xaxis="",ylist=[],type="bar"){
   let trace = this.make_trace(xdata ,this.getValues(source,ylist[i]),ylist[i],type=type)
    if (type=="hbar"){
     trace = this.make_trace(this.getValues(source,ylist[i]),xdata,ylist[i],type="bar")
-    trace["orientation"]="h"
+    trace["orientation"]="h"    
    }
+   if (type=="bar" || type=="bar" || type=="scatter" ){
+    trace["marker"]= {
+      color: colors[i]      
+    }
+   }
+
    list.push(trace)
    i = i+1
   }
@@ -116,7 +123,13 @@ getValues(array, key) {
 }
 
 filterArray(array,key,value){
-  return array.find(i => i[key] === value);
+  let i =0
+  let result = []
+  for (let item of array){
+    if (item[key]==value){result.push(item)};
+    i = i+1
+  }
+  return result
 }
 
 

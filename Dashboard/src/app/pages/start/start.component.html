@@ -118,6 +118,34 @@
 
     </div>
 
+    <div fxFlex=100>
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>
+                    R-Wert im Trend
+                </mat-card-title>
+                <mat-card-subtitle>
+                    Datenbasis: RKI
+                </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+
+                <plotly-plot 
+                [data]="this.testplot3"                
+                ></plotly-plot> 
+
+            </mat-card-content>
+            <mat-card-footer>
+                <div class="padding lightgreycolor">
+                    <p class="mat-caption">
+                        Legende:<br>Keine bisher
+                    </p>
+                </div>
+            </mat-card-footer>
+        </mat-card>
+
+    </div>
+
     <div fxFlex fxFlex.lt-md=100>
         <div style="min-width: 300px;">
             <h2>Fancy Description</h2>
