@@ -272,7 +272,13 @@ color: white;
   color: grey !important;
 }
 
+.padding {
+padding:.5rem;
+}
 
+.fullpadding {
+  padding:1rem;
+  }
 a,a:visited {
   color: mat-color($primary) ;
 }
@@ -290,3 +296,20 @@ a:hover{
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.green {
+  
+  background-color: greenyellow;
+  color: black;
+}
+
+.yellow {
+  background-color: orange;
+  color: black;
+
+}
+
+.red {
+  background-color: crimson;
+  color: black;
+}

@@ -12,39 +12,94 @@ export class StartComponent implements OnInit {
 
   constructor(private http:HttpClient) { }
 
-  testlayout : any;
-  testconfig={};
   testdata :any;
   testtable:any;
+  testplot:any;
+  barlayout:any;
+  hbarlayout:any;
+  mainconfig:any;
   colorblue = "#1d96f3";
   colorgreen = "#8bc34a";
   colororange = "#ff7043";
-
+  wert : any;
 
   ngOnInit(): void {
-this.testconfig = {displayModeBar: false,
-responsive:true};
+// see https://github.com/plotly/plotly.js/blob/master/src/plot_api/plot_config.js
+this.mainconfig = {
+  displayModeBar: false,
+  scrollZoom: false,
+  autosizable:false,
+  locale: 'de',
+  doubleClick: 'reset+autosize',
+  showAxisDragHandles:false,
+  showAxisRangeEntryBoxes:false,
+  showTips:true,
+  responsive:true
+};
+
+this.barlayout= {
+    xaxis:{fixedrange:true, type: 'category'},
+    yaxis: {fixedrange:true,title: '',automargin: true},
+    autosize: false,padding:0,      
+    margin: {l: 0,r: 100,b: 50,t: 0}, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
+    };
+      
+this.hbarlayout= {
+      yaxis:{fixedrange:true, type: 'category'},
+      xaxis: {fixedrange:true,title: '',automargin: true},
+      autosize: false,padding:0,      
+      margin: {l: 0,r: 100,b: 50,t: 0}, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
+      };
+        
+
 this.http.get('https://www.zidatasciencelab.de/covid19dashboard/data/tabledata/bundeslaender_table.json')
 .subscribe(data=>{this.testtable=data;
-  console.log(this.testtable);
-  this.testdata=[
-    { name: 'R-Wert', 
-    y: this.getValues(this.testtable,"Bundesland") , 
-    x: this.getValues(this.testtable,"R(t)"), type: 'bar' ,marker: {    color: this.colorblue  } ,
-    orientation: 'h'
-  },
-  ];
+  this.wert = this.filterArray(this.testtable,"Bundesland","Gesamt");
+  console.log("Wert",this.wert)  
+  console.log("Table",this.testtable)  
+  console.log("Plotly bar",this.make_plotdata(this.testtable,"Bundesland",["R(t)"],"bar"))  
+  console.log("Plotly hbar",this.make_plotdata(this.testtable,"Bundesland",["R(t)"],"hbar"))  
+  
 })
 
 
-this.testlayout= {title: 'R-Wert COVID-19 nach Bundesland',
-yaxis: {
-  type: 'category',
-  title: '',
-  automargin: true
-}, };
-  
+this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/plotdata/plot_rwert_bund.json')
+.subscribe(data=>{this.testplot=data;
+  console.log("Plot",this.testplot); 
+})
+
+
+
   }
+
+
+  make_trace(xdata= [] ,ydata = [],name:string,type=""){
+    return {
+      x: xdata,
+      y: ydata,
+      name: name,
+      type: type
+    }
+  }
+
+make_plotdata(source=[], xaxis="",ylist=[],type="bar"){
+
+  let xdata = this.getValues(source,xaxis)
+  let list = []
+  let i = 0 
+  for (let name in ylist) {
+  let trace = this.make_trace(xdata ,this.getValues(source,ylist[i]),ylist[i],type=type)
+   if (type=="hbar"){
+    trace = this.make_trace(this.getValues(source,ylist[i]),xdata,ylist[i],type="bar")
+    trace["orientation"]="h"
+   }
+   list.push(trace)
+   i = i+1
+  }
+  return list
+}
+
+
 
 getValues(array, key) {
    let values = [];
@@ -53,6 +108,11 @@ getValues(array, key) {
    }
    return values;
 }
+
+filterArray(array,key,value){
+  return array.find(i => i[key] === value);
+}
+
 
 
 }
