@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { ValueTransformer } from '@angular/compiler/src/util';
 import { Component, OnInit } from '@angular/core';
+import * as L from 'leaflet';
 // import {Observable} from 'rxjs/Observable'
+
 
 @Component({
   selector: 'app-start',
@@ -20,11 +22,11 @@ export class StartComponent implements OnInit {
   testplot2:any;
   testplot3:any;
   barlayout:any;
+  blkarte:any;
   hbarlayout:any;
+  tslayout:any;
   mainconfig:any;
-  colorblue = "#1d96f3";
-  colorgreen = "#8bc34a";
-  colororange = "#ff7043";
+  colorscheme= ["#004c8c","#0277bd","#58a5f0","#b71c1c","#7f0000"]
   wert : any;
 
   ngOnInit(): void {
@@ -42,17 +44,25 @@ this.mainconfig = {
 };
 
 this.barlayout= {
-    xaxis:{fixedrange:true, type: 'category'},
+    xaxis:{fixedrange:false, type: 'category'},
     yaxis: {fixedrange:true,title: '',automargin: true},
     autosize: false,padding:0,      
     margin: {l: 0,r: 100,b: 100,t: 0}, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
     };
+
+this.tslayout= {
+      xaxis:{fixedrange:false},
+      yaxis: {fixedrange:true,title: '',automargin: true},
+      autosize: false,padding:0,      
+      margin: {l: 0,r: 0,b: 20,t: 0}, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
+      };
+        
       
 this.hbarlayout= {
-      yaxis:{fixedrange:true, type: 'category',},
+      yaxis:{fixedrange:false, type: 'category',},
       xaxis: {fixedrange:true,title: '',automargin: true},
       autosize: false,padding:0,      
-      margin: {l: 200,r: 0,b: 0,t: 0}, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
+      margin: {l: 200,r: 0,b: 20,t: 0}, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
       };
         
 
@@ -67,6 +77,10 @@ this.http.get('https://www.zidatasciencelab.de/covid19dashboard/data/tabledata/b
   console.log("Plotly hbar",this.testplot2)  
   
 })
+
+// Import Map data
+this.http.get('/assets/data/bl.geojson')
+.subscribe(data=>{this.blkarte;console.log("Karte",data);})
 
 
 
@@ -90,7 +104,7 @@ this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/mast
     }
   }
 
-make_plotdata(source=[], xaxis="",ylist=[],type="bar",colors=["#004c8c","#0277bd","#00b248","#00e676","7f0000","#b71c1c"]){
+make_plotdata(source=[], xaxis="",ylist=[],type="bar",colors=this.colorscheme){
   let xdata = this.getValues(source,xaxis)
   let list = []
   let i = 0 
