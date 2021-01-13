@@ -1,8 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { ValueTransformer } from '@angular/compiler/src/util';
 import { Component, OnInit } from '@angular/core';
-import * as L from 'leaflet';
-// import {Observable} from 'rxjs/Observable'
 
 
 @Component({

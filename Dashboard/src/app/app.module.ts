@@ -9,14 +9,15 @@ import * as PlotlyJS from 'plotly.js/dist/plotly.js';
 import { PlotlyModule } from 'angular-plotly.js';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpClientModule } from '@angular/common/http';
-
+import { MapComponent } from './components/leafletmap/map/map.component';
 
 PlotlyModule.plotlyjs = PlotlyJS;
 
 @NgModule({
   declarations: [
     AppComponent,
-    StartComponent
+    StartComponent,
+    MapComponent
   ],
   imports: [
     BrowserModule,
@@ -25,7 +26,7 @@ PlotlyModule.plotlyjs = PlotlyJS;
     HttpClientModule,
     BrowserAnimationsModule,
     PlotlyModule,
-    FlexLayoutModule
+    FlexLayoutModule  
     
   ],
   providers: [],
