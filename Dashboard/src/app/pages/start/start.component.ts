@@ -14,6 +14,7 @@ export class StartComponent implements OnInit {
   testdata :any;
   testtable:any;
   testbardata:any
+  altmap:any;
   testtimeseriesdata:any;
   testplot1:any;
   testplot2:any;
@@ -27,6 +28,11 @@ export class StartComponent implements OnInit {
   wert : any;
 
   ngOnInit(): void {
+// Import Map data
+this.http.get('/assets/data/bl.geojson')
+.subscribe(data=>{this.blkarte=data;})
+
+
 // see https://github.com/plotly/plotly.js/blob/master/src/plot_api/plot_config.js
 this.mainconfig = {
   displayModeBar: false,
@@ -66,24 +72,16 @@ this.hbarlayout= {
 this.http.get('https://www.zidatasciencelab.de/covid19dashboard/data/tabledata/bundeslaender_table.json')
 .subscribe(data=>{this.testtable=data;
   this.wert = this.filterArray(this.testtable,"Bundesland","Gesamt")[0];
-  console.log("Wert",this.wert)  
-  console.log("Table",this.testtable)  
   this.testplot1 = this.make_plotdata(this.testtable,"Bundesland",["R(t)"],"bar");
-  console.log("Plotly bar",this.testplot1)  
   this.testplot2 = this.make_plotdata(this.testtable,"Bundesland",["R(t)"],"hbar");
-  console.log("Plotly hbar",this.testplot2)  
+
   
 })
-
-// Import Map data
-this.http.get('/assets/data/bl.geojson')
-.subscribe(data=>{this.blkarte;console.log("Karte",data);})
 
 
 
 this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/plotdata/plot_rwert_bund.json')
 .subscribe(data=>{this.testtimeseriesdata=data;
-  console.log("Plot",this.filterArray(this.testtimeseriesdata,"name","Gesamt")); 
   this.testplot3 = this.make_plotdata(this.filterArray(this.testtimeseriesdata,"name","Gesamt"),"date",["R"],"lines");
 })
 

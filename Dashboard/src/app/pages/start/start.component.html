@@ -45,7 +45,7 @@
             <mat-card-content>
 
                 <plotly-plot 
-                [data]="[{x: ['A','B','C'],  y: [15,20,30,0], name: 'R(t)', type: 'bar'}]"
+                [data]="[{x: ['A','B','C'],  y: [15,20,30,0], name: 'Test', type: 'bar'}]"
                 [layout]="this.barlayout" [config]="this.mainconfig"
                 ></plotly-plot> 
 
@@ -159,7 +159,7 @@
             <mat-card-content>
 
                 <div>
-                    <app-map></app-map>
+                    <app-map [data]="this.blkarte"></app-map>
                 </div> 
 
             </mat-card-content>
