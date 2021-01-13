@@ -14,7 +14,10 @@ export class StartComponent implements OnInit {
 
   testdata :any;
   testtable:any;
-  testplot:any;
+  testbardata:any
+  testtimeseriesdata:any;
+  testplot1:any;
+  testplot2:any;
   barlayout:any;
   hbarlayout:any;
   mainconfig:any;
@@ -41,14 +44,14 @@ this.barlayout= {
     xaxis:{fixedrange:true, type: 'category'},
     yaxis: {fixedrange:true,title: '',automargin: true},
     autosize: false,padding:0,      
-    margin: {l: 0,r: 100,b: 50,t: 0}, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
+    margin: {l: 0,r: 100,b: 100,t: 0}, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
     };
       
 this.hbarlayout= {
-      yaxis:{fixedrange:true, type: 'category'},
+      yaxis:{fixedrange:true, type: 'category',},
       xaxis: {fixedrange:true,title: '',automargin: true},
       autosize: false,padding:0,      
-      margin: {l: 0,r: 100,b: 50,t: 0}, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
+      margin: {l: 200,r: 0,b: 0,t: 0}, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
       };
         
 
@@ -57,15 +60,18 @@ this.http.get('https://www.zidatasciencelab.de/covid19dashboard/data/tabledata/b
   this.wert = this.filterArray(this.testtable,"Bundesland","Gesamt");
   console.log("Wert",this.wert)  
   console.log("Table",this.testtable)  
-  console.log("Plotly bar",this.make_plotdata(this.testtable,"Bundesland",["R(t)"],"bar"))  
-  console.log("Plotly hbar",this.make_plotdata(this.testtable,"Bundesland",["R(t)"],"hbar"))  
+  this.testplot1 = this.make_plotdata(this.testtable,"Bundesland",["R(t)"],"bar");
+  console.log("Plotly bar",this.testplot1)  
+  this.testplot2 = this.make_plotdata(this.testtable,"Bundesland",["R(t)"],"hbar");
+  console.log("Plotly hbar",this.testplot2)  
   
 })
 
 
+
 this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/plotdata/plot_rwert_bund.json')
-.subscribe(data=>{this.testplot=data;
-  console.log("Plot",this.testplot); 
+.subscribe(data=>{this.testtimeseriesdata=data;
+  console.log("Plot",this.testtimeseriesdata); 
 })
 
 
