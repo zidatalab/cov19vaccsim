@@ -114,13 +114,26 @@ initMap(): void {
 
   // Example 4 use provided feature
   let geojsonFeature:FeatureCollection = this.basemap;
-  let myStyle = {
-      color: 'red',
+  let colors=['#800026','#BD0026','#E31A1C','#FC4E2A','#FD8D3C','#FEB24C','#FED976' ,'#FFEDA0']
+  let cutoffs=[0,1e6,5e6,8e6,10e6,15e6,20e6,30e6]
+  let propname = "EWZ";
+  let myStyle = function (feature) {
+    console.log("Feature",feature.properties);
+    let i = 0;
+    let thecolor =colors[i];
+    for (let colorcode of colors){
+    if (feature.properties[propname]>cutoffs[i]){
+         thecolor = colorcode;        
+      };
+      i = i+1;
+     }
+    let result = {
+      color: thecolor,
       weight: 1.5,
       opacity: 1,
       fillOpacity: 0.3
-      ,
    };
+    return result};
    let info;
    info =  L.control.layers();
 
@@ -140,13 +153,14 @@ info.update = function (props) {
 info.addTo(mymap);
 
    const featLayer = L.geoJSON(geojsonFeature, 
-    {style:myStyle,
+    {style: myStyle,
       onEachFeature: (feature, layer) => (
         layer.on({
           mouseover: (e) => (this.highlightFeature(info,e)),
           mouseout: (e) => (this.resetFeature(info,e))  ,
           click: (e) => (this.zoomToFeature(mymap,e))          
-          }))});
+          })
+          )});
 
    featLayer.addTo(mymap);
 
@@ -178,6 +192,7 @@ info.addTo(mymap);
     map.fitBounds(e.target.getBounds());
 }
   
+
 
 }
 
