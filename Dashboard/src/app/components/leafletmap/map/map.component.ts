@@ -60,7 +60,7 @@ initMap(): void {
   
   // Openstreetmap Tiles
   const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', 
-  {maxZoom: 19, color:"white", opacity: 0.3 ,  
+  {maxZoom: 19,opacity: 0.3 ,  
   attribution: 'Kartenmaterial &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'});
   tiles.addTo(mymap);
 
@@ -101,17 +101,83 @@ initMap(): void {
   // const featLayer = L.geoJSON(geojsonFeature, {style:myStyle});
   // featLayer.addTo(mymap);
 
-  // Example 3 use provided feature
+  // Example 3 use provided basemap
+  // let geojsonFeature:FeatureCollection = this.basemap;
+  // let myStyle = {
+  //    "color": 'red',
+  //    "weight": 1.5,
+  //    "opacity": 1
+  // };
+
+  // const featLayer = L.geoJSON(geojsonFeature, {style:myStyle});
+  // featLayer.addTo(mymap);
+
+  // Example 4 use provided feature
   let geojsonFeature:FeatureCollection = this.basemap;
   let myStyle = {
-     "color": 'red',
-     "weight": 1.5,
-     "opacity": 1
+      color: 'red',
+      weight: 1.5,
+      opacity: 1,
+      fillOpacity: 0.3
+      ,
+   };
+   let info;
+   info =  L.control.layers();
+
+    info.onAdd = function (map) {
+    this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+    this.update();
+    return this._div;
+    };
+
+// method that we will use to update the control based on feature properties passed
+info.update = function (props) {
+    this._div.innerHTML = '<h3>' + 'Einwohnerzahl'+'</h3>' +      (props ?
+        '<b>' + props.Bundesland + '</b><br />' + props.EWZ + ' Einwohner'
+        : 'Weitere Informationen durch Mausberührung');
+};
+
+info.addTo(mymap);
+
+   const featLayer = L.geoJSON(geojsonFeature, 
+    {style:myStyle,
+      onEachFeature: (feature, layer) => (
+        layer.on({
+          mouseover: (e) => (this.highlightFeature(info,e)),
+          mouseout: (e) => (this.resetFeature(info,e))  ,
+          click: (e) => (this.zoomToFeature(mymap,e))          
+          }))});
+
+   featLayer.addTo(mymap);
+
+   
+  
   };
 
-  const featLayer = L.geoJSON(geojsonFeature, {style:myStyle});
-  featLayer.addTo(mymap);
-  };
+  highlightFeature(info,e)  {
+    const layer = e.target;
+    layer.setStyle({
+      weight: 2,
+      opacity: 1.0,
+      fillOpacity: 1.0      
+    });
+    info.update(layer.feature.properties);
+  }
+  
+  resetFeature(info,e)  {
+    const layer = e.target;
+    layer.setStyle({
+      weight: 1.5,
+      opacity: 1,
+      fillOpacity: 0.3,
+    });
+    info.update();
+  }
 
+  zoomToFeature(map,e) {
+    map.fitBounds(e.target.getBounds());
+}
+  
 
 }
+
