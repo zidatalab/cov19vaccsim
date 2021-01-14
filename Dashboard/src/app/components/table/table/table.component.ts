@@ -1,4 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { AfterViewInit, Component, OnInit, Input ,ViewChild} from '@angular/core';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatPaginator} from '@angular/material/paginator';
 
 @Component({
   selector: 'app-table',
@@ -7,10 +10,24 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class TableComponent implements OnInit {
   @Input() data:any;
+  @Input() columns:any;
+  datasource:any;
+  displayedColumns:String[];
+
+  
   constructor() { }
 
-  ngOnInit(): void {
-    console.log("Daten",data);
+
+  ngOnInit(){
+  this.displayedColumns =  this.columns;
+  this.datasource = new MatTableDataSource(this.data); 
+  }
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  ngAfterViewInit() {
+    this.datasource.sort = this.sort;
+    this.datasource.paginator = this.paginator;    
   }
 
 }

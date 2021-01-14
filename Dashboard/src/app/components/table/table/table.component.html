@@ -1,1 +1,13 @@
-<p>table works!</p>
+<mat-table [dataSource]="this.datasource" matSort class="mat-elevation-z0">
+
+ <ng-container *ngFor="let thecol of displayedColumns">
+  <ng-container [matColumnDef]="thecol">
+    <mat-header-cell *matHeaderCellDef mat-sort-header> {{thecol}} </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element[thecol]}} </mat-cell >
+  </ng-container>
+</ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>
+<mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
