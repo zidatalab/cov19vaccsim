@@ -60,7 +60,8 @@ initMap(): void {
   
   // Openstreetmap Tiles
   const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', 
-  {maxZoom: 19, attribution: 'Kartenmaterial &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'});
+  {maxZoom: 19, color:"white", opacity: 0.3 ,  
+  attribution: 'Kartenmaterial &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'});
   tiles.addTo(mymap);
 
   // Example 1:  // Markers
@@ -104,14 +105,11 @@ initMap(): void {
   let geojsonFeature:FeatureCollection = this.basemap;
   let myStyle = {
      "color": 'red',
-     "weight": 5,
-     "opacity": 0.65
+     "weight": 1.5,
+     "opacity": 1
   };
 
-  const featLayer = L.geoJSON(geojsonFeature);
-  console.log("basemap", this.basemap);
-  console.log("Feature", geojsonFeature);
-  console.log("FeatureLayer", featLayer);
+  const featLayer = L.geoJSON(geojsonFeature, {style:myStyle});
   featLayer.addTo(mymap);
   };
 
