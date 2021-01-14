@@ -65,9 +65,7 @@ export class PlotComponent implements OnInit {
     };
   }
 
-  console.log(this.data,this.xvalue,this.outcomes,this.outcomes.length,this.plotlytype);
   this.plotdata = this.make_plotdata(this.data,this.xvalue,this.outcomes,this.plotlytype);
-  console.log(this.plotdata)
   }
 
   make_trace(xdata= [] ,ydata = [],name:string,type=""){
