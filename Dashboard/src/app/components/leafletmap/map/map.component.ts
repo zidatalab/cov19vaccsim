@@ -22,6 +22,7 @@ export class MapComponent implements OnInit {
   @Input() feature:string;
   @Input() colorscale:any;
   @Input() cutofflist:any;
+  @Input() customlabels:any;
   @Input() id:string;
   
   public map;
@@ -33,9 +34,11 @@ export class MapComponent implements OnInit {
     if (!this.Zoom){this.Zoom=5;};
     if (!this.center){this.center=[51.948 , 10.265];};
     if (!this.opacity){this.opacity=.6;};
+    if (!this.customlabels){this.customlabels=[];};
     if (!this.colorscale){this.colorscale=['#800026','#BD0026','#E31A1C','#FC4E2A','#FD8D3C','#FEB24C','#FED976' ,'#FFEDA0'];};
     console.log("MAP",this.basemap);
     console.log("DATA",this.data);
+
   }
   ngAfterViewInit(): void {
     // Import Map data
@@ -79,11 +82,11 @@ initMap(): void {
   let propname = this.feature;
   let theid = this.id;
   let thedata = this.data;
+  let theopacity = this.opacity;
   let thefilter = this.filterArray;
   let myStyle = function (feature) {
     let byvalue = feature.properties[theid];
     let thevalue = thefilter(thedata,theid,byvalue)[propname]; // feature.properties[propname];
-    console.log(theid,byvalue,thevalue);
     let i = 0;
     let thecolor =colors[i];
     for (let colorcode of colors){
@@ -96,10 +99,10 @@ initMap(): void {
       color: thecolor,
       weight: 1.5,
       opacity: 1,
-      fillOpacity: 0.3
+      fillOpacity: theopacity
    };
     return result};
-   // method that we will use to update the control based on feature properties passed
+   // Infobox
    let info;
    info =  L.control.layers();
 
@@ -111,11 +114,16 @@ initMap(): void {
 
 
 info.update = function (props,maptitle=this.maptitle) {
-    this._div.innerHTML = (props ? props[theid]: "");
+    this._div.innerHTML = (props ? props[theid]: "") + '<br>';
+    let labelvalue = "";
+    // labelvalue = thefilter(thedata,theid,props[theid])[propname];
+    this._div.innerHTML += (props ? propname+"="+''+labelvalue:"");
+
 };
 
 info.addTo(mymap);
 
+// Add Features/Polygons to Map
    const featLayer = L.geoJSON(geojsonFeature, 
     {style: myStyle,
       onEachFeature: (feature, layer) => (
@@ -126,7 +134,36 @@ info.addTo(mymap);
           })
           )});
 
-   featLayer.addTo(mymap);
+featLayer.addTo(mymap);
+
+// Add Legend to Map
+var legend = L.control.layers();
+let labels = this.customlabels;
+legend.onAdd = function (map) {
+
+    var div = L.DomUtil.create('div', 'info legend')    ;
+    
+    div.innerHTML += '<p><strong>'+propname+'</strong></p>';
+    
+
+    // loop through our density intervals and generate a label with a colored square for each interval
+    for (var i = 0; i < cutoffs.length; i++) {
+        if (labels.length==cutoffs.length){
+        div.innerHTML +=
+            '<i style="background-color:' + colors[i] + ';">&nbsp;&nbsp;&nbsp;</i> ' +
+            labels[i];
+        }
+        else {
+          div.innerHTML +=
+          '<i style="background-color:' + colors[i] + ';">&nbsp;&nbsp;&nbsp;</i> ' +
+          cutoffs[i] + (cutoffs[i + 1] ? ' bis unter ' + cutoffs[i + 1] + '<br>' : '+');
+        }
+    }
+
+    return div;
+};
+
+legend.addTo(mymap);
 
    
   
@@ -166,5 +203,11 @@ filterArray(array,key,value){
   return result;
 }
 
+/* updategeojson(geojson,data,id){
+  for (let item of geojson){
+    let newitem = this.filterArray(data,id,item[id]);
+    item.properties = newitem;
+  }
+} */
 }
 

@@ -90,7 +90,7 @@ this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/mast
   }
 
 
-  make_trace(xdata= [] ,ydata = [],name:string,type=""){
+make_trace(xdata= [] ,ydata = [],name:string,type=""){
     return {
       x: xdata,
       y: ydata,

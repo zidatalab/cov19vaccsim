@@ -10,6 +10,8 @@ import { PlotlyModule } from 'angular-plotly.js';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpClientModule } from '@angular/common/http';
 import { MapComponent } from './components/leafletmap/map/map.component';
+import { PlotComponent } from './components/plotly/plot/plot.component';
+import { TableComponent } from './components/table/table/table.component';
 
 PlotlyModule.plotlyjs = PlotlyJS;
 
@@ -17,7 +19,9 @@ PlotlyModule.plotlyjs = PlotlyJS;
   declarations: [
     AppComponent,
     StartComponent,
-    MapComponent
+    MapComponent,
+    PlotComponent,
+    TableComponent
   ],
   imports: [
     BrowserModule,

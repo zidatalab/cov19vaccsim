@@ -73,7 +73,7 @@
             <mat-card-content *ngIf="this.testplot2">
 
                 <plotly-plot 
-                [data]="this.testplot1"
+                [data]="this.testplot1" 
                 [layout]="this.barlayout" [config]="this.mainconfig"
                 ></plotly-plot> 
 
@@ -150,7 +150,7 @@
         <mat-card>
             <mat-card-header>
                 <mat-card-title>
-                    Karte des R-Wertes nach Bundesland
+                    7-Tages-Inzidenz nach Bundesland
                 </mat-card-title>
                 <mat-card-subtitle>
                     Datenbasis: RKI
@@ -159,9 +159,9 @@
             <mat-card-content *ngIf="this.blkarte">
 
                 <div >
-                    <app-map maptitle="Testkarte" feature="7-Tage-Inzidenz" id="Bundesland"
-                    [cutofflist]="[0,7,20,50,100,150,200,250,1500]"
-                    
+                    <app-map maptitle="Inzidenz nach Bundesland" feature="7-Tage-Inzidenz" id="Bundesland"
+                    [cutofflist]="[0,20,50,150,200,300]" opacity=.8
+                    [colorscale]="['green','yellow','orange','red','darkred','purple'                    ]"
                     [basemap]="this.blkarte" [data]="this.testtable"></app-map>
                 </div> 
 
