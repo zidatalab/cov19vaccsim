@@ -13,15 +13,29 @@ import { Feature,FeatureCollection,GeoJsonObject,GeoJsonTypes } from 'geojson';
 })
 export class MapComponent implements OnInit {
   @Input() data:any;
+  @Input() maptitle:String;
   @Input() Outcome:String;
   @Input() Zoom:number;
   @Input() basemap:any;
+  @Input() center:any;
+  @Input() opacity:number;
+  @Input() feature:string;
+  @Input() colorscale:any;
+  @Input() cutofflist:any;
+  @Input() id:string;
   
   public map;
   constructor(private http:HttpClient) { }
 
   ngOnInit(): void {
-    
+    // Init vars
+    if (!this.maptitle){this.maptitle="";};
+    if (!this.Zoom){this.Zoom=5;};
+    if (!this.center){this.center=[51.948 , 10.265];};
+    if (!this.opacity){this.opacity=.6;};
+    if (!this.colorscale){this.colorscale=['#800026','#BD0026','#E31A1C','#FC4E2A','#FD8D3C','#FEB24C','#FED976' ,'#FFEDA0'];};
+    console.log("MAP",this.basemap);
+    console.log("DATA",this.data);
   }
   ngAfterViewInit(): void {
     // Import Map data
@@ -50,12 +64,7 @@ initMap(): void {
 
   // Basemap
   let mymap = L.map('map', 
-    // Example 1: 
-    // {center: [51.509, -0.09 ],zoom: 14}
-    // Example 2: 
-    //{center: [39.75621, -104.99404 ],zoom: 17}
-    // Example 3: 
-    {center: [51.948 , 10.265],zoom: 5}
+    {center: this.center,zoom: this.Zoom}
     );
   
   // Openstreetmap Tiles
@@ -64,65 +73,21 @@ initMap(): void {
   attribution: 'Kartenmaterial &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'});
   tiles.addTo(mymap);
 
-  // Example 1:  // Markers
-/*   let circle = L.circle([51.508, -0.11], {
-    color: 'red',
-    fillColor: '#f03',
-    fillOpacity: 0.5,
-    radius: 500
-    }).addTo(mymap);
-
-  let polygon = L.polygon([
-      [51.509, -0.08],
-      [51.503, -0.06],
-      [51.51, -0.047],
-      [51.52, -0.067]
-  ]).addTo(mymap); */
-
-  // Example 2
-  // let geojsonFeature:Feature = {
-  //   "type": "Feature",
-  //   "properties": {
-  //       "name": "Coors Field",
-  //       "amenity": "Baseball Stadium",
-  //       "popupContent": "This is where the Rockies play!"
-  //   },
-  //   "geometry": {
-  //       "type": "Point",
-  //       "coordinates": [-104.99404,39.75621]
-  //   }
-  // };
-
-  // let myStyle = {
-  //   "color": "#ff7800",
-  //   "weight": 5,
-  //   "opacity": 0.65
-  // };
-  // const featLayer = L.geoJSON(geojsonFeature, {style:myStyle});
-  // featLayer.addTo(mymap);
-
-  // Example 3 use provided basemap
-  // let geojsonFeature:FeatureCollection = this.basemap;
-  // let myStyle = {
-  //    "color": 'red',
-  //    "weight": 1.5,
-  //    "opacity": 1
-  // };
-
-  // const featLayer = L.geoJSON(geojsonFeature, {style:myStyle});
-  // featLayer.addTo(mymap);
-
-  // Example 4 use provided feature
   let geojsonFeature:FeatureCollection = this.basemap;
-  let colors=['#800026','#BD0026','#E31A1C','#FC4E2A','#FD8D3C','#FEB24C','#FED976' ,'#FFEDA0']
-  let cutoffs=[0,1e6,5e6,8e6,10e6,15e6,20e6,30e6]
-  let propname = "EWZ";
+  let colors=this.colorscale;
+  let cutoffs=this.cutofflist;
+  let propname = this.feature;
+  let theid = this.id;
+  let thedata = this.data;
+  let thefilter = this.filterArray;
   let myStyle = function (feature) {
-    console.log("Feature",feature.properties);
+    let byvalue = feature.properties[theid];
+    let thevalue = thefilter(thedata,theid,byvalue)[propname]; // feature.properties[propname];
+    console.log(theid,byvalue,thevalue);
     let i = 0;
     let thecolor =colors[i];
     for (let colorcode of colors){
-    if (feature.properties[propname]>cutoffs[i]){
+    if (thevalue>cutoffs[i]){
          thecolor = colorcode;        
       };
       i = i+1;
@@ -134,6 +99,7 @@ initMap(): void {
       fillOpacity: 0.3
    };
     return result};
+   // method that we will use to update the control based on feature properties passed
    let info;
    info =  L.control.layers();
 
@@ -143,11 +109,9 @@ initMap(): void {
     return this._div;
     };
 
-// method that we will use to update the control based on feature properties passed
-info.update = function (props) {
-    this._div.innerHTML = '<h3>' + 'Einwohnerzahl'+'</h3>' +      (props ?
-        '<b>' + props.Bundesland + '</b><br />' + props.EWZ + ' Einwohner'
-        : 'Weitere Informationen durch Mausberührung');
+
+info.update = function (props,maptitle=this.maptitle) {
+    this._div.innerHTML = (props ? props[theid]: "");
 };
 
 info.addTo(mymap);
@@ -173,9 +137,9 @@ info.addTo(mymap);
     layer.setStyle({
       weight: 2,
       opacity: 1.0,
-      fillOpacity: 1.0      
+      fillOpacity: 1      
     });
-    info.update(layer.feature.properties);
+    info.update(layer.feature.properties, this.maptitle);
   }
   
   resetFeature(info,e)  {
@@ -183,7 +147,7 @@ info.addTo(mymap);
     layer.setStyle({
       weight: 1.5,
       opacity: 1,
-      fillOpacity: 0.3,
+      fillOpacity: this.opacity,
     });
     info.update();
   }
@@ -192,7 +156,15 @@ info.addTo(mymap);
     map.fitBounds(e.target.getBounds());
 }
   
-
+filterArray(array,key,value){
+  let i =0
+  let result = {}
+  for (let item of array){
+    if (item[key]==value){result =item};
+    i = i+1
+  }
+  return result;
+}
 
 }
 

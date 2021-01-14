@@ -159,7 +159,10 @@
             <mat-card-content *ngIf="this.blkarte">
 
                 <div >
-                    <app-map [basemap]="this.blkarte"></app-map>
+                    <app-map maptitle="Testkarte" feature="7-Tage-Inzidenz" id="Bundesland"
+                    [cutofflist]="[0,7,20,50,100,150,200,250,1500]"
+                    
+                    [basemap]="this.blkarte" [data]="this.testtable"></app-map>
                 </div> 
 
             </mat-card-content>
