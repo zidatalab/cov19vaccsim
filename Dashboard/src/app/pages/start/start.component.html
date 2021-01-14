@@ -1,5 +1,5 @@
 <div class="container" fxLayout="row wrap" fxLayoutGap="1rem" fxLayoutAllign="space-around">
-    <div fxFlex=20 fxFlex.lt-md=100>
+    <div fxFlex=20 fxFlex.lt-md=100 *ngIf="this.wert">
         <div>
             <mat-card [ngClass]="{
                 'green': this.wert['R(t)'].replace(',', '.')<1.0,
@@ -70,7 +70,7 @@
                     Datenbasis: RKI
                 </mat-card-subtitle>
             </mat-card-header>
-            <mat-card-content>
+            <mat-card-content *ngIf="this.testplot2">
 
                 <plotly-plot 
                 [data]="this.testplot1"
@@ -99,7 +99,7 @@
                     Datenbasis: RKI
                 </mat-card-subtitle>
             </mat-card-header>
-            <mat-card-content>
+            <mat-card-content *ngIf="this.testplot2">
 
                 <plotly-plot 
                 [data]="this.testplot2"
@@ -128,7 +128,7 @@
                     Datenbasis: RKI
                 </mat-card-subtitle>
             </mat-card-header>
-            <mat-card-content>
+            <mat-card-content *ngIf="this.testplot3">
 
                 <plotly-plot 
                 [data]="this.testplot3"  [layout]="this.tslayout"   [config]="this.mainconfig"            
@@ -156,9 +156,9 @@
                     Datenbasis: RKI
                 </mat-card-subtitle>
             </mat-card-header>
-            <mat-card-content>
+            <mat-card-content *ngIf="this.blkarte">
 
-                <div>
+                <div >
                     <app-map [data]="this.blkarte"></app-map>
                 </div> 
 

@@ -57,7 +57,7 @@ this.tslayout= {
       xaxis:{fixedrange:false, automargin: false},
       yaxis: {fixedrange:true,title: '',automargin: true},
       autosize: false,padding:0,      
-      margin: {l: 0,r: 0,b: 20,t: 0}, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
+      margin: {l: 0,r: 20,b: 20,t: 0}, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
       };
         
       
