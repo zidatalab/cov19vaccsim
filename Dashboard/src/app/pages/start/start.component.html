@@ -36,7 +36,7 @@
         <mat-card>
             <mat-card-header>
                 <mat-card-title>
-                    Testdaten
+                    Tabelle aller Daten nach Bundesland
                 </mat-card-title>
                 <mat-card-subtitle>
                     Datenbasis: keine
@@ -44,11 +44,7 @@
             </mat-card-header>
             <mat-card-content>
 
-                <plotly-plot 
-                [data]="[{x: ['A','B','C'],  y: [15,20,30,0], name: 'Test', type: 'bar'}]"
-                [layout]="this.barlayout" [config]="this.mainconfig"
-                ></plotly-plot> 
-
+          <app-table></app-table>
             </mat-card-content>
             <mat-card-footer>
                 <div class="padding lightgreycolor">
@@ -64,18 +60,16 @@
         <mat-card>
             <mat-card-header>
                 <mat-card-title>
-                    R-Wert nach Bundesland
+                    7-Tages-Inzidenz nach Bundesland
                 </mat-card-title>
                 <mat-card-subtitle>
                     Datenbasis: RKI
                 </mat-card-subtitle>
             </mat-card-header>
-            <mat-card-content *ngIf="this.testplot2">
-
-                <plotly-plot 
-                [data]="this.testplot1" 
-                [layout]="this.barlayout" [config]="this.mainconfig"
-                ></plotly-plot> 
+            <mat-card-content *ngIf="this.testtable" >
+                <app-plot [data]="this.testtable" xvalue="Bundesland" [outcomes]="['7-Tage-Inzidenz']"
+                plottype="bar"></app-plot>
+                <app-table></app-table>
 
             </mat-card-content>
             <mat-card-footer>
@@ -93,19 +87,15 @@
         <mat-card>
             <mat-card-header>
                 <mat-card-title>
-                    R-Wert nach Bundesland
+                    Vorwarnzeit nach Bundesland
                 </mat-card-title>
                 <mat-card-subtitle>
-                    Datenbasis: RKI
+                    Datenbasis: RKI, Berechnungen Zi
                 </mat-card-subtitle>
             </mat-card-header>
-            <mat-card-content *ngIf="this.testplot2">
-
-                <plotly-plot 
-                [data]="this.testplot2"
-                [layout]="this.hbarlayout" [config]="this.mainconfig"
-                ></plotly-plot> 
-
+            <mat-card-content *ngIf="this.testtable">
+                <app-plot [data]="this.testtable" xvalue="Bundesland" [outcomes]="['Vorwarnzeit aktuell']"
+                plottype="hbar"></app-plot> 
             </mat-card-content>
             <mat-card-footer>
                 <div class="padding lightgreycolor">
@@ -128,11 +118,11 @@
                     Datenbasis: RKI
                 </mat-card-subtitle>
             </mat-card-header>
-            <mat-card-content *ngIf="this.testplot3">
+            <mat-card-content >
 
-                <plotly-plot 
-                [data]="this.testplot3"  [layout]="this.tslayout"   [config]="this.mainconfig"            
-                ></plotly-plot> 
+              <app-plot [data]="this.filterArray(this.testtimeseriesdata,'name','Gesamt')"  
+                xvalue="date" [outcomes]="['R']"
+               plottype="tsline"></app-plot> 
 
             </mat-card-content>
             <mat-card-footer>

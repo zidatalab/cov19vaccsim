@@ -36,8 +36,6 @@ export class MapComponent implements OnInit {
     if (!this.opacity){this.opacity=.6;};
     if (!this.customlabels){this.customlabels=[];};
     if (!this.colorscale){this.colorscale=['#800026','#BD0026','#E31A1C','#FC4E2A','#FD8D3C','#FEB24C','#FED976' ,'#FFEDA0'];};
-    console.log("MAP",this.basemap);
-    console.log("DATA",this.data);
 
   }
   ngAfterViewInit(): void {
