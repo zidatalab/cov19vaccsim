@@ -31,6 +31,8 @@ export class StartComponent implements OnInit {
   wert : any;
   selected_Land = 'Gesamt';
   bundeslandoptions = [];
+  indicators = [];
+  selected_Indicator = '7-Tage-Inzidenz';
   ngOnInit(): void {
 // Import Map data
 this.http.get('/assets/data/bl.geojson')
@@ -42,6 +44,9 @@ this.http.get('/assets/data/bl.geojson')
 this.http.get('https://www.zidatasciencelab.de/covid19dashboard/data/tabledata/bundeslaender_table.json')
 .subscribe(data=>{this.testtable=data;
   this.wert = this.filterArray(this.testtable,"Bundesland","Gesamt")[0]; 
+  this.indicators = this.getKeys(this.testtable);
+  this.indicators.shift();
+
   
 })
 
@@ -52,6 +57,7 @@ this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/mast
   this.tsplotdata= this.filterArray(this.testtimeseriesdata,'name',this.selected_Land);
   this.bundeslandoptions = this.getOptions(this.testtimeseriesdata,'name');
   this.selected_Land = this.bundeslandoptions[0];
+
 })
 
 
@@ -62,12 +68,19 @@ update_bl(){
   this.tsplotdata= this.filterArray(this.testtimeseriesdata,'name',this.selected_Land);  
 }
 
+update_indicator(){
+  this.tsplotdata= this.filterArray(this.testtimeseriesdata,'name',this.selected_Land);  
+}
+
 getValues(array, key) {
    let values = [];
    for (let item of array){
      values.push(item[key]);
    }
    return values;
+}
+getKeys(array){
+  return Object.keys(array[0]);
 }
 
 getOptions(array, key){

@@ -19,7 +19,12 @@ export class MapComponent implements OnInit {
   @Input() basemap: any;
   @Input() center: any;
   @Input() opacity: number;
-  @Input() feature: string;
+  private _feature:string;
+  @Input() set feature (value: string) {
+    this._feature = value;
+    console.log("New Feature:", this._feature);
+    // this.initMap();
+    };
   @Input() colorscale: any;
   @Input() cutofflist: any;
   @Input() customlabels: any;
@@ -40,7 +45,10 @@ export class MapComponent implements OnInit {
   }
   ngAfterViewInit(): void {
     // Import Map data
-    this.initMap();
+    let themap = L.map('map',
+    { center: this.center, zoom: this.Zoom }
+  );
+    this.initMap(themap);
 
   }
 
@@ -48,7 +56,7 @@ export class MapComponent implements OnInit {
 
 
 
-  initMap(): void {
+  initMap(map): void {
     // Fix Icons see https://stackoverflow.com/questions/41144319/leaflet-marker-not-found-production-env
     // See 
     const iconRetinaUrl = 'assets/marker-icon-2x.png';
@@ -68,9 +76,9 @@ export class MapComponent implements OnInit {
 
 
     // Basemap
-    let mymap = L.map('map',
-      { center: this.center, zoom: this.Zoom }
-    );
+    let mymap = map;
+    
+    // let mymap = L.map('map',      { center: this.center, zoom: this.Zoom }    );
 
     // Openstreetmap Tiles
     const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -83,13 +91,13 @@ export class MapComponent implements OnInit {
     let geojsonFeature: FeatureCollection = this.basemap;
     let colors = this.colorscale;
     let cutoffs = this.cutofflist;
-    let propname = this.feature;
+    let propname = this._feature;
     let theid = this.id;
     let thedata = this.data;
     let theopacity = this.opacity;
     let thefilter = this.filterArray;
-    let myStyle = function (feature) {
-      let byvalue = feature.properties[theid];
+    let myStyle = function (_feature) {
+      let byvalue = _feature.properties[theid];
       let thevalue = thefilter(thedata, theid, byvalue)[propname]; // feature.properties[propname];
       let i = 0;
       let thecolor = colors[i];
@@ -132,7 +140,7 @@ export class MapComponent implements OnInit {
     const featLayer = L.geoJSON(geojsonFeature,
       {
         style: myStyle,
-        onEachFeature: (feature, layer) => (
+        onEachFeature: (_feature, layer) => (
           layer.on({
             mouseover: (e) => (this.highlightFeature(info, e)),
             mouseout: (e) => (this.resetFeature(info, e)),

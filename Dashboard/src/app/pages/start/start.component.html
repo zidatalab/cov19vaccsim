@@ -112,7 +112,7 @@
             <p>Für welches Land soll ein Trend zum R-Wert soll angezeigt werden?</p>
             <p>
                 <mat-form-field appearance="fill">
-                    <mat-label>Select an option</mat-label>
+                    <mat-label>Bundesland</mat-label>
                     <mat-select [(value)]="this.selected_Land" (selectionChange)="this.update_bl()">
                       <ng-container *ngFor="let option of this.bundeslandoptions">
                         <mat-option [value]="option">{{option}}</mat-option>
@@ -158,9 +158,26 @@
 
     <div fxFlex=100>
         <mat-card>
+            <p>Für welchen Indikator soll eine Karte angezeigt werden werden?</p>
+            <p>
+                <mat-form-field appearance="fill">
+                    <mat-label>Indikator</mat-label>
+                    <mat-select [(value)]="this.selected_Indicator" (selectionChange)="this.update_indicator()">
+                      <ng-container *ngFor="let option of this.indicators">
+                        <mat-option [value]="option">{{option}}</mat-option>
+                      </ng-container>
+                      
+                    </mat-select>
+                  </mat-form-field>
+                  
+                 
+            </p>
+
+        </mat-card>
+        <mat-card>
             <mat-card-header>
                 <mat-card-title>
-                    7-Tages-Inzidenz nach Bundesland
+                    {{this.selected_Indicator}} nach Bundesland
                 </mat-card-title>
                 <mat-card-subtitle>
                     Datenbasis: RKI
@@ -170,7 +187,7 @@
 
                 <div >
                     <app-map maptitle="Inzidenz nach Bundesland" 
-                    feature="7-Tage-Inzidenz" id="Bundesland"
+                    [(feature)]="this.selected_Indicator" id="Bundesland"
                     [cutofflist]="[0,20,50,150,200,300]" opacity=.8
                     [colorscale]="['green','yellow','orange','red','darkred','purple'                    ]"
                     [basemap]="this.blkarte" [data]="this.testtable"></app-map>
