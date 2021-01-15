@@ -59,8 +59,7 @@ this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/mast
   }
 
 update_bl(){
-  this.tsplotdata= this.filterArray(this.testtimeseriesdata,'name',this.selected_Land);
-  console.log("new data",this.tsplotdata);
+  this.tsplotdata= this.filterArray(this.testtimeseriesdata,'name',this.selected_Land);  
 }
 
 getValues(array, key) {
