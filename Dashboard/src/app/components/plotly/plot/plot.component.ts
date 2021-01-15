@@ -30,7 +30,7 @@ export class PlotComponent implements OnInit {
     this.mainconfig = {
       displayModeBar: false,
       scrollZoom: false,
-      autosizable: false,
+      autosizable: true,
       locale: 'de',
       doubleClick: 'reset+autosize',
       showAxisDragHandles: false,
