@@ -19,10 +19,12 @@ export class MapComponent implements OnInit {
   @Input() basemap: any;
   @Input() center: any;
   @Input() opacity: number;
+  globalmap : any;
   private _feature:string;
   @Input() set feature (value: string) {
     this._feature = value;
     console.log("New Feature:", this._feature);
+    this.initMap(this.globalmap);
     // this.initMap();
     };
   @Input() colorscale: any;
@@ -45,10 +47,10 @@ export class MapComponent implements OnInit {
   }
   ngAfterViewInit(): void {
     // Import Map data
-    let themap = L.map('map',
+    this.globalmap = L.map('map',
     { center: this.center, zoom: this.Zoom }
   );
-    this.initMap(themap);
+    this.initMap(this.globalmap);
 
   }
 
