@@ -15,6 +15,7 @@ export class PlotComponent implements OnInit {
   @Input() customconfig:any; 
   @Input() customlayout:any; 
   @Input() custommargins:any; 
+  @Input() linewidth:number; 
 
   constructor() { }
   plotlayout: any;
@@ -25,7 +26,7 @@ export class PlotComponent implements OnInit {
 
 
   ngOnInit(): void {
-
+    if (!this.linewidth){this.linewidth=5};
     this.mainconfig = {
       displayModeBar: false,
       scrollZoom: false,
@@ -53,7 +54,7 @@ export class PlotComponent implements OnInit {
       xaxis: { fixedrange: false, automargin: false },
       yaxis: { fixedrange: true, title: '', automargin: true },
       autosize: false, padding: 0,
-      margin: { l: 0, r: 0, b: 20, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
+      margin: { l: 0, r: 20, b: 20, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
     };
   }
 
@@ -94,6 +95,13 @@ make_plotdata(source=[], xaxis="",ylist=[],type="bar",colors=this.colorscheme){
    if (type=="bar" || type=="bar" || type=="scatter" ){
     trace["marker"]= {
       color: colors[i]      
+    }
+    
+   }
+   if (type=="lines"  ){
+    trace["line"]= {
+      color: colors[i]     , 
+      width: this.linewidth
     }
    }
 
