@@ -6,4 +6,7 @@ If this is the case, the Dashboard can be tested with the following commands fro
 
 `cd Dashboard`
 
+# at first launch:
+`npm install`
+
 `ng serve`
