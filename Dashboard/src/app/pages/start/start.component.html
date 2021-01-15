@@ -107,10 +107,30 @@
     </div>
 
     <div fxFlex=100>
+        <div>
+        <mat-card>
+            <p>Für welches Land soll ein Trend zum R-Wert soll angezeigt werden?</p>
+            <p>
+                <mat-form-field appearance="fill">
+                    <mat-label>Select an option</mat-label>
+                    <mat-select [(value)]="this.selected_Land" (selectionChange)="this.update_bl()">
+                      <ng-container *ngFor="let option of this.bundeslandoptions">
+                        <mat-option [value]="option">{{option}}</mat-option>
+                      </ng-container>
+                      
+                    </mat-select>
+                  </mat-form-field>
+                  
+                 
+            </p>
+
+        </mat-card>
+        </div>
+        <div>
         <mat-card>
             <mat-card-header>
                 <mat-card-title>
-                    R-Wert im Trend
+                    R-Wert im Trend ({{this.selected_Land}})
                 </mat-card-title>
                 <mat-card-subtitle>
                     Datenbasis: RKI
@@ -118,7 +138,7 @@
             </mat-card-header>
             <mat-card-content *ngIf="this.testtimeseriesdata" >
 
-              <app-plot [data]="this.filterArray(this.testtimeseriesdata,'name','Gesamt')"  
+              <app-plot [(data)]="this.tsplotdata"  
                [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
                 xvalue="date" [outcomes]="['R']"
                plottype="tsline"></app-plot> 
@@ -132,6 +152,7 @@
                 </div>
             </mat-card-footer>
         </mat-card>
+    </div>
 
     </div>
 

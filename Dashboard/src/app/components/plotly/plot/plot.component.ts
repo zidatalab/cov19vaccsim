@@ -1,4 +1,3 @@
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit , Input} from '@angular/core';
 
 @Component({
@@ -71,6 +70,10 @@ export class PlotComponent implements OnInit {
     this.plotlayout['margin'] = this.custommargins;
   }
   this.plotdata = this.make_plotdata(this.data,this.xvalue,this.outcomes,this.plotlytype);
+  }
+
+  ngOnChanges(changes: any) {
+    this.plotdata = this.make_plotdata(this.data,this.xvalue,this.outcomes,this.plotlytype);
   }
 
   make_trace(xdata= [] ,ydata = [],name:string,type=""){
