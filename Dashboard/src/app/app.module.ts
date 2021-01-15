@@ -12,6 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { MapComponent } from './components/leafletmap/map/map.component';
 import { PlotComponent } from './components/plotly/plot/plot.component';
 import { TableComponent } from './components/table/table/table.component';
+import { BoxComponent } from './components/infobox/box/box.component';
 
 PlotlyModule.plotlyjs = PlotlyJS;
 
@@ -21,7 +22,8 @@ PlotlyModule.plotlyjs = PlotlyJS;
     StartComponent,
     MapComponent,
     PlotComponent,
-    TableComponent
+    TableComponent,
+    BoxComponent
   ],
   imports: [
     BrowserModule,
