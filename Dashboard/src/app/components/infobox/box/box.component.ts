@@ -13,25 +13,37 @@ export class BoxComponent implements OnInit {
 @Input() colors:string[];
 @Input() cutoffs:string[];
 @Input() maincolor:string;
-
+@Input() numberformat:string;
+@Input() maticon:string;
+@Input() textbehind:boolean;
   
   constructor() { }
-  backupcolor = "grey";
+  itemcolor = "grey";
 
   
   ngOnInit() {
+    this.value= Number(this.value);
+          if (!this.numberformat){this.numberformat='1.1-1';}
           this.setcolor();
         };    
     
    setcolor(){
-     let color ="white";
+     let color ="darkgreen";
      if (this.maincolor){
       color = this.maincolor;
      }
      if (this.cutoffs.length>0 && this.cutoffs.length == this.colors.length){
-
+      let i = 0;
+      for (let cutvalue of this.cutoffs){
+        if (Number(cutvalue)<=this.value){
+          color = this.colors[i];
+        }
+        i = i+1;
+      }
+      
      }
-     document.documentElement.style.setProperty('--bgcolor', color);
+     this.itemcolor = color;
+     
    }
     
 

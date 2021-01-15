@@ -13,8 +13,13 @@ import { MapComponent } from './components/leafletmap/map/map.component';
 import { PlotComponent } from './components/plotly/plot/plot.component';
 import { TableComponent } from './components/table/table/table.component';
 import { BoxComponent } from './components/infobox/box/box.component';
+import { registerLocaleData } from '@angular/common';
+import locales from '@angular/common/locales/de';
+import { LOCALE_ID } from '@angular/core';
 
 PlotlyModule.plotlyjs = PlotlyJS;
+
+registerLocaleData(locales, 'de');
 
 @NgModule({
   declarations: [
@@ -35,7 +40,8 @@ PlotlyModule.plotlyjs = PlotlyJS;
     FlexLayoutModule  
     
   ],
-  providers: [],
+  providers: [{provide: LOCALE_ID, useValue: 'de-DE' }],
   bootstrap: [AppComponent]
 })
+
 export class AppModule { }

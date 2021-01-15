@@ -1,41 +1,31 @@
 <div class="container" fxLayout="row wrap" fxLayoutGap="1rem" fxLayoutAllign="space-around">
-    <div fxFlex=20 fxFlex.lt-md=100 *ngIf="this.wert">
-        <div>
-            <mat-card [ngClass]="{
-                'green': this.wert['R(t)'].replace(',', '.')<1.0,
-                'yellow': this.wert['R(t)'].replace(',', '.')>1.0 && this.wert['R(t)'].replace(',', '.')<1.3,
-                'red': this.wert['R(t)'].replace(',', '.')>=1.3 || (this.wert['7-Tage-Inzidenz']>=50 && this.wert['R(t)'].replace(',', '.')>1.0)
-            }">
-                <h1>{{this.wert["R(t)"]}}</h1>
-                <p><span>R-Wert</span> </p>
-            </mat-card>
+    <div fxFlex=30 fxFlex.lt-md=100 *ngIf="this.wert" fxLayout="column">
+        <div fxFlex>
             <app-box 
             [value]="this.wert['R(t)'].replace(',', '.')"
-            [title]="'R(t)='"
+            [title]="'R(t)= '" 
             [description]="'Bei hohen Inzidenzen sind auch Werte um 1 problematisch'"
-            [cutoffs]="[1.0,1.3]"
-            [colors]="['green','orange','red']">
+            [cutoffs]="[0,1.0,1.3]"
+            [colors]="['green','orange','crimson']">
         </app-box>
         </div>
-        <div>
-            <mat-card [ngClass]="{
-                'green':  this.wert['7-Tage-Inzidenz']<25,
-                'yellow': this.wert['7-Tage-Inzidenz']>=25 && this.wert['7-Tage-Inzidenz']<50,
-                'red': this.wert['7-Tage-Inzidenz']>=50
-            }">
-                <h1>{{this.wert["7-Tage-Inzidenz"]}}</h1>
-                <p><span>7-Tage-Inzidenz</span> </p>
-            </mat-card>
+        <div fxFlex>
+            <app-box 
+            [value]="this.wert['7-Tage-Inzidenz']"
+            [description]="'7-Tage-Inzidenz je 100 Tsd. Einw.'"
+            [title]="'Fälle'" [textbehind]="true"
+            [cutoffs]="[0,20,50]" numberformat="1.0-0"
+            [colors]="['green','orange','crimson']">
+            </app-box>
         </div>
-        <div>
-            <mat-card [ngClass]="{
-                'green':  this.wert['Vorwarnzeit aktuell']>50,
-                'yellow': this.wert['Vorwarnzeit aktuell']>21 && this.wert['Vorwarnzeit aktuell']<50,
-                'red': this.wert['Vorwarnzeit aktuell']<=21
-            }">
-                <h1>{{this.wert["Vorwarnzeit aktuell"]}}</h1>
-                <p><span>Vorwarnzeit in Tagen</span> </p>
-            </mat-card>
+        <div fxFlex>
+            <app-box 
+            [value]="this.wert['Vorwarnzeit aktuell']"
+            [description]="'Vorwarnzeit aktuell, Tage bis Ausschöpfung der freien Intensivbetten unter Annahme R=1,3.'"
+            [title]="'Tage'" [textbehind]="true"
+            [cutoffs]="[0,20,50]" numberformat="1.0-0"
+            [colors]="['crimson','orange','green']">
+            </app-box>
         </div>
 
     </div>
