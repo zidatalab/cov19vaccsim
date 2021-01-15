@@ -6,7 +6,8 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StartComponent } from './pages/start/start.component';
 import * as PlotlyJS from 'plotly.js/dist/plotly.js';
-import { PlotlyModule } from 'angular-plotly.js';
+import { PlotlyModule ,PlotlyService} from 'angular-plotly.js';
+import * as SVLocale from 'plotly.js/lib/locales/de.js';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpClientModule } from '@angular/common/http';
 import { MapComponent } from './components/leafletmap/map/map.component';
@@ -40,8 +41,12 @@ registerLocaleData(locales, 'de');
     FlexLayoutModule  
     
   ],
-  providers: [{provide: LOCALE_ID, useValue: 'de-DE' }],
+  providers: [{provide: LOCALE_ID, useValue: 'de-DE' },PlotlyService],
   bootstrap: [AppComponent]
 })
 
-export class AppModule { }
+export class AppModule { 
+  constructor(private plotlyService: PlotlyService) {
+    this.plotlyService.getPlotly().register(SVLocale);
+  }
+}
