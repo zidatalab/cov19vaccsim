@@ -1,3 +1,4 @@
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit , Input} from '@angular/core';
 
 @Component({
@@ -13,6 +14,7 @@ export class PlotComponent implements OnInit {
   @Input() customdata:any;
   @Input() customconfig:any; 
   @Input() customlayout:any; 
+  @Input() custommargins:any; 
 
   constructor() { }
   plotlayout: any;
@@ -45,13 +47,13 @@ export class PlotComponent implements OnInit {
     };
     }
 
-    if (this.plottype=="tsline"){
+    if (this.plottype=="tsline" || this.plottype=="lines"){
     this.plotlytype="lines";
     this.plotlayout = {
       xaxis: { fixedrange: false, automargin: false },
       yaxis: { fixedrange: true, title: '', automargin: true },
       autosize: false, padding: 0,
-      margin: { l: 0, r: 20, b: 20, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
+      margin: { l: 0, r: 0, b: 20, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
     };
   }
 
@@ -64,7 +66,9 @@ export class PlotComponent implements OnInit {
       margin: { l: 200, r: 0, b: 20, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
     };
   }
-
+  if (this.custommargins){
+    this.plotlayout['margin'] = this.custommargins;
+  }
   this.plotdata = this.make_plotdata(this.data,this.xvalue,this.outcomes,this.plotlytype);
   }
 

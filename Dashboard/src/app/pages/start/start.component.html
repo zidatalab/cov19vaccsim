@@ -119,6 +119,7 @@
             <mat-card-content *ngIf="this.testtimeseriesdata" >
 
               <app-plot [data]="this.filterArray(this.testtimeseriesdata,'name','Gesamt')"  
+               [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
                 xvalue="date" [outcomes]="['R']"
                plottype="tsline"></app-plot> 
 
