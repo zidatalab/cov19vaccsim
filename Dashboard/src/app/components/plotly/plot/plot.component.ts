@@ -21,11 +21,12 @@ export class PlotComponent implements OnInit {
   plotdata: any;
   mainconfig: any;
   plotlytype:string;
-  colorscheme = ["#004c8c", "#0277bd", "#58a5f0", "#b71c1c", "#7f0000"];
+  colorscheme = [];
 
 
   ngOnInit(): void {
     if (!this.linewidth){this.linewidth=5};
+    if (!this.colorscheme){this.colorscheme=["#004c8c", "#0277bd", "#58a5f0", "#b71c1c", "#7f0000"];}
     this.mainconfig = {
       displayModeBar: false,
       scrollZoom: false,
