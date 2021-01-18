@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-
+import {mean} from 'mathjs';
 
 @Component({
   selector: 'app-start',
@@ -33,7 +33,12 @@ export class StartComponent implements OnInit {
   bundeslandoptions = [];
   indicators = [];
   selected_Indicator = '7-Tage-Inzidenz';
+  testarray= [1,2,4,6]
   ngOnInit(): void {
+
+    console.log("Test", this.testarray);
+    console.log("MEan", mean(this.testarray));
+
 // Import Map data
 this.http.get('/assets/data/bl.geojson')
 .subscribe(data=>{this.blkarte=data;})

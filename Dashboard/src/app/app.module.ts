@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StartComponent } from './pages/start/start.component';
 import * as PlotlyJS from 'plotly.js/dist/plotly.js';
-import * as math from 'mathjs';
 import { PlotlyModule ,PlotlyService} from 'angular-plotly.js';
 import * as SVLocale from 'plotly.js/lib/locales/de.js';
 import { FlexLayoutModule } from '@angular/flex-layout';
