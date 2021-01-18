@@ -4,7 +4,7 @@ import * as L from 'leaflet';
 import { icon, Marker } from 'leaflet';
 import { HttpClient } from '@angular/common/http';
 import { Feature, FeatureCollection, GeoJsonObject, GeoJsonTypes } from 'geojson';
-
+import {  min,max,round,mean,std} from "mathjs";
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -204,6 +204,20 @@ export class MapComponent implements OnInit {
       fillOpacity: this.opacity,
     });
     info.update();
+  }
+  makecutoffs(array,method="equalint",bins=5){
+    let result=[];
+    if (method=="equalint"){
+      let minv = min(array);
+      let maxv = max(array);
+      let steps = round(maxv-minv);
+      let i = 0;
+      while (i<bins) {
+        result.push((i+1)*steps+minv);
+      }
+    }
+    return result;
+  
   }
 
   zoomToFeature(map, e) {
