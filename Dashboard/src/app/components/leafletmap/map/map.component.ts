@@ -115,7 +115,7 @@ export class MapComponent implements OnInit {
     info = L.control.layers();
 
     info.onAdd = function (map) {
-      this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+      this._div = L.DomUtil.create('div', 'info'); 
       this.update();
       return this._div;
     };
@@ -145,31 +145,33 @@ export class MapComponent implements OnInit {
     featLayer.addTo(mymap);
 
     // Add Legend to Map
-    let labels = this.customlabels;
+    let labels 
+    if (this.customlabels){labels=this.customlabels;};
 
-    this.legend = L.control.layers({}, {}, { position: 'topright' });
+    let legend ;
+    legend = L.control.layers({}, {}, { position: 'topright' });
 
-    this.legend.onAdd = function (map) {
+    legend.onAdd = function(map){
 
-      var div = L.DomUtil.create('legend', 'info legend');
-      div.innerHTML = '<p><strong>' + propname + '</strong></p>';
+      this._ldiv = L.DomUtil.create('legend', 'info legend');
+      this._ldiv.innerHTML = '<p><strong>' + propname + '</strong></p>';
       for (var i = 0; i < cutoffs.length; i++) {
         if (labels.length == cutoffs.length) {
-          div.innerHTML +=
+          this._ldiv.innerHTML +=
             '<i style="background-color:' + colors[i] + ';">&nbsp;&nbsp;&nbsp;</i> ' +
             labels[i];
         }
         else {
-          div.innerHTML +=
+          this._ldiv.innerHTML +=
             '<i style="background-color:' + colors[i] + ';">&nbsp;&nbsp;&nbsp;</i> ' +
             cutoffs[i] + (cutoffs[i + 1] ? ' bis unter ' + cutoffs[i + 1] + '<br>' : '+');
         }
       }
 
-      return div;
+      return this._ldiv;
     };
 
-    this.legend.addTo(mymap);
+    legend.addTo(mymap);
 
 
   };
