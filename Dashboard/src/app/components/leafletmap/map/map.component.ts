@@ -4,7 +4,7 @@ import * as L from 'leaflet';
 import { icon, Marker } from 'leaflet';
 import { HttpClient } from '@angular/common/http';
 import { Feature, FeatureCollection, GeoJsonObject, GeoJsonTypes } from 'geojson';
-import {  min,max,round,mean,std} from "mathjs";
+import { min, max, round, mean, std } from "mathjs";
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -19,20 +19,14 @@ export class MapComponent implements OnInit {
   @Input() basemap: any;
   @Input() center: any;
   @Input() opacity: number;
-  globalmap : any;
-  private _feature:string;
-  @Input() set feature (value: string) {
-    this._feature = value;
-    console.log("New Feature:", this._feature);
-    this.initMap(this.globalmap);
-    // this.initMap();
-    };
+  globalmap: any;
+  @Input() feature; string;
   @Input() colorscale: any;
   @Input() cutofflist: any;
   @Input() customlabels: any;
   @Input() id: string;
-
-  public map;
+  legend: any;
+  map: any;
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
@@ -48,19 +42,20 @@ export class MapComponent implements OnInit {
   ngAfterViewInit(): void {
     // Import Map data
     this.globalmap = L.map('map',
-    { center: this.center, zoom: this.Zoom }
-  );
+      { center: this.center, zoom: this.Zoom }
+    );
     this.initMap(this.globalmap);
 
   }
 
-  
+  ngOnChanges(changes: any) {
+     this.initMap(this.globalmap);
+  }
 
 
 
   initMap(map): void {
     // Fix Icons see https://stackoverflow.com/questions/41144319/leaflet-marker-not-found-production-env
-    // See 
     const iconRetinaUrl = 'assets/marker-icon-2x.png';
     const iconUrl = 'assets/marker-icon.png';
     const shadowUrl = 'assets/marker-shadow.png';
@@ -80,12 +75,10 @@ export class MapComponent implements OnInit {
     // Basemap
     let mymap = map;
     
-    // let mymap = L.map('map',      { center: this.center, zoom: this.Zoom }    );
-
     // Openstreetmap Tiles
     const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       {
-        maxZoom: 19, opacity: 0.3,
+        maxZoom: 19, opacity: 0.5,
         attribution: 'Kartenmaterial &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
       });
     tiles.addTo(mymap);
@@ -93,13 +86,13 @@ export class MapComponent implements OnInit {
     let geojsonFeature: FeatureCollection = this.basemap;
     let colors = this.colorscale;
     let cutoffs = this.cutofflist;
-    let propname = this._feature;
+    let propname = this.feature;
     let theid = this.id;
     let thedata = this.data;
     let theopacity = this.opacity;
     let thefilter = this.filterArray;
-    let myStyle = function (_feature) {
-      let byvalue = _feature.properties[theid];
+    let myStyle = function (feature) {
+      let byvalue = feature.properties[theid];
       let thevalue = thefilter(thedata, theid, byvalue)[propname]; // feature.properties[propname];
       let i = 0;
       let thecolor = colors[i];
@@ -127,13 +120,11 @@ export class MapComponent implements OnInit {
       return this._div;
     };
 
-
     info.update = function (props, maptitle = this.maptitle) {
       this._div.innerHTML = (props ? props[theid] : "") + '<br>';
       let labelvalue = "";
       // labelvalue = thefilter(thedata,theid,props[theid])[propname];
       this._div.innerHTML += (props ? propname + "=" + '' + labelvalue : "");
-
     };
 
     info.addTo(mymap);
@@ -142,7 +133,7 @@ export class MapComponent implements OnInit {
     const featLayer = L.geoJSON(geojsonFeature,
       {
         style: myStyle,
-        onEachFeature: (_feature, layer) => (
+        onEachFeature: (feature, layer) => (
           layer.on({
             mouseover: (e) => (this.highlightFeature(info, e)),
             mouseout: (e) => (this.resetFeature(info, e)),
@@ -154,16 +145,14 @@ export class MapComponent implements OnInit {
     featLayer.addTo(mymap);
 
     // Add Legend to Map
-    var legend = L.control.layers();
     let labels = this.customlabels;
-    legend.onAdd = function (map) {
 
-      var div = L.DomUtil.create('div', 'info legend');
+    this.legend = L.control.layers({}, {}, { position: 'topright' });
 
-      div.innerHTML += '<p><strong>' + propname + '</strong></p>';
+    this.legend.onAdd = function (map) {
 
-
-      // loop through our density intervals and generate a label with a colored square for each interval
+      var div = L.DomUtil.create('legend', 'info legend');
+      div.innerHTML = '<p><strong>' + propname + '</strong></p>';
       for (var i = 0; i < cutoffs.length; i++) {
         if (labels.length == cutoffs.length) {
           div.innerHTML +=
@@ -180,8 +169,7 @@ export class MapComponent implements OnInit {
       return div;
     };
 
-    legend.addTo(mymap);
-
+    this.legend.addTo(mymap);
 
 
   };
@@ -205,19 +193,19 @@ export class MapComponent implements OnInit {
     });
     info.update();
   }
-  makecutoffs(array,method="equalint",bins=5){
-    let result=[];
-    if (method=="equalint"){
+  makecutoffs(array, method = "equalint", bins = 5) {
+    let result = [];
+    if (method == "equalint") {
       let minv = min(array);
       let maxv = max(array);
-      let steps = round(maxv-minv);
+      let steps = round(maxv - minv);
       let i = 0;
-      while (i<bins) {
-        result.push((i+1)*steps+minv);
+      while (i < bins) {
+        result.push((i + 1) * steps + minv);
       }
     }
     return result;
-  
+
   }
 
   zoomToFeature(map, e) {
