@@ -183,9 +183,9 @@
                     Datenbasis: RKI
                 </mat-card-subtitle>
             </mat-card-header>
-            <mat-card-content *ngIf="this.blkarte && this.testtable">
+            <mat-card-content *ngIf="this.testtable && this.selected_Indicator">
 
-                <div >
+                <div *ngIf="this.blkarte">
                     <app-map maptitle="Inzidenz nach Bundesland" 
                     [(feature)]="this.selected_Indicator" id="Bundesland"
                     [cutofflist]="[0,20,50,150,200,300]" opacity=.8
