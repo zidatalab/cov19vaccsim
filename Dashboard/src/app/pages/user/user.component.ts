@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-
+import { from } from 'rxjs';
+import {AuthService} from '../../service/auth.service';
+import {AppService} from '../../service/app.service';
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
@@ -7,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserComponent implements OnInit {
 
-  constructor() { }
+  constructor(private auth:AuthService, private service:AppService) { }
   showlogin:boolean;
   currentuser:any;
   loginusername:string;
@@ -17,6 +19,10 @@ export class UserComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  Login(){}
+  Login(){
+    this.service.login(this.loginusername,this.loginuserpassword)
+    .subscribe(data => {console.log(data);this.currentuser=data;},error => {console.log(error)});
+
+  }
   Logout(){}
 }

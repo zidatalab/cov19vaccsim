@@ -16,7 +16,7 @@ export class User {
 
 
 export class AuthService {
-  public PRODAPIURL = "PRODMISSING"; 
+  public PRODAPIURL = "URLMISSING"; 
   public TESTAPIURL ="http://127.0.0.1:8000";
   public APIURL = this.TESTAPIURL;
   ASSETURL = "https://ziwebstorage.blob.core.windows.net/appradar";
@@ -49,8 +49,8 @@ export class AuthService {
   }
 
   login(username: string, password: string) {
-    let request = { user: username, password: password, AppName: this.WEBSITENAME };
-    return this.http.post<any>(`${this.APIURL}/auth/login`, request)
+    let request = { username: username, password: password, client_id: this.WEBSITENAME };
+    return this.http.post<any>(`${this.APIURL}/login`, request)
       .pipe(map(user => {
         // login successful if there's a jwt token in the response
         if (user && user.username && user.usergroup) {
