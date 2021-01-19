@@ -15,14 +15,14 @@
                 required>
         </mat-form-field>
         
-        <div fxLayout="column" fxLayoutGap="1rem" fxLayoutAlign="space-between"> 
+        <div fxLayout="row" fxLayoutGap="1rem" fxLayoutAlign="space-between"> 
             <div>
-            <button type ='submit' [disabled] = '!this.form.valid'> 
+            <button mat-raised-button color="primary" type ='submit' [disabled] = '!this.form.valid'> 
                 Login 
             </button> 
         </div> 
         <div>
-            <button (click)="logout()"> 
+            <button mat-raised-button color="warn" (click)="logout()"> 
                 Abbrechen 
             </button> 
         </div> 
@@ -33,7 +33,7 @@
 
     <div *ngIf="this.loggedin">
         You're in!
-        <button (click)="logout()"> 
+        <button mat-raised-button color="warn" (click)="logout()"> 
             Ausloggen 
         </button> 
     </div>

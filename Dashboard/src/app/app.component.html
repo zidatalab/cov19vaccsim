@@ -33,6 +33,30 @@
                 </a>
 
               </div>
+              <div >
+
+                <a mat-icon-button (click)="drawer.toggle()" href="/login">
+                  <mat-icon class="icon">login</mat-icon>
+                  <span>Login</span>
+                </a>
+
+              </div>
+              <div>
+
+                <a mat-icon-button (click)="drawer.toggle();logout();" href="/">
+                  <mat-icon class="icon">account_box</mat-icon>
+                  <span>Profil</span>
+                </a>
+
+              </div>
+              <div>
+
+                <a mat-icon-button (click)="drawer.toggle();logout();" href="/">
+                  <mat-icon class="icon">logout</mat-icon>
+                  <span>Ausloggen</span>
+                </a>
+
+              </div>
 
 
             </div>
