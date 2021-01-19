@@ -5,7 +5,7 @@
             [value]="this.wert['R(t)'].replace(',', '.')"
             [title]="'R(t)= '" 
             [description]="'Bei hohen Inzidenzen sind auch Werte um 1 problematisch'"
-            [cutoffs]="[0,1.0,1.3]"
+            [cutoffs]="[0,1.0,1.3]" numberformat="1.2-2"
             [colors]="['green','orange','crimson']">
         </app-box>
         </div>
@@ -157,6 +157,37 @@
     </div>
 
     <div fxFlex=100>
+        <div>
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>
+                    Neuinfizierte im Trend
+                </mat-card-title>
+                <mat-card-subtitle>
+                    Datenbasis: RKI
+                </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content *ngIf="this.tsplotdata2" >
+
+              <app-plot [(data)]="this.tsplotdata2"  
+               [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
+                xvalue="date" [outcomes]="['I_cases']"
+               plottype="area"></app-plot> 
+
+            </mat-card-content>
+            <mat-card-footer>
+                <div class="padding lightgreycolor">
+                    <p class="mat-caption">
+                        Legende:<br>Keine bisher
+                    </p>
+                </div>
+            </mat-card-footer>
+        </mat-card>
+    </div>
+
+    </div>
+
+    <div fxFlex=100>
         <mat-card>
             <p>Für welchen Indikator soll eine Karte angezeigt werden werden?</p>
             <p>
@@ -204,7 +235,7 @@
             <mat-card-footer>
                 <div class="padding lightgreycolor">
                     <p class="mat-caption">
-                        Legende:<br>Wird eine Datenreihe ausgewählt, in der der Wert Gesamt enthalten ist und wir eine Summe dargestellt,
+                        Legende:<br>Wird die Zahl der Kategorien geändert, muss ein neuer Indikator ausgewählt werden, damit die Änderungen wirksam werden. Wird eine Datenreihe ausgewählt, in der der Wert Gesamt enthalten ist und wir eine Summe dargestellt,
                         landen alle Einheiten in der Kategorie niedrig. Darum sollten die Werte vor Übermittlung gefiltert werden, um den Wert Gesamt zu entfernen.<br>
                         Ist das ausgewählte Feature String und nicht numerisch, schlägt die Darstellung fehl.
                     </p>

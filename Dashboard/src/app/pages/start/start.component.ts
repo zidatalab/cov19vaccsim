@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 
+
 @Component({
   selector: 'app-start',
   templateUrl: './start.component.html',
@@ -21,6 +22,7 @@ export class StartComponent implements OnInit {
   testplot2:any;
   testplot3:any;
   tsplotdata:any;
+  tsplotdata2:any;
   barlayout:any;
   blkarte:any;
   hbarlayout:any;
@@ -62,6 +64,12 @@ this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/mast
   this.tsplotdata= this.filterArray(this.testtimeseriesdata,'name',this.selected_Land);
   this.bundeslandoptions = this.getOptions(this.testtimeseriesdata,'name');
   this.selected_Land = this.bundeslandoptions[0];
+
+})
+
+this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/plotdata/plot_rwert_bund.json')
+.subscribe(data=>{this.tsplotdata2=data;
+  this.tsplotdata2= this.filterArray(this.tsplotdata2,'name',this.bundeslandoptions[0]);
 
 })
 

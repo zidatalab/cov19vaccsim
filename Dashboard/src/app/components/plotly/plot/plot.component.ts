@@ -48,7 +48,7 @@ export class PlotComponent implements OnInit {
     };
     }
 
-    if (this.plottype=="tsline" || this.plottype=="lines"){
+    if (this.plottype=="tsline" || this.plottype=="lines" || this.plottype=="area"){
     this.plotlytype="lines";
     this.plotlayout = {
       xaxis: { fixedrange: false, automargin: false },
@@ -108,10 +108,13 @@ make_plotdata(source=[], xaxis="",ylist=[],type="bar",colors=this.colorscheme){
       width: this.linewidth
     }
    }
+   if (this.plottype=="area"  ){
+     trace["fill"]="tonexty";    
+    }
 
    list.push(trace)
    i = i+1
-  } 
+  }   
   return list
 }
 

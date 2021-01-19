@@ -46,7 +46,6 @@ export class MapComponent implements OnInit {
   }
 
   ngOnChanges(changes: any) {
-    console.log(changes);
     // On any change remove map-container and add new map-container
     if (changes.feature.previousValue){        
       this.initMap(this.containername);           
