@@ -15,13 +15,13 @@ export class PlotComponent implements OnInit {
   @Input() customlayout:any; 
   @Input() custommargins:any; 
   @Input() linewidth:number; 
+  @Input() colorscheme=[];
 
   constructor() { }
   plotlayout: any;
   plotdata: any;
   mainconfig: any;
-  plotlytype:string;
-  colorscheme = [];
+  plotlytype:string;  
 
 
   ngOnInit(): void {
@@ -86,11 +86,13 @@ export class PlotComponent implements OnInit {
     }
   }
 
-make_plotdata(source=[], xaxis="",ylist=[],type="bar",colors=this.colorscheme){
+make_plotdata(source=[], xaxis="",ylist=[],type="bar",colors){
+  if (!colors){colors=this.colorscheme};
   let xdata = this.getValues(source,xaxis)
   let list = []
   let i = 0 
   for (let name in ylist) {
+  
   let trace = this.make_trace(xdata ,this.getValues(source,ylist[i]),ylist[i],type=type);
    if (type=="hbar"){
     trace = this.make_trace(this.getValues(source,ylist[i]),xdata,ylist[i],type="bar")
