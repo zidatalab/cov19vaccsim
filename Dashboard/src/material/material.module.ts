@@ -23,12 +23,16 @@ import {MatChipsModule} from '@angular/material/chips';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatSliderModule} from '@angular/material/slider';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
   declarations: [],
   imports: [
-    CommonModule,    
+    CommonModule,  
+    FormsModule,
+    MatSliderModule,  
     MatSidenavModule,
     MatToolbarModule,
     MatCheckboxModule,
@@ -58,6 +62,8 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
   ],
   exports: [
     MatSidenavModule,
+    MatSliderModule,
+    FormsModule,
     MatCheckboxModule,
     MatToolbarModule,
     MatIconModule,

@@ -26,6 +26,7 @@ export class StartComponent implements OnInit {
   hbarlayout:any;
   tslayout:any;
   mainconfig:any;
+  setbins = 5;
   colorscheme= ["#004c8c","#0277bd","#58a5f0","#b71c1c","#7f0000"];
   wert : any;
   selected_Land = 'Gesamt';

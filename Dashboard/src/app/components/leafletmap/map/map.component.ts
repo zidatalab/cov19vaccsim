@@ -38,10 +38,7 @@ export class MapComponent implements OnInit {
     if (!this.Zoom) { this.Zoom = 5; };
     if (!this.center) { this.center = [51.948, 10.265]; };
     if (!this.opacity) { this.opacity = .6; };
-    if (!this.customlabels) { this.customlabels = []; };
-    console.log("Scale",this.makescale(10));
-    
-    
+    if (!this.customlabels) { this.customlabels = []; };       
   }
   ngAfterViewInit(): void {
     // Import Map data
@@ -49,11 +46,13 @@ export class MapComponent implements OnInit {
   }
 
   ngOnChanges(changes: any) {
+    console.log(changes);
     // On any change remove map-container and add new map-container
     if (changes.feature.previousValue){        
       this.initMap(this.containername);           
     };
     
+  
   }
 
   preparedom(divid){

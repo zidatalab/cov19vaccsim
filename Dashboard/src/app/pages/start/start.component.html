@@ -168,7 +168,14 @@
                       </ng-container>
                       
                     </mat-select>
+                    
+                  
                   </mat-form-field>
+                  <br>
+                  <span  >Anzahl Kategorien: &nbsp;
+                      <mat-slider thumbLabel=true step=1 min=1 max=20 
+                      [(ngModel)]="this.setbins"
+                       ></mat-slider> </span>
                   
                  
             </p>
@@ -189,7 +196,7 @@
                 <div *ngIf="this.blkarte">
                     <app-map 
                     [feature]="this.selected_Indicator" id="Bundesland"
-                    opacity=.8 [bins]="10"
+                    opacity=.8 [bins]="this.setbins"
                     [colorscale]="['green','yellow','crimson']"
                     [basemap]="this.blkarte" [data]="this.testtable"></app-map>
                 </div> 
@@ -197,7 +204,9 @@
             <mat-card-footer>
                 <div class="padding lightgreycolor">
                     <p class="mat-caption">
-                        Legende:<br>Keine bisher
+                        Legende:<br>Wird eine Datenreihe ausgewählt, in der der Wert Gesamt enthalten ist und wir eine Summe dargestellt,
+                        landen alle Einheiten in der Kategorie niedrig. Darum sollten die Werte vor Übermittlung gefiltert werden, um den Wert Gesamt zu entfernen.<br>
+                        Ist das ausgewählte Feature String und nicht numerisch, schlägt die Darstellung fehl.
                     </p>
                 </div>
             </mat-card-footer>
