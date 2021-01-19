@@ -86,8 +86,7 @@ export class PlotComponent implements OnInit {
     }
   }
 
-make_plotdata(source=[], xaxis="",ylist=[],type="bar",colors){
-  if (!colors){colors=this.colorscheme};
+make_plotdata(source=[], xaxis="",ylist=[],type="bar",colors=this.colorscheme){
   let xdata = this.getValues(source,xaxis)
   let list = []
   let i = 0 

@@ -17,6 +17,7 @@ import { BoxComponent } from './components/infobox/box/box.component';
 import { registerLocaleData } from '@angular/common';
 import locales from '@angular/common/locales/de';
 import { LOCALE_ID } from '@angular/core';
+import { UserComponent } from './pages/user/user.component';
 
 PlotlyModule.plotlyjs = PlotlyJS;
 
@@ -29,7 +30,8 @@ registerLocaleData(locales, 'de');
     MapComponent,
     PlotComponent,
     TableComponent,
-    BoxComponent
+    BoxComponent,
+    UserComponent
   ],
   imports: [
     BrowserModule,
