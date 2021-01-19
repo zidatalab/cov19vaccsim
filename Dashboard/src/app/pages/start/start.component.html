@@ -185,14 +185,14 @@
             </mat-card-header>
             <mat-card-content *ngIf="this.testtable && this.selected_Indicator">
 
+ 
                 <div *ngIf="this.blkarte">
-                    <app-map maptitle="Inzidenz nach Bundesland" 
-                    [(feature)]="this.selected_Indicator" id="Bundesland"
-                    [cutofflist]="[0,20,50,150,200,300]" opacity=.8
-                    [colorscale]="['green','yellow','orange','red','darkred','purple'                    ]"
+                    <app-map 
+                    [feature]="this.selected_Indicator" id="Bundesland"
+                    opacity=.8 [bins]="10"
+                    [colorscale]="['green','yellow','crimson']"
                     [basemap]="this.blkarte" [data]="this.testtable"></app-map>
                 </div> 
-
             </mat-card-content>
             <mat-card-footer>
                 <div class="padding lightgreycolor">
