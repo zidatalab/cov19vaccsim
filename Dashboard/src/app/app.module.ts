@@ -9,7 +9,6 @@ import * as PlotlyJS from 'plotly.js/dist/plotly.js';
 import { PlotlyModule ,PlotlyService} from 'angular-plotly.js';
 import * as SVLocale from 'plotly.js/lib/locales/de.js';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { HttpClientModule } from '@angular/common/http';
 import { MapComponent } from './components/leafletmap/map/map.component';
 import { PlotComponent } from './components/plotly/plot/plot.component';
 import { TableComponent } from './components/table/table/table.component';
@@ -17,7 +16,11 @@ import { BoxComponent } from './components/infobox/box/box.component';
 import { registerLocaleData } from '@angular/common';
 import locales from '@angular/common/locales/de';
 import { LOCALE_ID } from '@angular/core';
-import { UserComponent } from './pages/user/user.component';
+import { LoginComponent } from './pages/login/login.component';
+import { ProfileComponent } from './pages/profile/profile.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'; 
+import { InterceptorService } from './services/interceptor-service.service' 
 
 PlotlyModule.plotlyjs = PlotlyJS;
 
@@ -31,7 +34,9 @@ registerLocaleData(locales, 'de');
     PlotComponent,
     TableComponent,
     BoxComponent,
-    UserComponent
+    LoginComponent,
+    ProfileComponent
+    
   ],
   imports: [
     BrowserModule,
@@ -40,10 +45,20 @@ registerLocaleData(locales, 'de');
     HttpClientModule,
     BrowserAnimationsModule,
     PlotlyModule,
-    FlexLayoutModule  
+    FlexLayoutModule  ,
+    ReactiveFormsModule, 
+    FormsModule, 
+    HttpClientModule 
+
     
   ],
-  providers: [{provide: LOCALE_ID, useValue: 'de-DE' },PlotlyService],
+  providers: [{provide: LOCALE_ID, useValue: 'de-DE' },PlotlyService,
+
+  // This needs to be uncommented to provide  auth
+  { provide: HTTP_INTERCEPTORS, 
+  useClass: InterceptorService, 
+  multi: true } 
+],
   bootstrap: [AppComponent]
 })
 
