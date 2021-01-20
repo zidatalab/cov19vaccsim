@@ -1,40 +1,43 @@
-<div class="container" fxLayout="row wrap" fxLayoutGap="1rem" > 
-    <div fxFlex=100 style="max-width: 500px;"  *ngIf="!this.loggedin">
-    <mat-card>
-    <form [formGroup] = 'form' (ngSubmit) = 'login()'> 
-        <h1>Login</h1>
-        <mat-form-field appearance="outline" class="full-width">
-            <mat-label>E-Mail</mat-label>
-            <input matInput type="email" placeholder="Email" name="email"
-                formControlName = 'username'  required>
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Kennwort</mat-label>
-            <input matInput type="password" name="current-password"
-            formControlName = 'password'
-                required>
-        </mat-form-field>
-        
-        <div fxLayout="row" fxLayoutGap="1rem" fxLayoutAlign="space-between"> 
-            <div>
-            <button mat-raised-button color="primary" type ='submit' [disabled] = '!this.form.valid'> 
-                Login 
-            </button> 
-        </div> 
-        <div>
-            <button mat-raised-button color="warn" (click)="logout()"> 
-                Abbrechen 
-            </button> 
-        </div> 
-        </div>
-    </form> 
-    </mat-card>
+<div class="container" fxLayout="row wrap" fxLayoutGap="1rem">
+    <div fxFlex=100 style="max-width: 500px;" *ngIf="!this.loggedin">
+        <mat-card>
+            <form [formGroup]='form' (ngSubmit)='login()'>
+                <h1>Login</h1>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>E-Mail</mat-label>
+                    <input matInput type="email" placeholder="Email" name="email" formControlName='username' required>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Kennwort</mat-label>
+                    <input matInput type="password" name="current-password" formControlName='password' required>
+                </mat-form-field>
+
+                <div *ngIf="!this.login_pending" fxLayout="row" fxLayoutGap="1rem" fxLayoutAlign="space-between">
+                    <div>
+                        <button mat-raised-button color="primary" type='submit' [disabled]='!this.form.valid'>
+                            Login
+                        </button>
+                    </div>
+                    <div>
+                        <button mat-raised-button color="warn" (click)="logout()">
+                            Abbrechen
+                        </button>
+                    </div>
+                </div>
+                <div *ngIf="this.login_pending">
+                    ... in Bearbeitung ... 
+                </div>
+                <div *ngIf="this.loginerror">
+                    <p style="color:crimson;">Falscher Benutzername/Falsches Kennwort</p>
+                </div>
+            </form>
+        </mat-card>
     </div>
 
     <div *ngIf="this.loggedin">
         You're in!
-        <button mat-raised-button color="warn" (click)="logout()"> 
-            Ausloggen 
-        </button> 
+        <button mat-raised-button color="warn" (click)="logout()">
+            Ausloggen
+        </button>
     </div>
 </div>

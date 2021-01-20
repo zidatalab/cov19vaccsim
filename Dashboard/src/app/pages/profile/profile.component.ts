@@ -14,19 +14,11 @@ export class ProfileComponent implements OnInit {
     private _api : ApiService, 
     private _auth: AuthService, 
   ) { } 
- userdetails:any;
+ 
+  userdetails:any;
 
   ngOnInit(): void { 
-    this.test_jwt() 
-  } 
- 
-  test_jwt(){ 
-    this._api.getTypeRequest('users/me/').subscribe((res: any) => { 
-      console.log(res) 
-      this.userdetails = res;
- 
-    }, err => { 
-      console.log(err) 
-    }); 
+    this.userdetails= this._auth.getUserDetails().data;
+
   } 
 }

@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service'; 
 import {ApiService} from '../../services/api.service' 
 import {HttpParams} from '@angular/common/http';  
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+
  
 @Component({ 
   selector: 'app-login', 
@@ -18,10 +20,16 @@ export class LoginComponent implements OnInit {
     private router: Router, 
     public fb: FormBuilder 
     
+    
   ) { }
   loggedin:boolean; 
+  login_pending:boolean;
+  loginerror:boolean;
+
+
  
   ngOnInit(): void { 
+    this.login_pending = false;
     this.form = this.fb.group({ 
       username: ['', Validators.required], 
       password:['', Validators.required] 
@@ -29,25 +37,24 @@ export class LoginComponent implements OnInit {
     if(this._auth.getToken()){this.loggedin=true;}
   } 
  
-  login(){ 
-    let b = this.form.value 
-    const payload = new HttpParams()
-      .set('username', b.username)
-      .set('password', b.password);
-    this._api.postTypeRequest('login', payload).subscribe((res: any) => { 
-      console.log(res) 
-      if(res.access_token){ 
-        this._auth.setDataInLocalStorage('token', res.access_token) 
-        this.router.navigate(['profile']) 
-      } 
-    }, err => { 
-      console.log(err) 
-    }); 
+  login(){
+    this.login_pending = true;
+    this._auth.login(this.form.value).subscribe(data => {
+      let res:any = data;
+      this._auth.setDataInLocalStorage('token', res.access_token);
+      this._auth.updateUserData();
+      this.loggedin=true;  
+      this.router.navigate(['/']);    
+      
+    },error => {
+      this.loginerror = true;
+    });
+    this.login_pending = false;
   }
   
   logout(){
-    localStorage.clear();
-    this.router.navigate(['']);
+    this._auth.logout();    
+    this.router.navigate(['/']);
   }
  
 }

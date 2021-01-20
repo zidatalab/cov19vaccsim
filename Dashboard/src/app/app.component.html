@@ -5,8 +5,9 @@
         aria-label="Example icon-button with menu icon">
         <mat-icon>menu</mat-icon>
       </button>
-      <span>My Dashboard</span>
+      <span>{{this.title}}</span>
       <span class="example-spacer"></span>
+      <span class="mat-caption userinfo" *ngIf="this.loginstatus">Eingeloggt als {{this.currentuser.username}}</span>
       <a href="https://www.zi.de">
         <img src="https://ziwebstorage.blob.core.windows.net/appradar/assets/logo_zi_small_grey_transparent.png"
           style="height: 1.2rem;filter:brightness(120%);">
@@ -33,23 +34,23 @@
                 </a>
 
               </div>
-              <div >
+              <div *ngIf="this.loginoption && !this.loginstatus" >
 
                 <a mat-icon-button (click)="drawer.toggle()" href="/login">
                   <mat-icon class="icon">login</mat-icon>
-                  <span>Login</span>
+                  <span>Anmelden</span>
                 </a>
 
               </div>
-              <div>
+              <div *ngIf="this.loginstatus">
 
-                <a mat-icon-button (click)="drawer.toggle();logout();" href="/">
+                <a mat-icon-button (click)="drawer.toggle();" href="/profile">
                   <mat-icon class="icon">account_box</mat-icon>
                   <span>Profil</span>
                 </a>
 
               </div>
-              <div>
+              <div *ngIf="this.loginstatus">
 
                 <a mat-icon-button (click)="drawer.toggle();logout();" href="/">
                   <mat-icon class="icon">logout</mat-icon>
