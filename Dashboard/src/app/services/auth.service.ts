@@ -36,6 +36,16 @@ export class AuthService {
         return this._api.postTypeRequest('login', payload); 
       }
  
+    refreshToken(){
+        return this._api.getTypeRequest('login/refresh').subscribe(
+            data=>{
+                let result :any = data;
+                this.setDataInLocalStorage('token',result.access_token)
+                this.updateUserData();
+            }
+        )
+    }
+
     storeUserDetails(data) { 
         return localStorage.setItem('userInfo', JSON.stringify({data}));
     } 
