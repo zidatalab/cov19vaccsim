@@ -53,6 +53,7 @@ this.http.get('https://www.zidatasciencelab.de/covid19dashboard/data/tabledata/b
   this.wert = this.filterArray(this.testtable,"Bundesland","Gesamt")[0]; 
   this.indicators = this.getKeys(this.testtable);
   this.indicators.shift();
+  console.log(this.testtable);
 
   
 })

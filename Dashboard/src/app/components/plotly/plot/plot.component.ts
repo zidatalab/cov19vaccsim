@@ -15,6 +15,7 @@ export class PlotComponent implements OnInit {
   @Input() customlayout:any; 
   @Input() custommargins:any; 
   @Input() linewidth:number; 
+  @Input() showlegend:boolean; 
   @Input() colorscheme=[];
 
   constructor() { }
@@ -27,6 +28,15 @@ export class PlotComponent implements OnInit {
   ngOnInit(): void {
     if (!this.linewidth){this.linewidth=5};
     if (!this.colorscheme){this.colorscheme=["#004c8c", "#0277bd", "#58a5f0", "#b71c1c", "#7f0000"];}
+    this.make_plot();
+  }
+
+  ngOnChanges(changes: any) {
+    this.make_plot();
+  }
+
+
+  make_plot(){
     this.mainconfig = {
       displayModeBar: false,
       scrollZoom: false,
@@ -36,7 +46,7 @@ export class PlotComponent implements OnInit {
       showAxisDragHandles: false,
       showAxisRangeEntryBoxes: false,
       showTips: true,
-      responsive: true
+      responsive: true      
     };
     if (this.plottype=="bar"){
     this.plotlytype="bar";
@@ -65,17 +75,20 @@ export class PlotComponent implements OnInit {
       xaxis: { fixedrange: true, title: '', automargin: true },
       autosize: false, padding: 0,
       margin: { l: 200, r: 0, b: 20, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
+      
     };
   }
   if (this.custommargins){
     this.plotlayout['margin'] = this.custommargins;
   }
+  if (this.showlegend){
+    this.plotlayout['showlegend'] = true;
+  }
+
   this.plotdata = this.make_plotdata(this.data,this.xvalue,this.outcomes,this.plotlytype);
   }
 
-  ngOnChanges(changes: any) {
-    this.plotdata = this.make_plotdata(this.data,this.xvalue,this.outcomes,this.plotlytype);
-  }
+  
 
   make_trace(xdata= [] ,ydata = [],name:string,type=""){
     return {
@@ -112,7 +125,6 @@ make_plotdata(source=[], xaxis="",ylist=[],type="bar",colors=this.colorscheme){
    if (this.plottype=="area"  ){
      trace["fill"]="tonexty";    
     }
-
    list.push(trace)
    i = i+1
   }   

@@ -65,7 +65,9 @@
                 </mat-card-subtitle>
             </mat-card-header>
             <mat-card-content *ngIf="this.testtable" >
-                <app-plot [data]="this.testtable" xvalue="Bundesland" [outcomes]="['7-Tage-Inzidenz']"
+                <app-plot [data]="this.testtable" 
+                xvalue="Bundesland" [outcomes]="['7-Tage-Inzidenz','7-Tage-Inzidenz 80+']"
+                [showlegend]="true"
                 plottype="bar"></app-plot>
                 
 
