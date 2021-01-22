@@ -1,4 +1,4 @@
-<div class="container" fxLayout="row wrap" fxLayoutGap="1rem">
+<div class="container" fxLayout="column" fxLayoutGap="1rem">
     <div fxFlex=100 style="max-width: 500px;" *ngIf="!this.loggedin">
         <mat-card>
             <form [formGroup]='form' (ngSubmit)='login()'>

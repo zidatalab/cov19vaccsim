@@ -44,6 +44,14 @@
               </div>
               <div *ngIf="this.loginstatus">
 
+                <a mat-icon-button (click)="drawer.toggle();" href="/private">
+                  <mat-icon class="icon">lock_open</mat-icon>
+                  <span>Geschützter Bereich</span>
+                </a>
+
+              </div>
+              <div *ngIf="this.loginstatus">
+
                 <a mat-icon-button (click)="drawer.toggle();" href="/profile">
                   <mat-icon class="icon">account_box</mat-icon>
                   <span>Profil</span>
