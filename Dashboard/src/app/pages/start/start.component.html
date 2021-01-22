@@ -163,7 +163,7 @@
         <mat-card>
             <mat-card-header>
                 <mat-card-title>
-                    Neuinfizierte im Trend
+                    Akut Infizierte im Trend
                 </mat-card-title>
                 <mat-card-subtitle>
                     Datenbasis: RKI
@@ -171,9 +171,9 @@
             </mat-card-header>
             <mat-card-content *ngIf="this.tsplotdata2" >
 
-              <app-plot [(data)]="this.tsplotdata2"  
+              <app-plot [(data)]="this.akutinfiziert"  
                [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
-                xvalue="date" [outcomes]="['I_cases']" [colorscheme]="['orange']"
+                xvalue="date" [outcomes]="['Infected']" [colorscheme]="['green']"
                plottype="area"></app-plot> 
 
             </mat-card-content>

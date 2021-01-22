@@ -18,6 +18,7 @@ export class StartComponent implements OnInit {
   testbardata:any
   altmap:any;
   testtimeseriesdata:any;
+  akutinfiziert:any;
   testplot1:any;
   testplot2:any;
   testplot3:any;
@@ -45,19 +46,16 @@ export class StartComponent implements OnInit {
 this.http.get('/assets/data/bl.geojson')
 .subscribe(data=>{this.blkarte=data;})
 
-
-      
-
+// Import some public data    
 this.http.get('https://www.zidatasciencelab.de/covid19dashboard/data/tabledata/bundeslaender_table.json')
 .subscribe(data=>{this.testtable=data;
   this.wert = this.filterArray(this.testtable,"Bundesland","Gesamt")[0]; 
   this.indicators = this.getKeys(this.testtable);
   this.indicators.shift();
-  console.log(this.testtable);
-
-  
 })
 
+this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/plotdata/akutinfiziert.json')
+.subscribe(data=>{this.akutinfiziert=data})
 
 
 this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/plotdata/plot_rwert_bund.json')

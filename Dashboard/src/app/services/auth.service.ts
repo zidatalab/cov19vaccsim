@@ -32,10 +32,15 @@ export class AuthService {
         let b = formdata;
         const payload = new HttpParams()
           .set('username', b.username)
-          .set('password', b.password);
+          .set('password', b.password)
+          .set('client_id', this._api.REST_API_SERVER_CLIENTID);
         return this._api.postTypeRequest('login', payload); 
       }
  
+    adduser(data){
+        return this._api.postTypeRequest('newuser', data); 
+    }
+    
     refreshToken(){
         return this._api.getTypeRequest('login/refresh').subscribe(
             data=>{

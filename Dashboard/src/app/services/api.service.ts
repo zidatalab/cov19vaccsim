@@ -9,6 +9,8 @@ export class ApiService {
  
  
   public REST_API_SERVER = "http://localhost:8000/"; 
+  public REST_API_SERVER_CLIENTID = "TEST_Dashboard"; 
+
   constructor(private httpClient: HttpClient) { } 
  
   getTypeRequest(url) { 
