@@ -24,6 +24,7 @@
     "@angular/router": "~11.0.9",
     "@types/leaflet": "^1.5.21",
     "@types/mathjs": "^6.0.11",
+    "angular-cli-ghpages": "^1.0.0-rc.1",
     "angular-plotly.js": "^3.0.0",
     "chroma-js": "^2.1.0",
     "leaflet": "^1.7.1",

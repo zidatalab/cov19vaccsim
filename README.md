@@ -14,4 +14,6 @@ After update set
 
 `cp -r Dashboard/dist/Dashboard/* docs/`
 
+Build for github-pages
 
+`ng build --prod --base-href "https://www.zidatasciencelab.de/cov19vaccsim/"`
