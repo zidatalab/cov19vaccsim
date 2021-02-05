@@ -13,7 +13,7 @@ export class AppComponent {
   public currentuser : any;
   loginoption = false;
   public loginstatus:boolean;
-
+  
   constructor(
     private _auth : AuthService,
     private _api : ApiService    

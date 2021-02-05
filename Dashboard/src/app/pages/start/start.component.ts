@@ -15,7 +15,7 @@ export class StartComponent implements OnInit {
 
 map:any;  
 stand_impfungen_bund:any;
-
+days_since_start:number;
 // Sim Params
 params = {
 n_impfzentren:400,
@@ -32,6 +32,7 @@ updateinput:any;
 
   
   ngOnInit(): void {
+  this.update_days_since_start();
 
 // Import Map data
 this.http.get('/assets/data/bl.geojson')
@@ -53,6 +54,12 @@ getexternaldata(){
 
 }
 
+update_days_since_start(){
+  let date1 = new Date("2020-12-26"); 
+  let date2 = new Date();
+  this.days_since_start= Number((date2.getTime()-date1.getTime())/ (1000 * 3600 * 24));
+
+}
 update_kapazitaet(){
   let params = this.params;
   this.params.kapazitaet_pro_tag= 

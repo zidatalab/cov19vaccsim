@@ -1,6 +1,35 @@
 <div class="container" fxLayout="row wrap" fxLayoutGap="1rem" fxLayoutAllign="space-around">
-    <div fxFlex=100 fxFlex.lt-md=100 fxLayout="column">
+    <div fxFlex=100>
+        <mat-card>
+            <mat-card-title>Aktueller Stand der Impfkampagne</mat-card-title>
+            <mat-card-content>
+                <br><br>
+                <div fxLayout="row wrap" fxLayoutGap="1rem" fxLayoutAllign="space-around">
+                    <div fxFlex fxFlex.lt-md=100>
+                        <p>
+                            <span class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen gesamt'] |
+                                number:'1.0-0'}}</span><br>
+                            Dosen insgesamt verimpft
+                        </p>
+                    </div>
+                    <div fxFlex=30 fxFlex.lt-md=100>
+                        <p *ngIf="this.days_since_start">
+                            <span class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen gesamt']/(this.days_since_start/7) |
+                                number:'1.0-0'}}</span><br>
+                            Impfungen pro Woche
+                        </p>
+                    </div>
+                    <div fxFlex=30 fxFlex.lt-md=100>
+                        <p *ngIf="this.days_since_start">
+                            <span class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen gesamt']/(this.days_since_start) |
+                                number:'1.0-0'}}</span><br>
+                            Impfungen pro Tag
+                        </p>
+                    </div>
+                </div>
+            </mat-card-content>
 
+        </mat-card>
 
     </div>
     <div fxFlex fxFlex.lt-md=100>
