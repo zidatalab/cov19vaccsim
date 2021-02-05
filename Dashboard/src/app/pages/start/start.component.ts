@@ -16,6 +16,15 @@ export class StartComponent implements OnInit {
 map:any;  
 data:any;
 
+// Sim Params
+n_impfzentren=400;
+n_impfzentren_pat=500;
+impfzentren_tage=7;
+n_varzt=40000;
+n_varzt_pat=10;
+varzt_tage=5;
+
+
   
   ngOnInit(): void {
 
