@@ -58,11 +58,7 @@ getexternaldata(){
 this.http.get('https://www.zidatasciencelab.de/covid19dashboard/data/tabledata/impfsim_data.json')
 .subscribe(data=>{
   this.dosen_projektion = data;
-  this.update_kapazitaet(); 
-  console.log('input',this.dosen_projektion);
-  setTimeout(() => {console.log(this.sim_result)},500); 
-  
-  
+  this.update_kapazitaet();   
 });
 
 
