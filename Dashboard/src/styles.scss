@@ -47,7 +47,7 @@ $Dashboard-theme: mat-light-theme((
 // Define the default theme (same as the example above).
 $primary: mat-palette($mat-blue);
 $primaryultralight: mat-palette($mat-blue, 50);
-$accent:  mat-palette($mat-light-green, A200, A100, A400);
+$accent:  mat-palette($mat-green);
 $apptheme:   mat-light-theme($primary, $accent);
 
 // Include the default theme styles.

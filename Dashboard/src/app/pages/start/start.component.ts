@@ -14,7 +14,7 @@ export class StartComponent implements OnInit {
   constructor(private http:HttpClient) { }
 
 map:any;  
-data:any;
+stand_impfungen_bund:any;
 
 // Sim Params
 params = {
@@ -38,14 +38,20 @@ this.http.get('/assets/data/bl.geojson')
 .subscribe(data=>{this.map=data;})
 
 // Import some public data    
-this.http.get('https://www.zidatasciencelab.de/covid19dashboard/data/tabledata/bundeslaender_table.json')
-.subscribe(data=>{this.data=data;  
-})
+this.getexternaldata();
 this.update_kapazitaet(); 
 }
 
 
+getexternaldata(){
+  this.http.get('https://www.zidatasciencelab.de/covid19dashboard/data/tabledata/vacc_table_faktenblatt.json')
+.subscribe(data=>{
+  this.stand_impfungen_bund=this.filterArray(data,"Bundesland","Gesamt")[0];
+  console.log(this.stand_impfungen_bund)  ;
+});
 
+
+}
 
 update_kapazitaet(){
   let params = this.params;
