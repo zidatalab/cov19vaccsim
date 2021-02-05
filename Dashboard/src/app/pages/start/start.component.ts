@@ -15,8 +15,11 @@ export class StartComponent implements OnInit {
 
 map:any;  
 stand_impfungen_bund:any;
+dosen_projektion:any;
+sim_result:any;
 days_since_start:number;
 // Sim Params
+verteilungszenarien = ["Gleichverteilung","Linearer Anstieg der Produktion in Q2"];
 params = {
 n_impfzentren:400,
 n_impfzentren_pat:500,
@@ -26,9 +29,12 @@ n_varzt_pat:10,
 varzt_tage:5,
 kapazitaet_pro_tag:0,
 kapazitaet_pro_woche:0,
-
+impflinge : 67864036,
+verteilungszenario : this.verteilungszenarien[0]
 };
 updateinput:any;
+
+
 
   
   ngOnInit(): void {
@@ -40,24 +46,85 @@ this.http.get('/assets/data/bl.geojson')
 
 // Import some public data    
 this.getexternaldata();
-this.update_kapazitaet(); 
 }
 
 
 getexternaldata(){
   this.http.get('https://www.zidatasciencelab.de/covid19dashboard/data/tabledata/vacc_table_faktenblatt.json')
 .subscribe(data=>{
-  this.stand_impfungen_bund=this.filterArray(data,"Bundesland","Gesamt")[0];
-  console.log(this.stand_impfungen_bund)  ;
+  this.stand_impfungen_bund=this.filterArray(data,"Bundesland","Gesamt")[0];  
+});
+this.http.get('https://www.zidatasciencelab.de/covid19dashboard/data/tabledata/impfsim_data.json')
+.subscribe(data=>{
+  this.dosen_projektion = data;
+  this.update_kapazitaet(); 
+  console.log('input',this.dosen_projektion);
+  setTimeout(() => {console.log(this.sim_result)},500); 
+  
+  
 });
 
 
+}
+
+
+do_simulation(myinput,params){
+  let szenario=params.verteilungszenario;
+  let kapazitaet=params.kapazitaet_pro_woche;
+  let impflinge=params.impflinge
+  let input = this.filterArray(myinput,"Verteilungsszenario",szenario);
+  let result=[];
+  let finalresult = [];
+  for (var _i = 0; _i < input.length; _i++) {
+    let current_item = input[_i];
+    current_item['Dosen_aktuell'] = 0;
+    if (_i>0){
+      current_item['Dosen_aktuell'] = current_item.Dosen+result[result.length-1].Rest_Dosen;
+      current_item['Patienten_aktuell'] = current_item.Patienten+result[result.length-1].Rest_Patienten;
+    }
+    else {
+      current_item['Dosen_aktuell'] = current_item.Dosen;
+      current_item['Patienten_aktuell'] = current_item.Patienten
+    }
+    current_item['Anteil']= current_item.Dosen_aktuell / kapazitaet;
+    if (current_item.Anteil>1){
+      current_item['Anwendung']= current_item.Dosen_aktuell * (1 / current_item.Anteil);
+      current_item['Anwendung_Patienten']= current_item.Patienten_aktuell * (1 / current_item.Anteil);
+      current_item['Rest_Dosen']= current_item.Dosen_aktuell - current_item['Anwendung'];
+      current_item['Rest_Patienten']= current_item.Patienten_aktuell - current_item['Anwendung_Patienten'];
+    } 
+    else {
+      current_item['Anwendung']= current_item.Dosen_aktuell;
+      current_item['Anwendung_Patienten']= current_item.Patienten_aktuell ;
+      current_item['Rest_Dosen']= 0;
+      current_item['Rest_Patienten']= 0;
+    }
+    if (_i>0){
+      current_item['Anwendung_kum'] = current_item.Anwendung+result[_i-1].Anwendung_kum;
+      current_item['Anwendung_Patienten_kum'] = current_item.Anwendung_Patienten+result[_i-1].Anwendung_Patienten_kum;
+    }
+    else {
+        current_item['Anwendung_kum'] = current_item.Anwendung;
+        current_item['Anwendung_Patienten_kum'] = current_item.Anwendung_Patienten;      
+    }
+    
+      result.push(current_item);  
+    if (current_item.Anwendung_Patienten_kum<=impflinge){
+      finalresult.push(current_item);
+    }
+    
+  }
+  
+  
+
+  this.sim_result=finalresult;   
 }
 
 update_days_since_start(){
   let date1 = new Date("2020-12-26"); 
   let date2 = new Date();
   this.days_since_start= Number((date2.getTime()-date1.getTime())/ (1000 * 3600 * 24));
+
 
 }
 update_kapazitaet(){
@@ -66,6 +133,10 @@ update_kapazitaet(){
   (params.impfzentren_tage*params.n_impfzentren*params.n_impfzentren_pat+
   params.varzt_tage*params.n_varzt*params.n_varzt_pat)*1/7;
   this.params.kapazitaet_pro_woche=this.params.kapazitaet_pro_tag*7;
+  const data = this.dosen_projektion;
+  const myparams = this.params;
+  this.do_simulation(data,myparams);
+  
 }
 
 getValues(array, key) {

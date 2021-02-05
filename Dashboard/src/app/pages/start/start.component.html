@@ -6,21 +6,21 @@
                 <br><br>
                 <div fxLayout="row wrap" fxLayoutGap="1rem" fxLayoutAllign="space-around">
                     <div fxFlex fxFlex.lt-md=100>
-                        <p>
+                        <p *ngIf="this.stand_impfungen_bund">
                             <span class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen gesamt'] |
                                 number:'1.0-0'}}</span><br>
                             Dosen insgesamt verimpft
                         </p>
                     </div>
                     <div fxFlex=30 fxFlex.lt-md=100>
-                        <p *ngIf="this.days_since_start">
+                        <p *ngIf="this.stand_impfungen_bund">
                             <span class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen gesamt']/(this.days_since_start/7) |
                                 number:'1.0-0'}}</span><br>
                             Impfungen pro Woche
                         </p>
                     </div>
                     <div fxFlex=30 fxFlex.lt-md=100>
-                        <p *ngIf="this.days_since_start">
+                        <p *ngIf="this.stand_impfungen_bund">
                             <span class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen gesamt']/(this.days_since_start) |
                                 number:'1.0-0'}}</span><br>
                             Impfungen pro Tag
@@ -112,7 +112,58 @@
     </div>
     <div fxFlex=100>
         <mat-card>
-            Sim Results
+            <mat-card-title>Simulation</mat-card-title>
+            <mat-card-subtitle>Vereinfachte Simulation auf Basis der Parameter</mat-card-subtitle>
+            <div fxLayout="column" fxLayoutGap="1rem" fxLayoutAllign="space-around">
+                <div fxFlex=100>
+                    <h2>Impfstoffszenario</h2>
+                    <mat-radio-group class="my-radio-group" 
+                    [(ngModel)]="this.params.verteilungszenario"    
+                    (change)="this.update_kapazitaet();"                
+                    >
+                        <ng-container  *ngFor="let szenario of this.verteilungszenarien">
+                            <mat-radio-button class="my-radio-button" [value]="szenario">{{szenario}}</mat-radio-button>    
+                        </ng-container>
+                        
+                        
+                      </mat-radio-group>
+                </div>
+                <div fxFlex=100>
+                    <h2>Ergebnisse</h2>
+                    <div fxLayout="row wrap">
+                        <div fxFlex=100>
+                            <mat-card>
+                                <mat-card-header>
+                                    <mat-card-title>
+                                        Verfügbarkeit von Impfdosen
+                                    </mat-card-title>
+                                    <mat-card-subtitle>
+                                        
+                                    </mat-card-subtitle>
+                                </mat-card-header>
+                                <mat-card-content *ngIf="this.sim_result" >
+                    
+                                  <app-plot [(data)]="this.sim_result"  
+                                   [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
+                                    xvalue="kw" [outcomes]="['Dosen']"
+                                   plottype="tsline"></app-plot> 
+                    
+                                </mat-card-content>
+                                <mat-card-footer>
+                                    <div class="padding lightgreycolor">
+                                        <p class="mat-caption">
+                                            Legende:<br>Projektion auf Basis der aktuellen Verträge mit den Herstellern.
+                                        </p>
+                                    </div>
+                                </mat-card-footer>
+                            </mat-card>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
         </mat-card>
 
     </div>
