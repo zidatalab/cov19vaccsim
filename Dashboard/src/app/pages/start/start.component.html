@@ -182,7 +182,7 @@
                     </div>
                     <div fxLayout="row wrap">
                         <div fxFlex=100 *ngIf="this.sim_result">
-                            <h2>Vedreinfacht modellierte Impfquote</h2>
+                            <h2>Vereinfacht modellierte Impfquote</h2>
                             <div>
                                 <app-plot [(data)]="this.sim_result" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
                                     xvalue="maxdate" [outcomes]="['Impfquote']" plottype="tsline"></app-plot>
