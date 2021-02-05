@@ -14,14 +14,16 @@
                     </div>
                     <div fxFlex=30 fxFlex.lt-md=100>
                         <p *ngIf="this.stand_impfungen_bund">
-                            <span class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen gesamt']/(this.days_since_start/7) |
+                            <span class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen
+                                gesamt']/(this.days_since_start/7) |
                                 number:'1.0-0'}}</span><br>
                             Impfungen pro Woche
                         </p>
                     </div>
                     <div fxFlex=30 fxFlex.lt-md=100>
                         <p *ngIf="this.stand_impfungen_bund">
-                            <span class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen gesamt']/(this.days_since_start) |
+                            <span class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen
+                                gesamt']/(this.days_since_start) |
                                 number:'1.0-0'}}</span><br>
                             Impfungen pro Tag
                         </p>
@@ -37,7 +39,7 @@
             <mat-card-title>Auswahl der Parameter</mat-card-title>
             <mat-card-content>
                 <br>
-                <div fxLayout="row wrap" fxLayoutGap="1rem" fxLayoutAllign="space-around">
+                <div fxLayout="row wrap" fxLayoutGap=".1rem" fxLayoutAllign="space-around">
                     <div fxFlex=40 fxFlex.lt-md=100>
                         <h2>
                             <strong>Impfzentren</strong><br>
@@ -48,12 +50,10 @@
                         <p>Anzahl:
                             <mat-slider [(ngModel)]="this.params.n_impfzentren" min="100" max="500" step="10"
                                 (change)="this.update_kapazitaet();"></mat-slider> {{this.params.n_impfzentren}}
-                        </p>
-                        <p>Patienten pro Tag:
+                        <br>Patienten pro Tag:
                             <mat-slider [(ngModel)]="this.params.n_impfzentren_pat" min="100" max="1000" step="10"
                                 (change)="this.update_kapazitaet();"></mat-slider> {{this.params.n_impfzentren_pat}}
-                        </p>
-                        <p>Arbeitstage pro Woche:
+                        <br>Arbeitstage pro Woche:
                             <mat-slider [(ngModel)]="this.params.impfzentren_tage" min="0" max="7" step="1"
                                 (change)="this.update_kapazitaet();"></mat-slider> {{this.params.impfzentren_tage}}
                         </p>
@@ -68,18 +68,38 @@
                         <p>Anzahl:
                             <mat-slider [(ngModel)]="this.params.n_varzt" min="0" max="50000" step="1000"
                                 (change)="this.update_kapazitaet();"></mat-slider> {{this.params.n_varzt}}
-                        </p>
-                        <p>Patienten pro Tag:
+                        <br>Patienten pro Tag:
                             <mat-slider [(ngModel)]="this.params.n_varzt_pat" min="10" max="80" step="10"
                                 (change)="this.update_kapazitaet();"></mat-slider> {{this.params.n_varzt_pat}}
-                        </p>
-                        <p>Arbeitstage pro Woche:
+                        <br>Arbeitstage pro Woche:
                             <mat-slider [(ngModel)]="this.params.varzt_tage" min="0" max="7" step="1"
                                 (change)="this.update_kapazitaet();"></mat-slider> {{this.params.varzt_tage}}
                         </p>
                     </div>
                 </div>
-                <div fxLayout="column" fxLayoutGap="2rem">
+                <div fxLayout="row wrap" >
+                    <div fxFlex=100><h2><strong>Impfstoff Lieferungen</strong></h2></div>
+                    <div fxFlex>
+                        <h3><strong>Liefermenge zu Auftragsvolumen</strong><br></h3>
+                        <p>Liefermenge:
+                            <mat-slider [(ngModel)]="this.params.liefermenge" min=".8" max="1.2" step="0.01"
+                                (change)="this.update_kapazitaet();"></mat-slider> {{this.params.liefermenge*100}} %
+                        </p>
+                    </div>   
+                    <div fxFlex=50>
+                        <h3><strong>Eingang</strong></h3>
+                        <mat-radio-group class="my-radio-group" [(ngModel)]="this.params.verteilungszenario"
+                            (change)="this.update_kapazitaet();">
+                            <ng-container *ngFor="let szenario of this.verteilungszenarien">
+                                <mat-radio-button class="my-radio-button" [value]="szenario">{{szenario}}</mat-radio-button>
+                            </ng-container>
+    
+    
+                        </mat-radio-group>
+                    </div>            
+
+                </div>
+                <div fxLayout="column" fxLayoutGap="0rem">
                     <div>
                         <h2><strong>Impfkapazität</strong><br>
                         </h2>
@@ -116,35 +136,53 @@
             <mat-card-subtitle>Vereinfachte Simulation auf Basis der Parameter</mat-card-subtitle>
             <div fxLayout="column" fxLayoutGap="1rem" fxLayoutAllign="space-around">
                 <div fxFlex=100>
-                    <h2>Impfstoffszenario</h2>
-                    <mat-radio-group class="my-radio-group" 
-                    [(ngModel)]="this.params.verteilungszenario"    
-                    (change)="this.update_kapazitaet();"                
-                    >
-                        <ng-container  *ngFor="let szenario of this.verteilungszenarien">
-                            <mat-radio-button class="my-radio-button" [value]="szenario">{{szenario}}</mat-radio-button>    
-                        </ng-container>
-                        
-                        
-                      </mat-radio-group>
-                </div>
-                <div fxFlex=100>
-                    <h2>Ergebnisse</h2>
                     <div fxLayout="row wrap">
-                        <div fxFlex=100 *ngIf="this.sim_result">                                                 
-                        <h2>Verfügbarkeit von Impfdosen</h2>
-                        <div>
-                                  <app-plot [(data)]="this.sim_result"  
-                                   [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
-                                    xvalue="kw" [outcomes]="['Dosen']"
-                                   plottype="tsline"></app-plot> 
+                        <div fxFlex=100 *ngIf="this.sim_result">
+                            <h2>Gelieferte und Verimpfte Dosen</h2>
+                            <div>
+                                <app-plot [(data)]="this.sim_result" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
+                                    xvalue="maxdate" 
+                                    [colorscheme]="['crimson','green']"
+                                    [outcomes]="['Dosen verfügbar','Anwendung']" plottype="tsline"></app-plot>
+                            </div>
+                            <div class="padding lightgreycolor">
+                                <p class="mat-caption">
+                                    Legende:<br>Projektion auf Basis der aktuellen Verträge mit den Herstellern.
+                                </p>
+                            </div>
+
                         </div>
-                    
-                                    <div class="padding lightgreycolor">
-                                        <p class="mat-caption">
-                                            Legende:<br>Projektion auf Basis der aktuellen Verträge mit den Herstellern.
-                                        </p>
-                                    </div>                          
+
+                    </div>
+                    <div fxLayout="row wrap">
+                        <div fxFlex=100 *ngIf="this.sim_result">
+                            <h2>Durchgeführte Impfungen</h2>
+                            <div>
+                                <app-plot [(data)]="this.sim_result" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
+                                    xvalue="maxdate" [colorscheme]="['green']"
+                                    [outcomes]="['Anwendung_kum']" plottype="tsline"></app-plot>
+                            </div>
+                            <div class="padding lightgreycolor">
+                                <p class="mat-caption">
+                                    Legende:<br>Projektion auf Basis der aktuellen Verträge mit den Herstellern.
+                                </p>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div fxLayout="row wrap">
+                        <div fxFlex=100 *ngIf="this.sim_result">
+                            <h2>Vedreinfacht modellierte Impfquote</h2>
+                            <div>
+                                <app-plot [(data)]="this.sim_result" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
+                                    xvalue="maxdate" [outcomes]="['Impfquote']" plottype="tsline"></app-plot>
+                            </div>
+                            <div class="padding lightgreycolor">
+                                <p class="mat-caption">
+                                    Legende:<br>Projektion auf Basis der aktuellen Verträge mit den Herstellern.
+                                </p>
+                            </div>
 
                         </div>
 

@@ -29,6 +29,7 @@ n_varzt_pat:10,
 varzt_tage:5,
 kapazitaet_pro_tag:0,
 kapazitaet_pro_woche:0,
+liefermenge:1.0,
 impflinge : 67864036,
 verteilungszenario : this.verteilungszenarien[0]
 };
@@ -71,7 +72,8 @@ this.http.get('https://www.zidatasciencelab.de/covid19dashboard/data/tabledata/i
 do_simulation(myinput,params){
   let szenario=params.verteilungszenario;
   let kapazitaet=params.kapazitaet_pro_woche;
-  let impflinge=params.impflinge
+  let impflinge=params.impflinge;
+  let liefermenge = params.liefermenge;
   let input = this.filterArray(myinput,"Verteilungsszenario",szenario);
   let result=[];
   let finalresult = [];
@@ -79,13 +81,14 @@ do_simulation(myinput,params){
     let current_item = input[_i];
     current_item['Dosen_aktuell'] = 0;
     if (_i>0){
-      current_item['Dosen_aktuell'] = current_item.Dosen+result[result.length-1].Rest_Dosen;
-      current_item['Patienten_aktuell'] = current_item.Patienten+result[result.length-1].Rest_Patienten;
+      current_item['Dosen_aktuell'] = current_item.Dosen*liefermenge+result[result.length-1].Rest_Dosen;
+      current_item['Patienten_aktuell'] = current_item.Patienten*liefermenge+result[result.length-1].Rest_Patienten;
     }
     else {
-      current_item['Dosen_aktuell'] = current_item.Dosen;
-      current_item['Patienten_aktuell'] = current_item.Patienten
+      current_item['Dosen_aktuell'] = current_item.Dosen*liefermenge;
+      current_item['Patienten_aktuell'] = current_item.Patienten*liefermenge;
     }
+    current_item['Dosen verfügbar']= current_item.Dosen*liefermenge;
     current_item['Anteil']= current_item.Dosen_aktuell / kapazitaet;
     if (current_item.Anteil>1){
       current_item['Anwendung']= current_item.Dosen_aktuell * (1 / current_item.Anteil);
@@ -102,15 +105,22 @@ do_simulation(myinput,params){
     if (_i>0){
       current_item['Anwendung_kum'] = current_item.Anwendung+result[_i-1].Anwendung_kum;
       current_item['Anwendung_Patienten_kum'] = current_item.Anwendung_Patienten+result[_i-1].Anwendung_Patienten_kum;
+      current_item['Impfquote'] = 100*(current_item['Anwendung_Patienten_kum'])/impflinge;
     }
     else {
-        current_item['Anwendung_kum'] = current_item.Anwendung;
-        current_item['Anwendung_Patienten_kum'] = current_item.Anwendung_Patienten;      
+        current_item['Anwendung_kum'] = current_item.Anwendung+this.stand_impfungen_bund['Zahl der Impfungen gesamt'];
+        current_item['Anwendung_Patienten_kum'] = current_item.Anwendung_Patienten+this.stand_impfungen_bund['Zahl der Impfungen gesamt']/2;      
     }
+
     
       result.push(current_item);  
     if (current_item.Anwendung_Patienten_kum<=impflinge){
       finalresult.push(current_item);
+    }
+    else {
+      current_item['Anwendung_Patienten_kum'] = impflinge;
+      current_item['Impfquote'] = 100;
+      finalresult.push(current_item);      
     }
     
   }

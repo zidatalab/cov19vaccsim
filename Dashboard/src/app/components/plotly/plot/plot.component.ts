@@ -52,7 +52,7 @@ export class PlotComponent implements OnInit {
     this.plotlytype="bar";
     this.plotlayout = {
       xaxis: { fixedrange: false, type: 'category', automargin: false },
-      yaxis: { fixedrange: true, title: '', automargin: true },
+      yaxis: { fixedrange: true, title: '', automargin: true ,rangemode: 'tozero'},
       autosize: false, padding: 0,
       margin: { l: 0, r: 100, b: 100, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
     };
@@ -62,7 +62,7 @@ export class PlotComponent implements OnInit {
     this.plotlytype="lines";
     this.plotlayout = {
       xaxis: { fixedrange: false, automargin: false },
-      yaxis: { fixedrange: true, title: '', automargin: true },
+      yaxis: { fixedrange: true, title: '', automargin: true , rangemode: 'tozero'},
       autosize: false, padding: 0,
       margin: { l: 0, r: 20, b: 20, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
     };
@@ -71,7 +71,7 @@ export class PlotComponent implements OnInit {
   if (this.plottype=="hbar"){
     this.plotlytype="hbar";
     this.plotlayout = {
-      yaxis: { fixedrange: false, type: 'category', automargin: false },
+      yaxis: { fixedrange: false, type: 'category', automargin: false ,rangemode: 'tozero'},
       xaxis: { fixedrange: true, title: '', automargin: true },
       autosize: false, padding: 0,
       margin: { l: 200, r: 0, b: 20, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
