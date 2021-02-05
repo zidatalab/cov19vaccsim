@@ -1,45 +1,88 @@
 <div class="container" fxLayout="row wrap" fxLayoutGap="1rem" fxLayoutAllign="space-around">
     <div fxFlex=100 fxFlex.lt-md=100 fxLayout="column">
-        
+
 
     </div>
     <div fxFlex fxFlex.lt-md=100>
         <mat-card>
-        <mat-card-title>Auswahl der Parameter</mat-card-title>
-        <mat-card-content>
-            <div fxLayout="row" fxLayoutGap="20px">
-                <div fxFlex=50>
-                    <h2><strong>Impfzentren</strong></h2>
-                    <p>Anzahl: 
-                    <mat-slider [(ngModel)]="this.n_impfzentren" min="100" max="500" step="10"></mat-slider> {{this.n_impfzentren}}</p>
-                    <p>Patienten pro Tag: 
-                        <mat-slider [(ngModel)]="this.n_impfzentren_pat" min="100" max="1000" step="10"></mat-slider> {{this.n_impfzentren_pat}}
-                    </p>
-                    <p>Arbeitstage pro Woche: 
-                        <mat-slider [(ngModel)]="this.impfzentren_tage" min="0" max="7" step="1"></mat-slider> {{this.impfzentren_tage}}
-                    </p>
+            <mat-card-title>Auswahl der Parameter</mat-card-title>
+            <mat-card-content>
+                <br>
+                <div fxLayout="row wrap" fxLayoutGap="1rem" fxLayoutAllign="space-around">
+                    <div fxFlex=40 fxFlex.lt-md=100>
+                        <h2>
+                            <strong>Impfzentren</strong><br>
+                            <span>
+                                <mat-icon class="bigicon" [inline]="true">corporate_fare</mat-icon>
+                            </span>
+                        </h2>
+                        <p>Anzahl:
+                            <mat-slider [(ngModel)]="this.params.n_impfzentren" min="100" max="500" step="10"
+                                (change)="this.update_kapazitaet();"></mat-slider> {{this.params.n_impfzentren}}
+                        </p>
+                        <p>Patienten pro Tag:
+                            <mat-slider [(ngModel)]="this.params.n_impfzentren_pat" min="100" max="1000" step="10"
+                                (change)="this.update_kapazitaet();"></mat-slider> {{this.params.n_impfzentren_pat}}
+                        </p>
+                        <p>Arbeitstage pro Woche:
+                            <mat-slider [(ngModel)]="this.params.impfzentren_tage" min="0" max="7" step="1"
+                                (change)="this.update_kapazitaet();"></mat-slider> {{this.params.impfzentren_tage}}
+                        </p>
+                    </div>
+                    <div fxFlex=40 fxFlex.lt-md=100>
+                        <h2>
+                            <strong>Vertragsärzte</strong><br>
+                            <span>
+                                <mat-icon class="bigicon" [inline]="true">local_hospital</mat-icon>
+                            </span>
+                        </h2>
+                        <p>Anzahl:
+                            <mat-slider [(ngModel)]="this.params.n_varzt" min="0" max="50000" step="1000"
+                                (change)="this.update_kapazitaet();"></mat-slider> {{this.params.n_varzt}}
+                        </p>
+                        <p>Patienten pro Tag:
+                            <mat-slider [(ngModel)]="this.params.n_varzt_pat" min="10" max="80" step="10"
+                                (change)="this.update_kapazitaet();"></mat-slider> {{this.params.n_varzt_pat}}
+                        </p>
+                        <p>Arbeitstage pro Woche:
+                            <mat-slider [(ngModel)]="this.params.varzt_tage" min="0" max="7" step="1"
+                                (change)="this.update_kapazitaet();"></mat-slider> {{this.params.varzt_tage}}
+                        </p>
+                    </div>
                 </div>
-            </div>
-            <div fxLayout="row" fxLayoutGap="20px">
-                <div fxFlex=50>
-                    <h2><strong>Vertragsärzte</strong></h2>
-                    <p>Anzahl: 
-                    <mat-slider [(ngModel)]="this.n_varzt" min="1000" max="50000" step="1000"></mat-slider> {{this.n_impfzentren}}</p>
-                    <p>Patienten pro Tag: 
-                        <mat-slider [(ngModel)]="this.n_varzt_pat" min="10" max="80" step="10"></mat-slider> {{this.n_impfzentren_pat}}
-                    </p>
-                    <p>Arbeitstage pro Woche: 
-                        <mat-slider [(ngModel)]="this.varzt_tage" min="0" max="7" step="1"></mat-slider> {{this.impfzentren_tage}}
-                    </p>
+                <div fxLayout="column" fxLayoutGap="2rem">
+                    <div>
+                        <h2><strong>Impfkapazität</strong><br>
+                        </h2>
+                    </div>
+                    <div fxLayout="row wrap" fxLayoutGap="5rem">
+                        <div fxFlex=45 fxFlex.lt-l=100>
+                            <div class="mat-padding">
+                                <p>
+                                    <span class="bignum">{{this.params.kapazitaet_pro_tag | number:'1.0-0'}}</span><br>
+                                    Dosen pro Tag
+                                </p>
+                            </div>
+                        </div>
+                        <div class="mat-padding" fxFlex=45 fxFlex.lt-l=100>
+                            <div>
+                                <p>
+                                    <span class="bignum">{{this.params.kapazitaet_pro_woche |
+                                        number:'1.0-0'}}</span><br>
+                                    Dosen pro Woche
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-            </div>
-        </mat-card-content>
+            </mat-card-content>
         </mat-card>
 
     </div>
     <div fxFlex=100>
         <mat-card>
-         Sim Results
+            Sim Results
         </mat-card>
 
     </div>

@@ -17,13 +17,18 @@ map:any;
 data:any;
 
 // Sim Params
-n_impfzentren=400;
-n_impfzentren_pat=500;
-impfzentren_tage=7;
-n_varzt=40000;
-n_varzt_pat=10;
-varzt_tage=5;
+params = {
+n_impfzentren:400,
+n_impfzentren_pat:500,
+impfzentren_tage:7,
+n_varzt:0,
+n_varzt_pat:10,
+varzt_tage:5,
+kapazitaet_pro_tag:0,
+kapazitaet_pro_woche:0,
 
+};
+updateinput:any;
 
   
   ngOnInit(): void {
@@ -36,9 +41,19 @@ this.http.get('/assets/data/bl.geojson')
 this.http.get('https://www.zidatasciencelab.de/covid19dashboard/data/tabledata/bundeslaender_table.json')
 .subscribe(data=>{this.data=data;  
 })
-
+this.update_kapazitaet(); 
 }
 
+
+
+
+update_kapazitaet(){
+  let params = this.params;
+  this.params.kapazitaet_pro_tag= 
+  (params.impfzentren_tage*params.n_impfzentren*params.n_impfzentren_pat+
+  params.varzt_tage*params.n_varzt*params.n_varzt_pat)*1/7;
+  this.params.kapazitaet_pro_woche=this.params.kapazitaet_pro_tag*7;
+}
 
 getValues(array, key) {
    let values = [];
