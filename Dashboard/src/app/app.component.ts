@@ -11,7 +11,7 @@ import { AuthService } from './services/auth.service';
 export class AppComponent {
   title = 'Dashboard';
   public currentuser : any;
-  loginoption = true;
+  loginoption = false;
   public loginstatus:boolean;
 
   constructor(
