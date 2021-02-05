@@ -9,3 +9,9 @@ If this is the case, the Dashboard can be tested with the following commands fro
 First launch only: `npm install`
 
 `ng serve`
+
+After update set 
+
+`cp -r Dashboard/dist/Dashboard/* docs/`
+
+
