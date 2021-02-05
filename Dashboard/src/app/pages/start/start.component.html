@@ -131,32 +131,20 @@
                 <div fxFlex=100>
                     <h2>Ergebnisse</h2>
                     <div fxLayout="row wrap">
-                        <div fxFlex=100>
-                            <mat-card>
-                                <mat-card-header>
-                                    <mat-card-title>
-                                        Verfügbarkeit von Impfdosen
-                                    </mat-card-title>
-                                    <mat-card-subtitle>
-                                        
-                                    </mat-card-subtitle>
-                                </mat-card-header>
-                                <mat-card-content *ngIf="this.sim_result" >
-                    
+                        <div fxFlex=100 *ngIf="this.sim_result">                                                 
+                        <h2>Verfügbarkeit von Impfdosen</h2>
+                        <div>
                                   <app-plot [(data)]="this.sim_result"  
                                    [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
                                     xvalue="kw" [outcomes]="['Dosen']"
                                    plottype="tsline"></app-plot> 
+                        </div>
                     
-                                </mat-card-content>
-                                <mat-card-footer>
                                     <div class="padding lightgreycolor">
                                         <p class="mat-caption">
                                             Legende:<br>Projektion auf Basis der aktuellen Verträge mit den Herstellern.
                                         </p>
-                                    </div>
-                                </mat-card-footer>
-                            </mat-card>
+                                    </div>                          
 
                         </div>
 
