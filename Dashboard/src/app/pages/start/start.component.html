@@ -152,7 +152,7 @@
                                 <app-plot [(data)]="this.sim_result" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
                                     xvalue="maxdate" 
                                     [colorscheme]="['crimson','green']"
-                                    [outcomes]="['Dosen verfügbar','Anwendung']" plottype="tsline"></app-plot>
+                                    [outcomes]="['Dosen verfügbar','Anwendung']" plottype="area"></app-plot>
                             </div>
                             <div class="padding lightgreycolor">
                                 <p class="mat-caption">
@@ -169,7 +169,7 @@
                             <div>
                                 <app-plot [(data)]="this.sim_result" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
                                     xvalue="maxdate" [colorscheme]="['green']"
-                                    [outcomes]="['Anwendung_kum']" plottype="tsline"></app-plot>
+                                    [outcomes]="['Anwendung_kum']" plottype="area"></app-plot>
                             </div>
                             <div class="padding lightgreycolor">
                                 <p class="mat-caption">
@@ -185,7 +185,7 @@
                             <h2>Vereinfacht modellierte Impfquote</h2>
                             <div>
                                 <app-plot [(data)]="this.sim_result" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
-                                    xvalue="maxdate" [outcomes]="['Impfquote']" plottype="tsline"></app-plot>
+                                    xvalue="maxdate" [outcomes]="['Impfquote']" plottype="area"></app-plot>
                             </div>
                             <div class="padding lightgreycolor">
                                 <p class="mat-caption">

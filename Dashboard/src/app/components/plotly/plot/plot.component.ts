@@ -123,7 +123,7 @@ make_plotdata(source=[], xaxis="",ylist=[],type="bar",colors=this.colorscheme){
     }
    }
    if (this.plottype=="area"  ){
-     trace["fill"]="tonexty";    
+     trace["fill"]="tozeroy";    
     }
    list.push(trace)
    i = i+1
