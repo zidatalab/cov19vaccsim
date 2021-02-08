@@ -272,7 +272,7 @@
                 </div>
 
                 <div fxFlex=48 fxFlex.lt-md=100>
-                    <h2>Vereinfacht modellierte Impfquote</h2>
+                    <h2>Vereinfacht modellierte Impfquote in %</h2>
                     <div>
                         <app-plot [(data)]="this.sim_result" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
                             xvalue="maxdate" [outcomes]="['Impfquote']" plottype="area"></app-plot>
