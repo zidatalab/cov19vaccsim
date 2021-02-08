@@ -111,17 +111,19 @@ do_simulation(myinput,params){
   for (var _i = 0; _i < input.length; _i++) {
     let current_item = input[_i];
     let thedosen = current_item.Dosen;
+    let thepatienten = current_item.Patienten;
     if (params.impfstoffart=="zugelassen"){
       thedosen = current_item.dosen_zugelassen;
+      thepatienten = current_item.patienten_zugelassen;
     }
     current_item['Dosen_aktuell'] = 0;
     if (_i>0){
       current_item['Dosen_aktuell'] = thedosen*liefermenge+result[result.length-1].Rest_Dosen;
-      current_item['Patienten_aktuell'] = current_item.Patienten*liefermenge+result[result.length-1].Rest_Patienten;
+      current_item['Patienten_aktuell'] = thepatienten*liefermenge+result[result.length-1].Rest_Patienten;
     }
     else {
       current_item['Dosen_aktuell'] = thedosen*liefermenge;
-      current_item['Patienten_aktuell'] = current_item.Patienten*liefermenge;
+      current_item['Patienten_aktuell'] = thepatienten*liefermenge;
     }
     current_item['Dosen verfügbar']= thedosen*liefermenge;
     current_item['Anteil']= current_item.Dosen_aktuell / kapazitaet;
