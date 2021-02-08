@@ -32,7 +32,7 @@ kapazitaet_pro_woche:0,
 liefermenge:1.0,
 impflinge : 67864036,
 impfstoffart:"zugelassen",
-verteilungszenario : this.verteilungszenarien[0]
+verteilungszenario : this.verteilungszenarien[1]
 };
 updateinput:any;
 
@@ -42,7 +42,7 @@ updateinput:any;
   ngOnInit(): void {
   this.update_days_since_start();
 
-// Import Map data
+// Import Map data01
 this.http.get('/assets/data/bl.geojson')
 .subscribe(data=>{this.map=data;})
 
@@ -59,7 +59,7 @@ getexternaldata(){
 this.http.get('https://www.zidatasciencelab.de/covid19dashboard/data/tabledata/impfsim_data.json')
 .subscribe(data=>{
   this.dosen_projektion = data;
-  this.update_kapazitaet();   
+  this.update_kapazitaet();     
 });
 
 
@@ -76,16 +76,20 @@ do_simulation(myinput,params){
   let finalresult = [];
   for (var _i = 0; _i < input.length; _i++) {
     let current_item = input[_i];
+    let thedosen = current_item.Dosen;
+    if (params.impfstoffart=="zugelassen"){
+      thedosen = current_item.dosen_zugelassen;
+    }
     current_item['Dosen_aktuell'] = 0;
     if (_i>0){
-      current_item['Dosen_aktuell'] = current_item.Dosen*liefermenge+result[result.length-1].Rest_Dosen;
+      current_item['Dosen_aktuell'] = thedosen*liefermenge+result[result.length-1].Rest_Dosen;
       current_item['Patienten_aktuell'] = current_item.Patienten*liefermenge+result[result.length-1].Rest_Patienten;
     }
     else {
-      current_item['Dosen_aktuell'] = current_item.Dosen*liefermenge;
+      current_item['Dosen_aktuell'] = thedosen*liefermenge;
       current_item['Patienten_aktuell'] = current_item.Patienten*liefermenge;
     }
-    current_item['Dosen verfügbar']= current_item.Dosen*liefermenge;
+    current_item['Dosen verfügbar']= thedosen*liefermenge;
     current_item['Anteil']= current_item.Dosen_aktuell / kapazitaet;
     if (current_item.Anteil>1){
       current_item['Anwendung']= current_item.Dosen_aktuell * (1 / current_item.Anteil);
@@ -124,7 +128,8 @@ do_simulation(myinput,params){
   
   
 
-  this.sim_result=finalresult;   
+  this.sim_result=finalresult;
+  // console.log(this.sim_result);   
 }
 
 update_days_since_start(){

@@ -1,19 +1,21 @@
 <div class="container" fxLayout="row wrap" fxLayoutGap="1rem" fxLayoutAllign="space-around">
     <div fxFlex=100>
-        <mat-card>
+        <mat-card *ngIf="this.stand_impfungen_bund">
             <mat-card-title>Aktueller Stand der Impfkampagne</mat-card-title>
             <mat-card-content>
                 <br><br>
-                <div fxLayout="row wrap" fxLayoutGap="2rem" fxLayoutAllign="space-around">
+                <div 
+                *ngIf="this.stand_impfungen_bund"
+                fxLayout="row wrap" fxLayoutGap="2rem" fxLayoutAllign="space-around">
                     <div fxFlex fxFlex.lt-md=100 class="mat-padding">
-                        <p *ngIf="this.stand_impfungen_bund">
+                        <p >
                             <span class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen gesamt'] |
                                 number:'1.0-0'}}</span><br>
                             Dosen insgesamt verimpft
                         </p>
                     </div>
                     <div fxFlex=30 fxFlex.lt-md=100 class="mat-padding">
-                        <p *ngIf="this.stand_impfungen_bund">
+                        <p>
                             <span class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen
                                 gesamt']/(this.days_since_start/7) |
                                 number:'1.0-0'}}</span><br>
@@ -21,7 +23,7 @@
                         </p>
                     </div>
                     <div fxFlex=30 fxFlex.lt-md=100 class="mat-padding">
-                        <p *ngIf="this.stand_impfungen_bund">
+                        <p >
                             <span class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen
                                 gesamt']/(this.days_since_start) |
                                 number:'1.0-0'}}</span><br>
@@ -37,7 +39,7 @@
     <div fxFlex fxFlex.lt-md=100>
         <mat-card>
             <mat-card-content>
-                <div fxLayout="column">
+                <div  *ngIf="this.stand_impfungen_bund" fxLayout="column">
                     <div fxFlex=100 fxLayout="column wrap" fxLayoutGap="0rem">
                         <div>
                             <h2><strong>Geschätzte Impfkapazität</strong><br>
