@@ -241,6 +241,20 @@
                     </div>
 
                 </div>
+                <div fxFlex=100 fxFlex.lt-md=100>
+                    <h2>Unverimpfte Dosen (bei Kapazitätsmangel)</h2>
+                    <div>
+                        <app-plot [(data)]="this.sim_result" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
+                            xvalue="maxdate" [colorscheme]="['orange']"
+                            [outcomes]="['Rest_Dosen']" plottype="area"></app-plot>
+                    </div>
+                    <div class="padding lightgreycolor">
+                        <p class="mat-caption">
+                            Legende:<br>Projektion auf Basis der aktuellen Verträge mit den Herstellern.
+                        </p>
+                    </div>
+
+                </div>
 
                 <div fxFlex=48 fxFlex.lt-md=100>
                     <h2>Durchgeführte Impfungen</h2>
