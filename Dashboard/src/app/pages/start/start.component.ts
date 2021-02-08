@@ -20,6 +20,17 @@ stand_impfungen_bund:any;
 dosen_projektion:any;
 sim_result:any;
 days_since_start:number;
+risktimes = [];
+n_risikogruppen = [
+  {Stufe:1,n:8.6,anteil:0.12672396908},
+  {Stufe:2,n:7.0,anteil:0.22987138578},
+  {Stufe:3,n:5.7,anteil:0.31386285366},
+  {Stufe:4,n:6.9,anteil:0.41553673583},
+  {Stufe:5,n:8.4,anteil:0.53931363587},
+  {Stufe:6,n:31.26,anteil:1.00},
+  {Stufe:"",anteil:1000000},
+  {Stufe:"",anteil:1000000}
+];
 // Sim Params
 verteilungszenarien = ["Gleichverteilung","Linearer Anstieg der Produktion in Q2"];
 params = {
@@ -68,10 +79,6 @@ this.http.get('https://www.zidatasciencelab.de/covid19dashboard/data/tabledata/i
 }
 
 change_simple(){
-  console.log("CHANGE SIMPLE",
-  this.simple_aerzte_impfen,
-  this.simple_alle_zulassen
-  );
   if (this.simple_aerzte_impfen){
     this.params.n_varzt=50000;
   }
@@ -96,6 +103,11 @@ do_simulation(myinput,params){
   let input = this.filterArray(myinput,"Verteilungsszenario",szenario);
   let result=[];
   let finalresult = [];
+  let riskinfo = {};
+  this.risktimes = [];
+  let riskgroup = this.n_risikogruppen;
+  let riskgroup_i = 0;
+    
   for (var _i = 0; _i < input.length; _i++) {
     let current_item = input[_i];
     let thedosen = current_item.Dosen;
@@ -136,7 +148,8 @@ do_simulation(myinput,params){
     }
 
     
-      result.push(current_item);  
+    result.push(current_item);     
+  
     if (current_item.Anwendung_Patienten_kum<=impflinge){
       finalresult.push(current_item);
     }
@@ -145,13 +158,26 @@ do_simulation(myinput,params){
       current_item['Impfquote'] = 100;
       finalresult.push(current_item);      
     }
+
+    // Check who is done
+    if (riskgroup.length>=(riskgroup_i+1)){
+      if ((current_item['Impfquote']/100)>=riskgroup[riskgroup_i].anteil){
+        current_item['riskgroup_done'] =  riskgroup[riskgroup_i].Stufe;
+        riskinfo = riskgroup[riskgroup_i];
+        riskinfo["kw"] = current_item.kw;
+        riskinfo["Datum"] = input[_i].maxdate;
+        riskinfo["_Quote"] = current_item.Impfquote/100;
+        this.risktimes.push(riskinfo);
+        riskgroup_i = riskgroup_i+1;
+      };
+    }
     
   }
   
   
 
   this.sim_result=finalresult;
-  // console.log(this.sim_result);   
+  console.log("this.risktimes", this.risktimes); 
 }
 
 update_days_since_start(){
@@ -172,6 +198,8 @@ update_kapazitaet(){
   this.do_simulation(data,myparams);
   
 }
+
+
 
 getValues(array, key) {
    let values = [];

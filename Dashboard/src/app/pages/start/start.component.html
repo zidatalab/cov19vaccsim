@@ -18,7 +18,7 @@
                             <span class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen
                                 gesamt']/(this.days_since_start/7) |
                                 number:'1.0-0'}}</span><br>
-                            Impfungen pro Woche
+                            Rechnerisch Impfungen pro Woche
                         </p>
                     </div>
                     <div fxFlex=30 fxFlex.lt-md=100 class="mat-padding">
@@ -26,7 +26,7 @@
                             <span class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen
                                 gesamt']/(this.days_since_start) |
                                 number:'1.0-0'}}</span><br>
-                            Impfungen pro Tag
+                                Rechnerisch Impfungen pro Tag
                         </p>
                     </div>
                 </div>
@@ -38,13 +38,10 @@
     <div fxFlex fxFlex.lt-md=100>
         <mat-card>
             <mat-card-title>Kapazität</mat-card-title>
+            <mat-card-subtitle>Geschätzte Impfkapazität</mat-card-subtitle>
             <mat-card-content>
                 <div *ngIf="this.stand_impfungen_bund" fxLayout="column">
                     <div fxFlex=100 fxLayout="column wrap" fxLayoutGap="0rem">
-                        <div>
-                            <h2><strong>Geschätzte Impfkapazität</strong><br>
-                            </h2>
-                        </div>
                         <div fxLayout="row wrap" fxLayoutGap="2rem">
                             <div fxFlex fxFlex.lt-md=100>
                                 <div class="mat-padding">
@@ -84,7 +81,7 @@
                             <h2><strong>Parameter</strong><br>
                             </h2>
                             </div>
-                            <div fxFlex=25 class="mat-padding">
+                            <div fxFlex=25 fxFlex.lt-md=100 class="mat-padding">
                                 <mat-chip-list>
                                     <mat-chip color="accent" (click)="this.mode='simple'"
                                         [selected]="this.mode=='simple'">Einfach</mat-chip>
@@ -156,7 +153,7 @@
                                     (change)="this.update_kapazitaet();"></mat-slider>
                                 <strong>{{this.params.n_varzt}}</strong>
                                 <br>Patienten pro Tag:<span fxHide.lt-md="true"><br></span>
-                                <mat-slider [(ngModel)]="this.params.n_varzt_pat" min="10" max="80" step="10"
+                                <mat-slider [(ngModel)]="this.params.n_varzt_pat" min="10" max="60" step="10"
                                     (change)="this.update_kapazitaet();"></mat-slider>
                                 <strong>{{this.params.n_varzt_pat}}</strong>
                                 <br>Arbeitstage pro Woche:<span fxHide.lt-md="true"><br></span>
@@ -213,9 +210,23 @@
         <mat-card>
             <mat-card-title>Simulation</mat-card-title>
             <mat-card-subtitle>Vereinfachte Simulation auf Basis der Parameter</mat-card-subtitle>
-            <div fxLayout="row wrap" fxLayoutGap="0rem" fxLayoutAllign="space-around">
-                <div fxFlex=100>
-                    <h2>Gelieferte und Verimpfte Dosen</h2>
+            <div fxLayout="row wrap" fxLayoutGap="1rem" fxLayoutAllign="space-around">
+                <div fxFlex=20 *ngIf="this.risktimes" fxFlex.lt-md=100>
+                    <h2>Durchimpfung</h2>
+                    <ng-container *ngFor="let group of this.risktimes">
+                        <p>
+                            <span class="accentcolor bignum" style="font-size: 2rem;">
+                                {{group.Datum | date : 'dd.M.'}} </span><span fxHide.lt-md="true"><br></span>
+                            <strong>Risikostufe {{group.Stufe}}</strong><br>
+
+                        </p>
+                    </ng-container>
+                    <p class="mat-caption lightgreycolor">
+                        Diese Schätzung erfolgt nur näherungsweise anhand des Zeitpunktes, zu dem die notwendige Zahl von Impfdosen zur Durchimpfung verabreicht wurden.
+                    </p>
+                </div>
+                <div fxFlex=75 fxFlex.lt-md=100>
+                    <h2>Gelieferte und verimpfte Dosen</h2>
                     <div>
                         <app-plot [(data)]="this.sim_result" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
                             xvalue="maxdate" [colorscheme]="['crimson','green']"
