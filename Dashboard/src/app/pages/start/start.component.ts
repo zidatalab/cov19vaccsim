@@ -198,7 +198,8 @@ update_kapazitaet(){
   const data = this.dosen_projektion;
   const myparams = this.params;
   this.do_simulation(data,myparams);
-  
+  this.simple_aerzte_impfen = this.params.n_varzt>0;
+  this.simple_alle_zulassen = this.params.impfstoffart!="zugelassen";
 }
 
 
