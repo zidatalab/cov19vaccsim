@@ -12,7 +12,9 @@ export class StartComponent implements OnInit {
 
 
   constructor(private http:HttpClient) { }
-
+mode="simple";
+simple_aerzte_impfen=false;
+simple_alle_zulassen=false;
 map:any;  
 stand_impfungen_bund:any;
 dosen_projektion:any;
@@ -25,7 +27,7 @@ n_impfzentren:400,
 n_impfzentren_pat:500,
 impfzentren_tage:7,
 n_varzt:0,
-n_varzt_pat:10,
+n_varzt_pat:20,
 varzt_tage:5,
 kapazitaet_pro_tag:0,
 kapazitaet_pro_woche:0,
@@ -65,7 +67,27 @@ this.http.get('https://www.zidatasciencelab.de/covid19dashboard/data/tabledata/i
 
 }
 
+change_simple(){
+  console.log("CHANGE SIMPLE",
+  this.simple_aerzte_impfen,
+  this.simple_alle_zulassen
+  );
+  if (this.simple_aerzte_impfen){
+    this.params.n_varzt=50000;
+  }
+  else {
+    this.params.n_varzt=0;
+  }
+  if (this.simple_alle_zulassen){
+    this.params.impfstoffart='alle';
+  }
+  else {
+    this.params.impfstoffart='zugelassen';
+    
+  }
+  this.update_kapazitaet();
 
+}
 do_simulation(myinput,params){
   let szenario=params.verteilungszenario;
   let kapazitaet=params.kapazitaet_pro_woche;

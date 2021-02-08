@@ -9,7 +9,7 @@ import { AuthService } from './services/auth.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'COVID-19 Simulationen zur Impforganisation';
+  title = 'COVID-19 Impfkampagne';
   public currentuser : any;
   loginoption = false;
   public loginstatus:boolean;

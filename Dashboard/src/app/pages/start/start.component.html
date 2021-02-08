@@ -1,14 +1,13 @@
 <div class="container" fxLayout="row wrap" fxLayoutGap="1rem" fxLayoutAllign="space-around">
     <div fxFlex=100>
         <mat-card *ngIf="this.stand_impfungen_bund">
-            <mat-card-title>Aktueller Stand der Impfkampagne</mat-card-title>
+            <mat-card-title>Aktueller Stand</mat-card-title>
             <mat-card-content>
                 <br><br>
-                <div 
-                *ngIf="this.stand_impfungen_bund"
-                fxLayout="row wrap" fxLayoutGap="2rem" fxLayoutAllign="space-around">
+                <div *ngIf="this.stand_impfungen_bund" fxLayout="row wrap" fxLayoutGap="2rem"
+                    fxLayoutAllign="space-around">
                     <div fxFlex fxFlex.lt-md=100 class="mat-padding">
-                        <p >
+                        <p>
                             <span class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen gesamt'] |
                                 number:'1.0-0'}}</span><br>
                             Dosen insgesamt verimpft
@@ -23,7 +22,7 @@
                         </p>
                     </div>
                     <div fxFlex=30 fxFlex.lt-md=100 class="mat-padding">
-                        <p >
+                        <p>
                             <span class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen
                                 gesamt']/(this.days_since_start) |
                                 number:'1.0-0'}}</span><br>
@@ -38,8 +37,9 @@
     </div>
     <div fxFlex fxFlex.lt-md=100>
         <mat-card>
+            <mat-card-title>Kapazität</mat-card-title>
             <mat-card-content>
-                <div  *ngIf="this.stand_impfungen_bund" fxLayout="column">
+                <div *ngIf="this.stand_impfungen_bund" fxLayout="column">
                     <div fxFlex=100 fxLayout="column wrap" fxLayoutGap="0rem">
                         <div>
                             <h2><strong>Geschätzte Impfkapazität</strong><br>
@@ -79,8 +79,48 @@
 
                     </div>
                     <div fxFlex=100 fxLayout="row wrap" fxLayoutGap=".1rem" fxLayoutAllign="space-around">
-                        <div fxFlex=100 >
-                            <h2><strong>Parameter anpassen</strong><br>
+                        <div fxLayout="row wrap"  fxFlex=100>
+                            <div fxFlex=100>
+                            <h2><strong>Parameter</strong><br>
+                            </h2>
+                            </div>
+                            <div fxFlex=25 class="mat-padding">
+                                <mat-chip-list>
+                                    <mat-chip color="accent" (click)="this.mode='simple'"
+                                        [selected]="this.mode=='simple'">Einfach</mat-chip>
+                                    <mat-chip color="accent" (click)="this.mode='detail'"
+                                        [selected]="this.mode!='simple'">Detailliert</mat-chip>
+                                </mat-chip-list>
+                            </div>
+                            <div class="mat-padding">
+                                <div>
+                                    <p>
+                                        <mat-slide-toggle  [(ngModel)]="this.simple_aerzte_impfen" (change)="this.change_simple()"
+                                        [disabled]="this.mode=='detail'" [ngModel]="this.simple_aerzte_impfen">
+                                            Vertragsärzte/-innen impfen
+                                        </mat-slide-toggle>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="mat-padding">
+                                <div>
+                                    <p>
+                                        <mat-slide-toggle [(ngModel)]="this.simple_alle_zulassen" (change)="this.change_simple()"
+                                        [disabled]="this.mode=='detail'">
+                                            Alle Impfstoffe werden zugelassen
+                                        </mat-slide-toggle>
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div style="background-color:rgba(211, 211, 211, 0.084);padding:2rem;margin:1rem;border-radius:10px;"
+                        *ngIf="this.mode=='detail'" fxFlex=100 fxLayout="row wrap" fxLayoutGap="2rem"
+                        fxLayoutAllign="space-around">
+                        <div fxFlex=100>
+                            <br>
+                            <h2><strong>Detaileinstellungen</strong><br>
                             </h2>
                         </div>
                         <div fxFlex fxFlex.lt-md=100>
@@ -130,24 +170,26 @@
                             fxLayoutAllign="space-around">
                             <div>
                                 <h3><strong>Impfstoff Lieferungen</strong><br>
-                                <span fxHide.lt-md="true">
-                                    <mat-icon class="accentcolor bigicon" [inline]="true">healing</mat-icon>
-                                </span>
+                                    <span fxHide.lt-md="true">
+                                        <mat-icon class="accentcolor bigicon" [inline]="true">healing</mat-icon>
+                                    </span>
                                 </h3>
                             </div>
                             <div>
                                 <p>Liefermenge:<span fxHide.lt-md="true"><br></span>
                                     <mat-slider [(ngModel)]="this.params.liefermenge" min=".8" max="1.2" step="0.01"
                                         (change)="this.update_kapazitaet();"></mat-slider>
-                                    <strong>{{this.params.liefermenge*100 |  number:'1.0-0'}} %</strong>
+                                    <strong>{{this.params.liefermenge*100 | number:'1.0-0'}} %</strong>
                                 </p>
                             </div>
                             <div>
                                 <span>Art der Impfstoffe:</span>
                                 <mat-radio-group class="my-radio-group" [(ngModel)]="this.params.impfstoffart"
                                     (change)="this.update_kapazitaet();">
-                                    <mat-radio-button class="my-radio-button" [value]="'alle'">Alle bestellten</mat-radio-button>
-                                    <mat-radio-button class="my-radio-button" [value]="'zugelassen'">Nur zugelassene Impfstoffe</mat-radio-button>
+                                    <mat-radio-button class="my-radio-button" [value]="'alle'">Alle bestellten
+                                    </mat-radio-button>
+                                    <mat-radio-button class="my-radio-button" [value]="'zugelassen'">Nur zugelassene
+                                        Impfstoffe</mat-radio-button>
                                 </mat-radio-group>
                             </div>
                             <div>
