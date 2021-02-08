@@ -31,6 +31,7 @@ kapazitaet_pro_tag:0,
 kapazitaet_pro_woche:0,
 liefermenge:1.0,
 impflinge : 67864036,
+impfstoffart:"zugelassen",
 verteilungszenario : this.verteilungszenarien[0]
 };
 updateinput:any;
