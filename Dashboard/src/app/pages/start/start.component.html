@@ -26,7 +26,7 @@
                             <span class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen
                                 gesamt']/(this.days_since_start) |
                                 number:'1.0-0'}}</span><br>
-                                Rechnerisch Impfungen pro Tag
+                            Rechnerisch Impfungen pro Tag
                         </p>
                     </div>
                 </div>
@@ -76,10 +76,10 @@
 
                     </div>
                     <div fxFlex=100 fxLayout="row wrap" fxLayoutGap=".1rem" fxLayoutAllign="space-around">
-                        <div fxLayout="row wrap"  fxFlex=100>
+                        <div fxLayout="row wrap" fxFlex=100>
                             <div fxFlex=100>
-                            <h2><strong>Parameter</strong><br>
-                            </h2>
+                                <h2><strong>Parameter</strong><br>
+                                </h2>
                             </div>
                             <div fxFlex=25 fxFlex.lt-md=100 class="mat-padding">
                                 <mat-chip-list>
@@ -92,8 +92,9 @@
                             <div class="mat-padding">
                                 <div>
                                     <p>
-                                        <mat-slide-toggle  [(ngModel)]="this.simple_aerzte_impfen" (change)="this.change_simple()"
-                                        [disabled]="this.mode=='detail'" [ngModel]="this.simple_aerzte_impfen">
+                                        <mat-slide-toggle [(ngModel)]="this.simple_aerzte_impfen"
+                                            (change)="this.change_simple()" [disabled]="this.mode=='detail'"
+                                            [ngModel]="this.simple_aerzte_impfen">
                                             Vertragsärzte/-innen impfen
                                         </mat-slide-toggle>
                                     </p>
@@ -102,8 +103,8 @@
                             <div class="mat-padding">
                                 <div>
                                     <p>
-                                        <mat-slide-toggle [(ngModel)]="this.simple_alle_zulassen" (change)="this.change_simple()"
-                                        [disabled]="this.mode=='detail'">
+                                        <mat-slide-toggle [(ngModel)]="this.simple_alle_zulassen"
+                                            (change)="this.change_simple()" [disabled]="this.mode=='detail'">
                                             Alle Impfstoffe werden zugelassen
                                         </mat-slide-toggle>
                                     </p>
@@ -222,7 +223,8 @@
                         </p>
                     </ng-container>
                     <p class="mat-caption lightgreycolor">
-                        Diese Schätzung erfolgt nur näherungsweise anhand des Zeitpunktes, zu dem die notwendige Zahl von Impfdosen zur Durchimpfung verabreicht wurden.
+                        Diese Schätzung erfolgt nur näherungsweise anhand des Zeitpunktes, zu dem die notwendige Zahl
+                        von Impfdosen zur Durchimpfung verabreicht wurden.
                     </p>
                 </div>
                 <div fxFlex=75 fxFlex.lt-md=100>
@@ -285,11 +287,11 @@
                 Impfzentren beträgt derzeit 1,4. Mio. Impfungen pro KW (200.000 täglich) und kann sicherlich auf 2,1
                 Mio. Impfungen (300.000 täglich) gesteigert werden.</p>
             <p> Weitere Kapazitätssteigerungen scheinen nur durch die
-                Einbeziehung der Vertragsärztinnen und Vertragsärzte kurzfristig umsetztbar. Wir gehen davon aus,
+                Einbeziehung der Vertragsärztinnen und Vertragsärzte kurzfristig umsetzbar. Wir gehen davon aus,
                 dass im niedergelassenen Bereich ca. 10 Dosen pro Arbeitsstunde verabreicht werden können.
             </p>
             <p>
-                Mit dem interaktiven Rechner kann untersucht werden, welche Auswirkungen Veränderunger der
+                Mit dem interaktiven Rechner kann untersucht werden, welche Auswirkungen Veränderungen der
                 Impforganisation auf die Zahl der durchführbaren Impfungen und den Zeitpunkt einer möglichen
                 Immunisierung der Bevölkerung haben.
             </p>
