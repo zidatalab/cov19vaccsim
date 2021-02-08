@@ -211,23 +211,28 @@
         <mat-card>
             <mat-card-title>Simulation</mat-card-title>
             <mat-card-subtitle>Vereinfachte Simulation auf Basis der Parameter</mat-card-subtitle>
-            <div fxLayout="row wrap" fxLayoutGap="1rem" fxLayoutAllign="space-around">
-                <div fxFlex=20 *ngIf="this.risktimes" fxFlex.lt-md=100>
-                    <h2>Durchimpfung</h2>
-                    <ng-container *ngFor="let group of this.risktimes">
+            <div fxLayout="row wrap" fxLayoutGap="2rem" fxLayoutAllign="space-between">
+                <div fxFlex=100 *ngIf="this.risktimes" fxFlex.lt-md=100 fxLayout="row wrap" fxLayoutGap="1rem" fxLayoutAllign="space-between">
+                    <div fxFlex=100>
+                    <h2>Durchimpfung</h2>                    
+                    </div>
+                    <div *ngFor="let group of this.risktimes" fxFlex.lt-md=100>
                         <p>
                             <span class="accentcolor bignum" style="font-size: 2rem;">
                                 {{group.Datum | date : 'dd.M.'}} </span><span fxHide.lt-md="true"><br></span>
                             <strong>Risikostufe {{group.Stufe}}</strong><br>
 
                         </p>
-                    </ng-container>
+                    </div>                 
+                    
+                    <div fxFlex=100>
                     <p class="mat-caption lightgreycolor">
                         Diese Schätzung erfolgt nur näherungsweise anhand des Zeitpunktes, zu dem die notwendige Zahl
                         von Impfdosen zur Durchimpfung verabreicht wurden.
                     </p>
+                    </div>
                 </div>
-                <div fxFlex=75 fxFlex.lt-md=100>
+                <div fxFlex=45 fxFlex.lt-md=100>
                     <h2>Gelieferte und verimpfte Dosen</h2>
                     <div>
                         <app-plot [(data)]="this.sim_result" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
@@ -241,7 +246,7 @@
                     </div>
 
                 </div>
-                <div fxFlex=100 fxFlex.lt-md=100>
+                <div fxFlex=45 fxFlex.lt-md=100>
                     <h2>Unverimpfte Dosen (bei Kapazitätsmangel)</h2>
                     <div>
                         <app-plot [(data)]="this.sim_result" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
@@ -256,7 +261,7 @@
 
                 </div>
 
-                <div fxFlex=48 fxFlex.lt-md=100>
+                <div fxFlex=45 fxFlex.lt-md=100>
                     <h2>Durchgeführte Impfungen</h2>
                     <div>
                         <app-plot [(data)]="this.sim_result" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
@@ -271,7 +276,7 @@
 
                 </div>
 
-                <div fxFlex=48 fxFlex.lt-md=100>
+                <div fxFlex=45 fxFlex.lt-md=100>
                     <h2>Vereinfacht modellierte Impfquote in %</h2>
                     <div>
                         <app-plot [(data)]="this.sim_result" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
