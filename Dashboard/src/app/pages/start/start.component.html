@@ -1,32 +1,53 @@
 <div class="container" fxLayout="row wrap" fxLayoutGap="1rem" fxLayoutAllign="space-around">
     <div fxFlex=100>
         <mat-card *ngIf="this.stand_impfungen_bund">
-            <mat-card-title>Aktueller Stand</mat-card-title>
-            <mat-card-content>
-                <br><br>
+            <mat-card-title>Stand der Impfkampagne
+                <span *ngIf="this.current_bl!='Gesamt'"> in {{this.current_bl}}</span>
+                <span *ngIf="this.current_bl=='Gesamt'"> in Deutschland</span>
+            </mat-card-title>
+            <mat-card-content class="mat-padding">               
                 <div *ngIf="this.stand_impfungen_bund" fxLayout="row wrap" fxLayoutGap="2rem"
                     fxLayoutAllign="space-around">
-                    <div fxFlex fxFlex.lt-md=100 class="mat-padding">
+                    <div fxFlex >
+                        
+                            <mat-form-field color="accent" appearance="outline" >
+                                <mat-label>Bundesland</mat-label>
+                                <mat-select [(ngModel)]="this.current_bl" (selectionChange)="this.land_changed=true;this.update_kapazitaet();" >
+                                  <ng-container *ngFor="let land of this.bl_liste">
+                                    <mat-option [value]="land">{{land}}</mat-option>
+                                  </ng-container>
+                                  
+                                </mat-select>
+                              </mat-form-field>
+                        
+                    </div>  
+                    <div fxFlex=15 fxFlex.lt-md=100 class="mat-padding">
                         <p>
                             <span class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen gesamt'] |
                                 number:'1.0-0'}}</span><br>
-                            Dosen insgesamt verimpft
+                            Dosen verimpft
                         </p>
                     </div>
-                    <div fxFlex=30 fxFlex.lt-md=100 class="mat-padding">
+                    <div fxFlex=15 fxFlex.lt-md=100 class="mat-padding">
                         <p>
                             <span class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen
                                 gesamt']/(this.days_since_start/7) |
                                 number:'1.0-0'}}</span><br>
-                            Rechnerisch Impfungen pro Woche
+                            pro Woche
                         </p>
                     </div>
-                    <div fxFlex=30 fxFlex.lt-md=100 class="mat-padding">
+                    <div fxFlex=15 fxFlex.lt-md=100 class="mat-padding">
                         <p>
                             <span class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen
                                 gesamt']/(this.days_since_start) |
                                 number:'1.0-0'}}</span><br>
-                            Rechnerisch Impfungen pro Tag
+                            pro Tag
+                        </p>
+                    </div>
+                    <div fxFlex=15 fxFlex.lt-md=100 class="mat-padding">
+                        <p>
+                            <span class="accentcolor bignum">{{this.stand_impfungen_bund['Gesamt 2x']}} %</span><br>
+                           Durchimpfung
                         </p>
                     </div>
                 </div>
@@ -129,9 +150,10 @@
                                 </span>
                             </h3>
                             <p>Anzahl:<span fxHide.lt-md="true"><br></span>
-                                <mat-slider [(ngModel)]="this.params.n_impfzentren" min="100" max="500" step="10"
+                                <mat-slider [(ngModel)]="this.params.n_impfzentren" min="0" [max]="800*(this.bev_anteil_land/100)" 
+                                [step]="100*(this.bev_anteil_land/100)"
                                     (change)="this.update_kapazitaet();"></mat-slider>
-                                <strong>{{this.params.n_impfzentren}}</strong>
+                                <strong>{{this.params.n_impfzentren | number: '1.0-0'}}</strong>
                                 <br>Patienten pro Tag:<span fxHide.lt-md="true"><br></span>
                                 <mat-slider [(ngModel)]="this.params.n_impfzentren_pat" min="100" max="1000" step="10"
                                     (change)="this.update_kapazitaet();"></mat-slider>
@@ -150,14 +172,15 @@
                                 </span>
                             </h3>
                             <p>Anzahl:<span fxHide.lt-md="true"><br></span>
-                                <mat-slider [(ngModel)]="this.params.n_varzt" min="0" max="50000" step="1000"
+                                <mat-slider [(ngModel)]="this.params.n_varzt" min="0" [max]="50000*(this.bev_anteil_land/100)" 
+                                [step]="1000*(this.bev_anteil_land/100)"
                                     (change)="this.update_kapazitaet();"></mat-slider>
-                                <strong>{{this.params.n_varzt}}</strong>
+                                <strong>{{this.params.n_varzt | number: '1.0-0'}}</strong>
                                 <br>Patienten pro Tag:<span fxHide.lt-md="true"><br></span>
                                 <mat-slider [(ngModel)]="this.params.n_varzt_pat" min="10" max="60" step="10"
                                     (change)="this.update_kapazitaet();"></mat-slider>
                                 <strong>{{this.params.n_varzt_pat}}</strong>
-                                <br>Arbeitstage pro Woche:<span fxHide.lt-md="true"><br></span>
+                                <br>Impftage pro Woche:<span fxHide.lt-md="true"><br></span>
                                 <mat-slider [(ngModel)]="this.params.varzt_tage" min="0" max="7" step="1"
                                     (change)="this.update_kapazitaet();"></mat-slider>
                                 <strong>{{this.params.varzt_tage}}</strong>

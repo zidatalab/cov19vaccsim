@@ -16,8 +16,15 @@ mode="simple";
 simple_aerzte_impfen=false;
 simple_alle_zulassen=false;
 map:any;  
+ewz_bl:any;
+stand_impfungen_data:any;
+bl_liste:Array<string>;
 stand_impfungen_bund:any;
+bev_anteil_land:number;
 dosen_projektion:any;
+land_changed:boolean;
+dosen_projektion_all:any;
+current_bl="Gesamt";
 sim_result:any;
 days_since_start:number;
 risktimes = [];
@@ -37,9 +44,9 @@ params = {
 n_impfzentren:400,
 n_impfzentren_pat:500,
 impfzentren_tage:7,
-n_varzt:0,
+n_varzt:50000,
 n_varzt_pat:20,
-varzt_tage:5,
+varzt_tage:0,
 kapazitaet_pro_tag:0,
 kapazitaet_pro_woche:0,
 liefermenge:1.0,
@@ -55,9 +62,12 @@ updateinput:any;
   ngOnInit(): void {
   this.update_days_since_start();
 
-// Import Map data01
+// Import Local data
 this.http.get('/assets/data/bl.geojson')
 .subscribe(data=>{this.map=data;})
+
+this.http.get('/assets/data/ewz_bl.json')
+.subscribe(data=>{this.ewz_bl=data;this.bl_liste=this.getValues(this.ewz_bl,"Bundesland");})
 
 // Import some public data    
 this.getexternaldata();
@@ -67,11 +77,11 @@ this.getexternaldata();
 getexternaldata(){
   this.http.get('https://www.zidatasciencelab.de/covid19dashboard/data/tabledata/vacc_table_faktenblatt.json')
 .subscribe(data=>{
-  this.stand_impfungen_bund=this.filterArray(data,"Bundesland","Gesamt")[0];  
+  this.stand_impfungen_data=data;  
 });
 this.http.get('https://www.zidatasciencelab.de/covid19dashboard/data/tabledata/impfsim_data.json')
 .subscribe(data=>{
-  this.dosen_projektion = data;
+  this.dosen_projektion_all = data;
   this.update_kapazitaet();     
 });
 
@@ -80,10 +90,10 @@ this.http.get('https://www.zidatasciencelab.de/covid19dashboard/data/tabledata/i
 
 change_simple(){
   if (this.simple_aerzte_impfen){
-    this.params.n_varzt=50000;
+    this.params.varzt_tage=5;
   }
   else {
-    this.params.n_varzt=0;
+    this.params.varzt_tage=0;
   }
   if (this.simple_alle_zulassen){
     this.params.impfstoffart='alle';
@@ -178,8 +188,7 @@ do_simulation(myinput,params){
   
   
 
-  this.sim_result=finalresult;
-  console.log("this.risktimes", this.risktimes); 
+  this.sim_result=finalresult;  
 }
 
 update_days_since_start(){
@@ -190,6 +199,15 @@ update_days_since_start(){
 
 }
 update_kapazitaet(){
+  this.dosen_projektion = this.filterArray(this.dosen_projektion_all,"Bundesland",this.current_bl);
+  this.stand_impfungen_bund=this.filterArray(this.stand_impfungen_data,"Bundesland",this.current_bl)[0];  
+  this.params.impflinge = this.getValues(this.filterArray(this.ewz_bl,"Bundesland",this.current_bl),"EW_20plus")[0];
+  this.bev_anteil_land = this.getValues(this.filterArray(this.ewz_bl,"Bundesland",this.current_bl),"Anteil_20plus")[0];
+  if (this.land_changed){
+    this.params.n_impfzentren=400*this.bev_anteil_land/100;
+    this.params.n_varzt=50000*this.bev_anteil_land/100;
+    this.land_changed = false;
+  }
   let params = this.params;
   this.params.kapazitaet_pro_tag= 
   (params.impfzentren_tage*params.n_impfzentren*params.n_impfzentren_pat+
@@ -198,7 +216,7 @@ update_kapazitaet(){
   const data = this.dosen_projektion;
   const myparams = this.params;
   this.do_simulation(data,myparams);
-  this.simple_aerzte_impfen = this.params.n_varzt>0;
+  this.simple_aerzte_impfen = this.params.varzt_tage>0;
   this.simple_alle_zulassen = this.params.impfstoffart!="zugelassen";
 }
 
