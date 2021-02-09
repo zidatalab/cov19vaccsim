@@ -192,6 +192,13 @@ do_simulation(myinput,params){
     }
     
   }
+
+  while ((riskgroup_i+1)<=6){
+    riskinfo = riskgroup[riskgroup_i];
+    riskinfo["Datum"] = "nie";
+    this.risktimes.push(riskinfo);
+    riskgroup_i = riskgroup_i+1;
+  }
   
   
 

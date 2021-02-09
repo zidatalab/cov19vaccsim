@@ -251,8 +251,11 @@
                     </div>
                     <div *ngFor="let group of this.risktimes" fxFlex.lt-md=100>
                         <p>
-                            <span class="accentcolor bignum" style="font-size: 2rem;">
-                                {{group.Datum | date : 'dd.M.'}} </span><span fxHide.lt-md="true"><br></span>
+                            <span *ngIf="group.Datum!='nie'" class="accentcolor bignum" style="font-size: 2rem;">
+                                {{group.Datum | date : 'dd.M.'}} </span>
+                            <span *ngIf="group.Datum=='nie'" class="accentcolor bignum" style="font-size: 2rem;">
+                                später </span>
+                                <span fxHide.lt-md="true"><br></span>
                             <strong>Risikostufe {{group.Stufe}}</strong><br>
 
                         </p>
@@ -295,7 +298,7 @@
                 </div>
 
                 <div fxFlex=45 fxFlex.lt-md=100>
-                    <h2>Durchgeführte Impfungen</h2>
+                    <h2>Durchführbare Impfungen</h2>
                     <div>
                         <app-plot [(data)]="this.sim_result" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
                             xvalue="maxdate" [colorscheme]="['green']" [outcomes]="['Anwendung_kum']" plottype="area">
