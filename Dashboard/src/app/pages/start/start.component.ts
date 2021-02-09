@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-start',
@@ -11,11 +11,16 @@ export class StartComponent implements OnInit {
   
 
 
-  constructor(private http:HttpClient) { }
+  constructor(
+    private http:HttpClient,
+    private route: ActivatedRoute) { }
 mode="simple";
 simple_aerzte_impfen=false;
 simple_alle_zulassen=false;
 map:any;  
+token:any;
+// Einfacher Schutz, wer ihn aushebelt ist nicht nett. Kann sich aber bei mir melden, für einen Job. VG L. Kroll.
+valid_token = "zugang_valid_mp_salz_8_bmg";
 ewz_bl:any;
 stand_impfungen_data:any;
 bl_liste:Array<string>;
@@ -61,6 +66,8 @@ updateinput:any;
   
   ngOnInit(): void {
   this.update_days_since_start();
+  this.token = this.route.snapshot.queryParams['token']===this.valid_token;
+  console.log("TOKEN",this.token);
 
 // Import Local data
 this.http.get('/assets/data/bl.geojson')
@@ -82,7 +89,6 @@ getexternaldata(){
 this.http.get('https://www.zidatasciencelab.de/covid19dashboard/data/tabledata/impfsim_data.json')
 .subscribe(data=>{
   this.dosen_projektion_all = data;
-  console.log("ALLE",data);
   this.update_kapazitaet();     
 });
 
@@ -112,8 +118,6 @@ do_simulation(myinput,params){
   let impflinge=params.impflinge;
   let liefermenge = params.liefermenge;
   let input = this.filterArray(myinput,"Verteilungsszenario",szenario);
-  console.log("MYINPUT",myinput);
-  console.log("input",input);
   let result=[];
   let finalresult = [];
   let riskinfo = {};
