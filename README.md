@@ -6,14 +6,14 @@ If this is the case, the Dashboard can be tested with the following commands fro
 
 `cd Dashboard`
 
-First launch only: `npm install`
+First launch only: 
+
+`npm install`
 
 `ng serve`
-
-After update set 
-
-`cp -r Dashboard/dist/Dashboard/* docs/`
 
 Build for github-pages
 
 `ng build --prod --base-href "https://www.zidatasciencelab.de/cov19vaccsim/"`
+
+The angular.json assumes that doc is the desired output dir.
