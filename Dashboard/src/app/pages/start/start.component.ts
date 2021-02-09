@@ -82,6 +82,7 @@ getexternaldata(){
 this.http.get('https://www.zidatasciencelab.de/covid19dashboard/data/tabledata/impfsim_data.json')
 .subscribe(data=>{
   this.dosen_projektion_all = data;
+  console.log("ALLE",data);
   this.update_kapazitaet();     
 });
 
@@ -111,6 +112,8 @@ do_simulation(myinput,params){
   let impflinge=params.impflinge;
   let liefermenge = params.liefermenge;
   let input = this.filterArray(myinput,"Verteilungsszenario",szenario);
+  console.log("MYINPUT",myinput);
+  console.log("input",input);
   let result=[];
   let finalresult = [];
   let riskinfo = {};
@@ -189,6 +192,7 @@ do_simulation(myinput,params){
   
 
   this.sim_result=finalresult;  
+  
 }
 
 update_days_since_start(){
@@ -199,7 +203,7 @@ update_days_since_start(){
 
 }
 update_kapazitaet(){
-  this.dosen_projektion = this.filterArray(this.dosen_projektion_all,"Bundesland",this.current_bl);
+  this.dosen_projektion = this.filterArray(this.dosen_projektion_all,"geo",this.current_bl);
   this.stand_impfungen_bund=this.filterArray(this.stand_impfungen_data,"Bundesland",this.current_bl)[0];  
   this.params.impflinge = this.getValues(this.filterArray(this.ewz_bl,"Bundesland",this.current_bl),"EW_20plus")[0];
   this.bev_anteil_land = this.getValues(this.filterArray(this.ewz_bl,"Bundesland",this.current_bl),"Anteil_20plus")[0];
@@ -213,9 +217,7 @@ update_kapazitaet(){
   (params.impfzentren_tage*params.n_impfzentren*params.n_impfzentren_pat+
   params.varzt_tage*params.n_varzt*params.n_varzt_pat)*1/7;
   this.params.kapazitaet_pro_woche=this.params.kapazitaet_pro_tag*7;
-  const data = this.dosen_projektion;
-  const myparams = this.params;
-  this.do_simulation(data,myparams);
+  this.do_simulation(this.dosen_projektion,this.params);
   this.simple_aerzte_impfen = this.params.varzt_tage>0;
   this.simple_alle_zulassen = this.params.impfstoffart!="zugelassen";
 }

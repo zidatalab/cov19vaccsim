@@ -23,17 +23,21 @@
                     </div>  
                     <div fxFlex=15 fxFlex.lt-md=100 class="mat-padding">
                         <p>
-                            <span class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen gesamt'] |
-                                number:'1.0-0'}}</span><br>
-                            Dosen verimpft
+                            <span *ngIf="this.stand_impfungen_bund['Zahl der Impfungen gesamt']>=1e6" class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen gesamt']/1e6 |
+                                number:'1.2-2'}}</span>
+                            <span *ngIf="this.stand_impfungen_bund['Zahl der Impfungen gesamt']<1e6" class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen gesamt']/1e3 |
+                                    number:'1.0-0'}}</span>
+                                <br>
+                                <span *ngIf="this.stand_impfungen_bund['Zahl der Impfungen gesamt']>=1e6" >Mio. Dosen verimpft</span>
+                                <span *ngIf="this.stand_impfungen_bund['Zahl der Impfungen gesamt']<1e6" >Tsd. Dosen verimpft</span>
                         </p>
                     </div>
                     <div fxFlex=15 fxFlex.lt-md=100 class="mat-padding">
                         <p>
                             <span class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen
-                                gesamt']/(this.days_since_start/7) |
+                                gesamt']/(this.days_since_start/7)/1e3 |
                                 number:'1.0-0'}}</span><br>
-                            pro Woche
+                            Tsd. pro Woche
                         </p>
                     </div>
                     <div fxFlex=15 fxFlex.lt-md=100 class="mat-padding">
