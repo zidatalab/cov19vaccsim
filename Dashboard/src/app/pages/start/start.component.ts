@@ -70,7 +70,7 @@ updateinput:any;
   console.log("TOKEN",this.token);
 
 // Import Local data
-this.http.get('/assets/data/bl.geojson')
+this.http.get('https://www.zidatasciencelab.de/cov19vaccsim/assets/data/bl.geojson')
 .subscribe(data=>{this.map=data;})
 
 this.http.get('https://www.zidatasciencelab.de/cov19vaccsim/assets/data/ewz_bl.json')
