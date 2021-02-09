@@ -19,7 +19,7 @@ simple_aerzte_impfen=false;
 simple_alle_zulassen=false;
 map:any;  
 token:any;
-// Einfacher Schutz, wer ihn aushebelt ist nicht nett. Kann sich aber bei mir melden, für einen Job. VG L. Kroll.
+// Einfacher Schutz, wer ihn aushebelt ist nicht nett. Kann sich aber bei mir melden,
 valid_token = "zugang_valid_mp_salz_8_bmg";
 ewz_bl:any;
 stand_impfungen_data:any;
@@ -73,8 +73,8 @@ updateinput:any;
 this.http.get('/assets/data/bl.geojson')
 .subscribe(data=>{this.map=data;})
 
-this.http.get('/assets/data/ewz_bl.json')
-.subscribe(data=>{this.ewz_bl=data;this.bl_liste=this.getValues(this.ewz_bl,"Bundesland");})
+this.http.get('https://www.zidatasciencelab.de/cov19vaccsim/assets/data/ewz_bl.json')
+.subscribe(data=>{this.ewz_bl=data;this.bl_liste=this.getValues(this.ewz_bl,"Bundesland");});
 
 // Import some public data    
 this.getexternaldata();
