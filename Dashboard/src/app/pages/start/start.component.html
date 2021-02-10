@@ -4,7 +4,12 @@
     <h3>Wenden Sie sich bitte an das Zi für Zugangsdaten.</h3>
     </div>
 </div>
-<div *ngIf="this.token" class="container" fxLayout="row wrap" fxLayoutGap="1rem" fxLayoutAllign="space-around">
+<div *ngIf="this.token && !this.dosen_projektion_all" class="container" fxLayout="row wrap" fxLayoutGap="1rem" >
+    <div>
+    <mat-spinner></mat-spinner>
+    </div>
+</div>
+<div *ngIf="this.token && this.dosen_projektion_all" class="container" fxLayout="row wrap" fxLayoutGap="1rem" fxLayoutAllign="space-around">
     <div fxFlex=100>
         <mat-card *ngIf="this.stand_impfungen_bund">
             <mat-card-title>Stand der Impfkampagne
