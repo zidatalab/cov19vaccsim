@@ -67,8 +67,8 @@ updateinput:any;
   ngOnInit(): void {
   this.update_days_since_start();
   this.token = this.route.snapshot.queryParams['token']===this.valid_token;
-  console.log("TOKEN",this.token);
-
+  
+ if (this.token){
 // Import Local data
 this.http.get('https://www.zidatasciencelab.de/cov19vaccsim/assets/data/bl.geojson')
 .subscribe(data=>{this.map=data;})
@@ -79,6 +79,7 @@ this.http.get('https://www.zidatasciencelab.de/cov19vaccsim/assets/data/ewz_bl.j
 // Import some public data    
 this.getexternaldata();
 }
+}
 
 
 getexternaldata(){
@@ -86,7 +87,7 @@ getexternaldata(){
 .subscribe(data=>{
   this.stand_impfungen_data=data;  
 });
-this.http.get('https://raw.githubusercontent.com/zidatalab/impfmodellierung/main/export/tables/impfsim_data.json?token=AHZPFC7KB27F7QBNSHQAZQLAEPMXS')
+this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/tabledata/impfsim_data.json')
 .subscribe(data=>{
   this.dosen_projektion_all = data;
   this.update_kapazitaet();     
