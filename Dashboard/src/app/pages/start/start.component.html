@@ -245,12 +245,12 @@
         </mat-card>
 
     </div>
-    <div fxFlex=100 *ngIf="this.sim_result">
+    <div fxFlex=100 *ngIf="this.risktimes" >
         <mat-card>
             <mat-card-title>Simulation</mat-card-title>
             <mat-card-subtitle>Vereinfachte Simulation auf Basis der Parameter</mat-card-subtitle>
             <div fxLayout="row wrap" fxLayoutGap="2rem" fxLayoutAllign="space-between">
-                <div fxFlex=100 *ngIf="this.risktimes" fxFlex.lt-md=100 fxLayout="row wrap" fxLayoutGap="1rem" fxLayoutAllign="space-between">
+                <div fxFlex=100 fxFlex.lt-md=100 fxLayout="row wrap" fxLayoutGap="1rem" fxLayoutAllign="space-between">
                     <div fxFlex=100>
                     <h2>Durchimpfung</h2>                    
                     </div>

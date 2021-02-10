@@ -86,7 +86,7 @@ getexternaldata(){
 .subscribe(data=>{
   this.stand_impfungen_data=data;  
 });
-this.http.get('https://www.zidatasciencelab.de/covid19dashboard/data/tabledata/impfsim_data.json')
+this.http.get('https://raw.githubusercontent.com/zidatalab/impfmodellierung/main/export/tables/impfsim_data.json?token=AHZPFC7KB27F7QBNSHQAZQLAEPMXS')
 .subscribe(data=>{
   this.dosen_projektion_all = data;
   this.update_kapazitaet();     
