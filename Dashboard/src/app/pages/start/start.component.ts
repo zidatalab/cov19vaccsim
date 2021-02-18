@@ -46,14 +46,15 @@ n_risikogruppen = [
 // Sim Params
 verteilungszenarien = ["Gleichverteilung","Linearer Anstieg der Produktion in Q2"];
 params = {
-n_impfzentren:400,
-n_impfzentren_pat:500,
+n_impfzentren:433,
+n_impfzentren_pat:789,
 impfzentren_tage:7,
 n_varzt:50000,
 n_varzt_pat:20,
 varzt_tage:0,
 kapazitaet_pro_tag:0,
 kapazitaet_pro_woche:0,
+warten_dosis_2:5,
 liefermenge:1.0,
 impflinge : 67864036,
 impfstoffart:"zugelassen",
@@ -118,6 +119,7 @@ do_simulation(myinput,params){
   let kapazitaet=params.kapazitaet_pro_woche;
   let impflinge=params.impflinge;
   let liefermenge = params.liefermenge;
+  let warten_dosis_2 = params.warten_dosis_2;
   let input = this.filterArray(myinput,"Verteilungsszenario",szenario);
   let result=[];
   let finalresult = [];
@@ -125,8 +127,10 @@ do_simulation(myinput,params){
   this.risktimes = [];
   let riskgroup = this.n_risikogruppen;
   let riskgroup_i = 0;
-    
+  
+  // Loop over weeks
   for (var _i = 0; _i < input.length; _i++) {
+    // Firs week
     let current_item = input[_i];
     let thedosen = current_item.Dosen;
     let thepatienten = current_item.Patienten;
