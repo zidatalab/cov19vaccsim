@@ -26,6 +26,8 @@ stand_impfungen_data:any;
 bl_liste:Array<string>;
 stand_impfungen_bund:any;
 bev_anteil_land:number;
+impfkapazitaet_land:number;
+impfkapazitaet_bund:number;
 dosen_projektion:any;
 land_changed:boolean;
 dosen_projektion_all:any;
@@ -75,7 +77,10 @@ this.http.get('https://www.zidatasciencelab.de/cov19vaccsim/assets/data/bl.geojs
 .subscribe(data=>{this.map=data;})
 
 this.http.get('https://www.zidatasciencelab.de/cov19vaccsim/assets/data/ewz_bl.json')
-.subscribe(data=>{this.ewz_bl=data;this.bl_liste=this.getValues(this.ewz_bl,"Bundesland");});
+.subscribe(data=>{this.ewz_bl=data;
+  this.bl_liste=this.getValues(this.ewz_bl,"Bundesland");
+  this.impfkapazitaet_bund = this.getValues(this.filterArray(this.ewz_bl,"Bundesland","Gesamt"),"Impfkapazitaet")[0];
+});
 
 // Import some public data    
 this.getexternaldata();
@@ -223,8 +228,10 @@ update_kapazitaet(){
   this.stand_impfungen_bund=this.filterArray(this.stand_impfungen_data,"Bundesland",this.current_bl)[0];  
   this.params.impflinge = this.getValues(this.filterArray(this.ewz_bl,"Bundesland",this.current_bl),"EW_20plus")[0];
   this.bev_anteil_land = this.getValues(this.filterArray(this.ewz_bl,"Bundesland",this.current_bl),"Anteil_20plus")[0];
+  this.impfkapazitaet_land = this.getValues(this.filterArray(this.ewz_bl,"Bundesland",this.current_bl),"Impfkapazitaet")[0];
   if (this.land_changed){
-    this.params.n_impfzentren=400*this.bev_anteil_land/100;
+    // console.log('KAP:',this.filterArray(this.ewz_bl,"Bundesland",this.current_bl),this.impfkapazitaet_land,this.impfkapazitaet_bund);
+    this.params.n_impfzentren=433*this.bev_anteil_land/100;
     this.params.n_varzt=50000*this.bev_anteil_land/100;
     this.land_changed = false;
   }
