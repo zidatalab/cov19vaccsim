@@ -14,6 +14,10 @@ export class StartComponent implements OnInit {
   constructor(
     private http:HttpClient,
     private route: ActivatedRoute) { }
+
+// Plan B
+showdurchimpfung = false;
+
 mode="simple";
 simple_aerzte_impfen=false;
 simple_alle_zulassen=false;

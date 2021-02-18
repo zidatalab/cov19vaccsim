@@ -1,46 +1,54 @@
-<div *ngIf="!this.token" class="container" fxLayout="row wrap" fxLayoutGap="1rem" >
+<div *ngIf="!this.token" class="container" fxLayout="row wrap" fxLayoutGap="1rem">
     <div>
-    <h1>Nicht autorisiert</h1> 
-    <h3>Wenden Sie sich bitte an das Zi für Zugangsdaten.</h3>
+        <h1>Nicht autorisiert</h1>
+        <h3>Wenden Sie sich bitte an das Zi für Zugangsdaten.</h3>
     </div>
 </div>
-<div *ngIf="this.token && !this.dosen_projektion_all" class="container" fxLayout="row wrap" fxLayoutGap="1rem" >
+<div *ngIf="this.token && !this.dosen_projektion_all" class="container" fxLayout="row wrap" fxLayoutGap="1rem">
     <div>
-    <mat-spinner></mat-spinner>
+        <mat-spinner></mat-spinner>
     </div>
 </div>
-<div *ngIf="this.token && this.dosen_projektion_all" class="container" fxLayout="row wrap" fxLayoutGap="1rem" fxLayoutAllign="space-around">
+<div *ngIf="this.token && this.dosen_projektion_all" class="container" fxLayout="row wrap" fxLayoutGap="1rem"
+    fxLayoutAllign="space-around">
     <div fxFlex=100>
         <mat-card *ngIf="this.stand_impfungen_bund">
             <mat-card-title>Stand der Impfkampagne
                 <span *ngIf="this.current_bl!='Gesamt'"> in {{this.current_bl}}</span>
                 <span *ngIf="this.current_bl=='Gesamt'"> in Deutschland</span>
             </mat-card-title>
-            <mat-card-content class="mat-padding">               
+            <mat-card-content class="mat-padding">
                 <div *ngIf="this.stand_impfungen_bund" fxLayout="row wrap" fxLayoutGap="2rem"
                     fxLayoutAllign="space-around">
-                    <div fxFlex >
-                        
-                            <mat-form-field color="accent" appearance="outline" >
-                                <mat-label>Bundesland</mat-label>
-                                <mat-select [(ngModel)]="this.current_bl" (selectionChange)="this.land_changed=true;this.update_kapazitaet();" >
-                                  <ng-container *ngFor="let land of this.bl_liste">
+                    <div fxFlex>
+
+                        <mat-form-field color="accent" appearance="outline">
+                            <mat-label>Bundesland</mat-label>
+                            <mat-select [(ngModel)]="this.current_bl"
+                                (selectionChange)="this.land_changed=true;this.update_kapazitaet();">
+                                <ng-container *ngFor="let land of this.bl_liste">
                                     <mat-option [value]="land">{{land}}</mat-option>
-                                  </ng-container>
-                                  
-                                </mat-select>
-                              </mat-form-field>
-                        
-                    </div>  
+                                </ng-container>
+
+                            </mat-select>
+                        </mat-form-field>
+
+                    </div>
                     <div fxFlex=15 fxFlex.lt-md=100 class="mat-padding">
                         <p>
-                            <span *ngIf="this.stand_impfungen_bund['Zahl der Impfungen gesamt']>=1e6" class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen gesamt']/1e6 |
+                            <span *ngIf="this.stand_impfungen_bund['Zahl der Impfungen gesamt']>=1e6"
+                                class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen gesamt']/1e6
+                                |
                                 number:'1.2-2'}}</span>
-                            <span *ngIf="this.stand_impfungen_bund['Zahl der Impfungen gesamt']<1e6" class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen gesamt']/1e3 |
-                                    number:'1.0-0'}}</span>
-                                <br>
-                                <span *ngIf="this.stand_impfungen_bund['Zahl der Impfungen gesamt']>=1e6" >Mio. Dosen verimpft</span>
-                                <span *ngIf="this.stand_impfungen_bund['Zahl der Impfungen gesamt']<1e6" >Tsd. Dosen verimpft</span>
+                            <span *ngIf="this.stand_impfungen_bund['Zahl der Impfungen gesamt']<1e6"
+                                class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen gesamt']/1e3
+                                |
+                                number:'1.0-0'}}</span>
+                            <br>
+                            <span *ngIf="this.stand_impfungen_bund['Zahl der Impfungen gesamt']>=1e6">Mio. Dosen
+                                verimpft</span>
+                            <span *ngIf="this.stand_impfungen_bund['Zahl der Impfungen gesamt']<1e6">Tsd. Dosen
+                                verimpft</span>
                         </p>
                     </div>
                     <div fxFlex=15 fxFlex.lt-md=100 class="mat-padding">
@@ -62,7 +70,7 @@
                     <div fxFlex=15 fxFlex.lt-md=100 class="mat-padding">
                         <p>
                             <span class="accentcolor bignum">{{this.stand_impfungen_bund['Gesamt 2x']}} %</span><br>
-                           Durchimpfung
+                            Durchimpfung
                         </p>
                     </div>
                 </div>
@@ -165,8 +173,7 @@
                                 </span>
                             </h3>
                             <p>Anzahl:<span fxHide.lt-md="true"><br></span>
-                                <mat-slider [(ngModel)]="this.params.n_impfzentren" min="0" [max]="500" 
-                                [step]="1"
+                                <mat-slider [(ngModel)]="this.params.n_impfzentren" min="0" [max]="500" [step]="1"
                                     (change)="this.update_kapazitaet();"></mat-slider>
                                 <strong>{{this.params.n_impfzentren | number: '1.0-0'}}</strong>
                                 <br>Patienten pro Tag:<span fxHide.lt-md="true"><br></span>
@@ -187,12 +194,12 @@
                                 </span>
                             </h3>
                             <p>Anzahl:<span fxHide.lt-md="true"><br></span>
-                                <mat-slider [(ngModel)]="this.params.n_varzt" min="0" [max]="50000*(this.bev_anteil_land/100)" 
-                                [step]="1000*(this.bev_anteil_land/100)"
+                                <mat-slider [(ngModel)]="this.params.n_varzt" min="0"
+                                    [max]="50000*(this.bev_anteil_land/100)" [step]="1000*(this.bev_anteil_land/100)"
                                     (change)="this.update_kapazitaet();"></mat-slider>
                                 <strong>{{this.params.n_varzt | number: '1.0-0'}}</strong>
                                 <br>Patienten pro Tag:<span fxHide.lt-md="true"><br></span>
-                                <mat-slider [(ngModel)]="this.params.n_varzt_pat" min="10" max="60" step="10"
+                                <mat-slider [(ngModel)]="this.params.n_varzt_pat" min="0" max="100" step="10"
                                     (change)="this.update_kapazitaet();"></mat-slider>
                                 <strong>{{this.params.n_varzt_pat}}</strong>
                                 <br>Impftage pro Woche:<span fxHide.lt-md="true"><br></span>
@@ -238,6 +245,12 @@
                                     </ng-container>
                                 </mat-radio-group>
                             </div>
+                            <div>
+                                <span>Durchimpfung anzeigen</span><br>
+                                <mat-slide-toggle [(ngModel)]="this.showdurchimpfung">
+                                            
+                                        </mat-slide-toggle>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -245,14 +258,14 @@
         </mat-card>
 
     </div>
-    <div fxFlex=100 *ngIf="this.risktimes" >
+    <div fxFlex=100 *ngIf="this.risktimes">
         <mat-card>
             <mat-card-title>Simulation</mat-card-title>
             <mat-card-subtitle>Vereinfachte Simulation auf Basis der Parameter</mat-card-subtitle>
             <div fxLayout="row wrap" fxLayoutGap="2rem" fxLayoutAllign="space-between">
-                <div fxFlex=100 fxFlex.lt-md=100 fxLayout="row wrap" fxLayoutGap="1rem" fxLayoutAllign="space-between">
+                <div *ngIf="this.showdurchimpfung" fxFlex=100 fxFlex.lt-md=100 fxLayout="row wrap" fxLayoutGap="1rem" fxLayoutAllign="space-between">
                     <div fxFlex=100>
-                    <h2>Durchimpfung</h2>                    
+                        <h2>Durchimpfung</h2>
                     </div>
                     <div *ngFor="let group of this.risktimes" fxFlex.lt-md=100>
                         <p>
@@ -260,17 +273,18 @@
                                 {{group.Datum | date : 'dd.M.'}} </span>
                             <span *ngIf="group.Datum=='nie'" class="accentcolor bignum" style="font-size: 2rem;">
                                 später </span>
-                                <span fxHide.lt-md="true"><br></span>
+                            <span fxHide.lt-md="true"><br></span>
                             <strong>Risikostufe {{group.Stufe}}</strong><br>
 
                         </p>
-                    </div>                 
-                    
+                    </div>
+
                     <div fxFlex=100>
-                    <p class="mat-caption lightgreycolor">
-                        Diese Schätzung erfolgt nur näherungsweise anhand des Zeitpunktes, zu dem die notwendige Zahl
-                        von Impfdosen zur Durchimpfung verabreicht wurden.
-                    </p>
+                        <p class="mat-caption lightgreycolor">
+                            Diese Schätzung erfolgt nur näherungsweise anhand des Zeitpunktes, zu dem die notwendige
+                            Zahl
+                            von Impfdosen zur Durchimpfung verabreicht wurden.
+                        </p>
                     </div>
                 </div>
                 <div fxFlex=45 fxFlex.lt-md=100>
@@ -291,8 +305,8 @@
                     <h2>Unverimpfte Dosen (bei Kapazitätsmangel)</h2>
                     <div>
                         <app-plot [(data)]="this.sim_result" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
-                            xvalue="maxdate" [colorscheme]="['orange']"
-                            [outcomes]="['Rest_Dosen']" plottype="area"></app-plot>
+                            xvalue="maxdate" [colorscheme]="['orange']" [outcomes]="['Rest_Dosen']" plottype="area">
+                        </app-plot>
                     </div>
                     <div class="padding lightgreycolor">
                         <p class="mat-caption">
@@ -317,7 +331,7 @@
 
                 </div>
 
-                <div fxFlex=45 fxFlex.lt-md=100>
+                <div  *ngIf="this.showdurchimpfung" fxFlex=45 fxFlex.lt-md=100>
                     <h2>Vereinfacht modellierte Impfquote in %</h2>
                     <div>
                         <app-plot [(data)]="this.sim_result" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
