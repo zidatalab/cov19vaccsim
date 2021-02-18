@@ -25,12 +25,14 @@ ewz_bl:any;
 stand_impfungen_data:any;
 bl_liste:Array<string>;
 stand_impfungen_bund:any;
+stand_impfungen_hersteller:any;
 bev_anteil_land:number;
 impfkapazitaet_land:number;
 impfkapazitaet_bund:number;
 dosen_projektion:any;
 land_changed:boolean;
 dosen_projektion_all:any;
+dosen_projektion_all_hersteller:any;
 current_bl="Gesamt";
 sim_result:any;
 days_since_start:number;
@@ -93,12 +95,23 @@ getexternaldata(){
 .subscribe(data=>{
   this.stand_impfungen_data=data;  
 });
+
+this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/tabledata/impfsim_lieferungen.json')
+.subscribe(data=>{
+  this.dosen_projektion_all_hersteller = data;    
+});
+
+this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/tabledata/impfsim_start.json')
+.subscribe(data=>{
+  this.stand_impfungen_hersteller = data;    
+});
+
+
 this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/tabledata/impfsim_data.json')
 .subscribe(data=>{
   this.dosen_projektion_all = data;
   this.update_kapazitaet();     
 });
-
 
 }
 
@@ -230,8 +243,7 @@ update_kapazitaet(){
   this.bev_anteil_land = this.getValues(this.filterArray(this.ewz_bl,"Bundesland",this.current_bl),"Anteil_20plus")[0];
   this.impfkapazitaet_land = this.getValues(this.filterArray(this.ewz_bl,"Bundesland",this.current_bl),"Impfkapazitaet")[0];
   if (this.land_changed){
-    // console.log('KAP:',this.filterArray(this.ewz_bl,"Bundesland",this.current_bl),this.impfkapazitaet_land,this.impfkapazitaet_bund);
-    this.params.n_impfzentren=433*this.bev_anteil_land/100;
+    this.params.n_impfzentren=433*this.impfkapazitaet_land/this.impfkapazitaet_bund;
     this.params.n_varzt=50000*this.bev_anteil_land/100;
     this.land_changed = false;
   }
