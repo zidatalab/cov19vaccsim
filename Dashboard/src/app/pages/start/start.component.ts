@@ -350,23 +350,17 @@ export class StartComponent implements OnInit {
       let gesamtinput_immunisierung = this.filterArray(this.filterArray(result_zweitimpfungen, 'kw', thewoche), "anwendungen", 2).concat(this.filterArray(this.filterArray(result_erstimpfungen, 'kw', thewoche), "anwendungen", 1));
       let gesamtinput_alle = this.filterArray(result_zweitimpfungen, 'kw', thewoche).concat(this.filterArray(result_erstimpfungen, 'kw', thewoche));
 
-      if (thewoche<firstweek+10){
-        console.log('Immunisierung KW'+thewoche,this.getValues(gesamtinput_alle,'patienten_geimpft'));
-        //console.log('Alle Dosen KW'+thewoche,gesamtinput_alle);
-      }
-
       if (gesamtinput_immunisierung.length > 0) {
         let topush = {};
         topush['kw'] = thewoche;
         topush['date'] = this.getDateOfISOWeek(thewoche, 2020);
         topush['kapazitaet'] = kapazitaet;
-        topush['population'] = this.getValues(gesamtinput_immunisierung, 'population')[0];
+        topush['population'] = this.getValues(gesamtinput_alle, 'population')[0];
         topush['Gelieferte Dosen'] = this.sumArray(this.getValues(gesamtinput_immunisierung, 'dosenlieferung_kw'));
         topush['Verfügbare Dosen'] = this.sumArray(this.getValues(gesamtinput_immunisierung, 'dosen_verfuegbar'));
         topush['Verimpfte Dosen'] = this.sumArray(this.getValues(gesamtinput_alle, 'impfungen'));
         topush['Auslastung'] = 100 * (topush['Verimpfte Dosen'] / kapazitaet);
         topush['Unverimpfte Dosen'] = topush['Verfügbare Dosen'] - topush['Verimpfte Dosen'];
-        topush['immunisierungen'] = this.sumArray(this.getValues(gesamtinput_immunisierung, 'impfungen'));
         topush['patienten_durchgeimpft'] = this.sumArray(
           this.getValues(gesamtinput_alle, 'patienten_geimpft'));
         
