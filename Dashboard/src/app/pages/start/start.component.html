@@ -287,12 +287,26 @@
                         </p>
                     </div>
                 </div>
-                <div fxFlex=45 fxFlex.lt-md=100>
+                <div fxFlex=100 fxFlex.lt-md=100>
                     <h2>Gelieferte und verimpfte Dosen</h2>
                     <div>
                         <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
                             xvalue="date" [colorscheme]="['crimson','green']"
                             [outcomes]="['Gelieferte Dosen','Verimpfte Dosen']" plottype="area"></app-plot>
+                    </div>
+                    <div class="padding lightgreycolor">
+                        <p class="mat-caption">
+                            Legende:<br>Projektion auf Basis der aktuellen Verträge mit den Herstellern.
+                        </p>
+                    </div>
+
+                </div>
+                <div fxFlex=45 fxFlex.lt-md=100>
+                    <h2>Warteschlange Zweitimpfung</h2>
+                    <div>
+                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
+                            xvalue="date" [colorscheme]="['navy']" [outcomes]="['Wartschlange Zweitimpfung']" plottype="area">
+                        </app-plot>
                     </div>
                     <div class="padding lightgreycolor">
                         <p class="mat-caption">

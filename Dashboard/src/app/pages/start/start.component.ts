@@ -150,7 +150,6 @@ export class StartComponent implements OnInit {
       (params.impfzentren_tage * params.n_impfzentren * params.n_impfzentren_pat +
         params.varzt_tage * params.n_varzt * params.n_varzt_pat) * 1 / 7;
     this.params.kapazitaet_pro_woche = this.params.kapazitaet_pro_tag * 7;
-    this.do_simulation(this.dosen_projektion, this.params);
     this.do_simulation_new(this.dosen_projektion_all_hersteller_filtered, this.params);
     this.simple_aerzte_impfen = this.params.varzt_tage > 0;
     this.simple_alle_zulassen = this.params.impfstoffart != "zugelassen";
@@ -197,13 +196,6 @@ export class StartComponent implements OnInit {
     let riskgroup = this.n_risikogruppen;
     let riskgroup_i = 0;
     this.risktimes = [];
-
-    console.log("NEW SIM");
-    console.log("TIME", time);
-    console.log("Hersteller", hersteller);
-    console.log("Auswahl:", myinput[0]['Bundesland'], myinput[0]['Verteilungsszenario']);
-    console.log("Datenstruktur Impfstand", impfstand);
-    console.log("Datenstruktur Dosen", myinput[0]);
     
     // Schleife Zeit
     for (const thewoche of time) {
@@ -363,6 +355,7 @@ export class StartComponent implements OnInit {
         topush['Unverimpfte Dosen'] = topush['Verfügbare Dosen'] - topush['Verimpfte Dosen'];
         topush['patienten_durchgeimpft'] = this.sumArray(
           this.getValues(gesamtinput_alle, 'patienten_geimpft'));
+        topush['Wartschlange Zweitimpfung'] =  this.sumArray(this.getValues(gesamtinput_alle, 'verbleibend_in_warteschlange_zweit_kw')); 
         
         // Korrektur Durchimpfung abgeschlossen
         topush['Anteil Durchimpfung'] = 100 * (topush['patienten_durchgeimpft'] / topush['population']);
@@ -391,113 +384,10 @@ export class StartComponent implements OnInit {
       }
     }
 
-    this.new_simresult = finalresult;
-
-
-
-
-    console.log('Datenstruktur finalresult:', finalresult[0]);
-    console.log('Check JJ Result',this.getValues(this.filterArray(result_erstimpfungen,'hersteller',"J&J"),'patienten_geimpft'));
-    console.log('Check Curevac Result',this.getValues(this.filterArray(result_zweitimpfungen,'hersteller',"Curevac"),'patienten_geimpft'));
+    this.new_simresult = finalresult;    
   }
 
-  do_simulation(myinput, params) {
-    let szenario = params.verteilungszenario;
-    let kapazitaet = params.kapazitaet_pro_woche;
-    let impflinge = params.impflinge;
-    let liefermenge = params.liefermenge;
-    let warten_dosis_2 = params.warten_dosis_2;
-    let input = myinput;
-    let result = [];
-    let finalresult = [];
-    let riskinfo = {};
-    this.risktimes = [];
-    let riskgroup = this.n_risikogruppen;
-    let riskgroup_i = 0;
-
-    // Loop over weeks
-    for (var _i = 0; _i < input.length; _i++) {
-      // Firs week
-      let current_item = input[_i];
-      let thedosen = current_item.Dosen;
-      let thepatienten = current_item.Patienten;
-      if (params.impfstoffart == "zugelassen") {
-        thedosen = current_item.dosen_zugelassen;
-        thepatienten = current_item.patienten_zugelassen;
-      }
-      current_item['Dosen_aktuell'] = 0;
-      if (_i > 0) {
-        current_item['Dosen_aktuell'] = thedosen * liefermenge + result[result.length - 1].Rest_Dosen;
-        current_item['Patienten_aktuell'] = thepatienten * liefermenge + result[result.length - 1].Rest_Patienten;
-      }
-      else {
-        current_item['Dosen_aktuell'] = thedosen * liefermenge;
-        current_item['Patienten_aktuell'] = thepatienten * liefermenge;
-      }
-      current_item['Dosen verfügbar'] = thedosen * liefermenge;
-      current_item['Anteil'] = current_item.Dosen_aktuell / kapazitaet;
-      if (current_item.Anteil > 1) {
-        current_item['Anwendung'] = current_item.Dosen_aktuell * (1 / current_item.Anteil);
-        current_item['Anwendung_Patienten'] = current_item.Patienten_aktuell * (1 / current_item.Anteil);
-        current_item['Rest_Dosen'] = current_item.Dosen_aktuell - current_item['Anwendung'];
-        current_item['Rest_Patienten'] = current_item.Patienten_aktuell - current_item['Anwendung_Patienten'];
-      }
-      else {
-        current_item['Anwendung'] = current_item.Dosen_aktuell;
-        current_item['Anwendung_Patienten'] = current_item.Patienten_aktuell;
-        current_item['Rest_Dosen'] = 0;
-        current_item['Rest_Patienten'] = 0;
-      }
-      if (_i > 0) {
-        current_item['Anwendung_kum'] = current_item.Anwendung + result[_i - 1].Anwendung_kum;
-        current_item['Anwendung_Patienten_kum'] = current_item.Anwendung_Patienten + result[_i - 1].Anwendung_Patienten_kum;
-        current_item['Impfquote'] = 100 * (current_item['Anwendung_Patienten_kum']) / impflinge;
-      }
-      else {
-        current_item['Anwendung_kum'] = current_item.Anwendung + this.stand_impfungen_bund['Zahl der Impfungen gesamt'];
-        current_item['Anwendung_Patienten_kum'] = current_item.Anwendung_Patienten + this.stand_impfungen_bund['Zahl der Impfungen gesamt'] / 2;
-      }
-
-
-      result.push(current_item);
-
-      if (current_item.Anwendung_Patienten_kum <= impflinge) {
-        finalresult.push(current_item);
-      }
-      else {
-        current_item['Anwendung_Patienten_kum'] = impflinge;
-        current_item['Impfquote'] = 100;
-        finalresult.push(current_item);
-      }
-
-      // Check who is done
-      if (riskgroup.length >= (riskgroup_i + 1)) {
-        if ((current_item['Impfquote'] / 100) >= riskgroup[riskgroup_i].anteil) {
-          current_item['riskgroup_done'] = riskgroup[riskgroup_i].Stufe;
-          riskinfo = riskgroup[riskgroup_i];
-          riskinfo["kw"] = current_item.kw;
-          riskinfo["Datum"] = input[_i].maxdate;
-          riskinfo["_Quote"] = current_item.Impfquote / 100;
-          this.risktimes.push(riskinfo);
-          riskgroup_i = riskgroup_i + 1;
-        };
-      }
-
-    }
-
-    while ((riskgroup_i + 1) <= 6) {
-      riskinfo = riskgroup[riskgroup_i];
-      riskinfo["Datum"] = "nie";
-      this.risktimes.push(riskinfo);
-      riskgroup_i = riskgroup_i + 1;
-    }
-
-
-
-    this.sim_result = finalresult;
-
-  }
-
+  
   update_days_since_start() {
     let date1 = new Date("2020-12-26");
     let date2 = new Date();
