@@ -52,7 +52,7 @@ export class StartComponent implements OnInit {
     { Stufe: 3, n: 5.7, anteil: 0.31386285366 },
     { Stufe: 4, n: 6.9, anteil: 0.41553673583 },
     { Stufe: 5, n: 8.4, anteil: 0.53931363587 },
-    { Stufe: 6, n: 31.26, anteil: 1.00 },
+    { Stufe: 6, n: 31.26, anteil: 0.99 },
     { Stufe: "", anteil: 1000000 },
     { Stufe: "", anteil: 1000000 }
   ];
@@ -372,8 +372,8 @@ export class StartComponent implements OnInit {
         }
 
         // Check who is done
-        if (riskgroup.length >= (riskgroup_i + 1)) {
-          if ((topush['Anteil Durchimpfung'] / 100) >= riskgroup[riskgroup_i+1].anteil) {
+        if (riskgroup.length > (riskgroup_i +1)) {
+          if ((topush['Anteil Durchimpfung'] ) >= 100*riskgroup[riskgroup_i+1].anteil) {
             topush['riskgroup_done'] = riskgroup[riskgroup_i].Stufe;
             riskinfo = riskgroup[riskgroup_i];
             riskinfo["kw"] = thewoche;
