@@ -41,7 +41,7 @@ export class StartComponent implements OnInit {
   dosen_projektion_all_hersteller_filtered: any;
   current_bl = "Gesamt";
   sim_result: any;
-  new_simresult:any;
+  new_simresult: any;
 
   days_since_start: number;
   risktimes = [];
@@ -70,7 +70,7 @@ export class StartComponent implements OnInit {
     liefermenge: 1.0,
     impflinge: 67864036,
     impfstoffart: "zugelassen",
-    verteilungszenario: this.verteilungszenarien[1] 
+    verteilungszenario: this.verteilungszenarien[1]
   };
   updateinput: any;
 
@@ -105,7 +105,7 @@ export class StartComponent implements OnInit {
         this.stand_impfungen_data = data;
       });
 
-    this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/tabledata/impfsim_lieferungen.json')
+    this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/tabledata/impfsim_lieferungen_ohnejj.json')
       .subscribe(data => {
         this.dosen_projektion_all_hersteller = data;
         this.update_kapazitaet();
@@ -183,11 +183,8 @@ export class StartComponent implements OnInit {
   }
 
   do_simulation_new(myinput, params) {
-    let szenario = params.verteilungszenario;
     let kapazitaet = params.kapazitaet_pro_woche;
-    let impflinge = params.impflinge;
     let liefermenge = params.liefermenge;
-    let warten_dosis_2 = params.warten_dosis_2;
     let input = myinput;
     let hersteller = this.herstellerliste;
     let time: Array<number> = this.getValues(this.sortArray(this.filterArray(input, "hersteller", hersteller[0]), 'kw'), "kw");
@@ -204,13 +201,14 @@ export class StartComponent implements OnInit {
     console.log("NEW SIM");
     console.log("TIME", time);
     console.log("Hersteller", hersteller);
-
-    // Schleife Zeit
     console.log("Auswahl:", myinput[0]['Bundesland'], myinput[0]['Verteilungsszenario']);
     console.log("Datenstruktur Impfstand", impfstand);
     console.log("Datenstruktur Dosen", myinput[0]);
+    
+    // Schleife Zeit
     for (const thewoche of time) {
       let kapazitaet_verbleibend = kapazitaet;
+      
       // Zweitimpfungen Startwoche
       if (thewoche == firstweek) {
         // Schleife Hersteller Zweitimpfung
@@ -227,50 +225,50 @@ export class StartComponent implements OnInit {
             topush['kapazitaet__vorher'] = kapazitaet_verbleibend;
             topush['dosen_geliefert'] = theinput['dosen_kw'] * liefermenge + impfstand_hersteller['dosen_geliefert'];
             topush['dosenlieferung_kw'] = theinput["dosen_kw"] * liefermenge;
-            topush['dosen_verfuegbar'] = theinput['dosen_kw'] * liefermenge + impfstand_hersteller['dosen_geliefert']-theinput['dosen_verabreicht_erst']-theinput['dosen_verabreicht_zweit'];
-            topush['impfungen'] = Math.min(topush['dosen_verfuegbar'],kapazitaet_verbleibend,theinput['warteschlange_zweit_kw']);
-            topush['impfungen_zweit'] = Math.min(topush['dosen_verfuegbar'],kapazitaet_verbleibend,theinput['warteschlange_zweit_kw']);
-            topush['verbleibend_in_warteschlange_zweit_kw']= theinput['warteschlange_zweit_kw']-topush['impfungen'];
-            kapazitaet_verbleibend = kapazitaet_verbleibend-topush['impfungen'];
+            topush['dosen_verfuegbar'] = theinput['dosen_kw'] * liefermenge + impfstand_hersteller['dosen_geliefert'] - theinput['dosen_verabreicht_erst'] - theinput['dosen_verabreicht_zweit'];
+            topush['impfungen'] = Math.min(topush['dosen_verfuegbar'], kapazitaet_verbleibend, theinput['warteschlange_zweit_kw']);
+            topush['impfungen_zweit'] = Math.min(topush['dosen_verfuegbar'], kapazitaet_verbleibend, theinput['warteschlange_zweit_kw']);
+            topush['verbleibend_in_warteschlange_zweit_kw'] = theinput['warteschlange_zweit_kw'] - topush['impfungen'];
+            kapazitaet_verbleibend = kapazitaet_verbleibend - topush['impfungen'];
             topush['kapazitaet_verbleibend'] = kapazitaet_verbleibend;
-            topush['patienten_geimpft'] = theinput['dosen_verabreicht_zweit'] +topush['impfungen'];
-            topush['dosenspeicher'] = topush['dosen_verfuegbar'] -topush['impfungen'];
+            topush['patienten_geimpft'] = theinput['dosen_verabreicht_zweit'] + topush['impfungen'];
+            topush['dosenspeicher'] = topush['dosen_verfuegbar'] - topush['impfungen'];
             result_zweitimpfungen.push(topush);
           }
         }
 
         // Schleife Hersteller Erstimpfung
-       for (const thehersteller of hersteller) {
-        let theinput = this.filterArray(this.filterArray(myinput, "hersteller", thehersteller), "kw", thewoche)[0];
-        let impfstand_hersteller = this.filterArray(impfstand, "hersteller", thehersteller)[0];
-        let info_zweitimpfungen_aktuelle_woche = 0;
-        let dosen_verfuegbar = theinput['dosen_kw']* liefermenge + impfstand_hersteller['dosen_geliefert']-theinput['dosen_verabreicht_erst']-theinput['dosen_verabreicht_zweit'];
-        if (theinput["anwendungen"] == 2) {
-        info_zweitimpfungen_aktuelle_woche = this.filterArray(this.filterArray(result_zweitimpfungen, "hersteller", thehersteller), "kw", thewoche)[0];
-        dosen_verfuegbar = info_zweitimpfungen_aktuelle_woche['dosenspeicher'];
+        for (const thehersteller of hersteller) {
+          let theinput = this.filterArray(this.filterArray(myinput, "hersteller", thehersteller), "kw", thewoche)[0];
+          let impfstand_hersteller = this.filterArray(impfstand, "hersteller", thehersteller)[0];
+          let info_zweitimpfungen_aktuelle_woche = 0;
+          let dosen_verfuegbar = theinput['dosen_kw'] * liefermenge + impfstand_hersteller['dosen_geliefert'] - theinput['dosen_verabreicht_erst'] - theinput['dosen_verabreicht_zweit'];
+          if (theinput["anwendungen"] == 2) {
+            info_zweitimpfungen_aktuelle_woche = this.filterArray(this.filterArray(result_zweitimpfungen, "hersteller", thehersteller), "kw", thewoche)[0];
+            dosen_verfuegbar = info_zweitimpfungen_aktuelle_woche['dosenspeicher'];
+          }
+
+          let ruecklage = Math.round(dosen_verfuegbar * theinput['ruecklage']);
+          let topush = {};
+          topush['hersteller'] = thehersteller;
+          topush['kw'] = thewoche;
+          topush['population'] = theinput['ueber18'];
+          topush['anwendungen'] = theinput['anwendungen'];
+          topush['kapazitaet__vorher'] = kapazitaet_verbleibend;
+          topush['dosenlieferung_kw'] = theinput["dosen_kw"] * liefermenge;
+          topush['dosen_verfuegbar'] = dosen_verfuegbar;
+          topush['impfungen'] = Math.min(topush['dosen_verfuegbar'] - ruecklage, kapazitaet_verbleibend);
+          topush['impfungen_erst'] = topush['impfungen'];
+          kapazitaet_verbleibend = kapazitaet_verbleibend - topush['impfungen'];
+          topush['kapazitaet_verbleibend'] = kapazitaet_verbleibend;
+          topush['patienten_geimpft'] = 0;
+          if (theinput["anwendungen"] == 1) {
+            topush['patienten_geimpft'] = theinput['dosen_verabreicht_erst'] + topush['impfungen'];
+          }
+          topush['dosenspeicher'] = topush['dosen_verfuegbar'] - topush['impfungen'];
+          result_erstimpfungen.push(topush);
+
         }
-        
-        let ruecklage = Math.round(dosen_verfuegbar*theinput['ruecklage']);
-        let topush = {};  
-        topush['hersteller'] = thehersteller;
-        topush['kw'] = thewoche; 
-        topush['population'] = theinput['ueber18'];  
-        topush['anwendungen'] = theinput['anwendungen'];   
-        topush['kapazitaet__vorher'] = kapazitaet_verbleibend;
-        topush['dosenlieferung_kw'] = theinput["dosen_kw"]* liefermenge;
-        topush['dosen_verfuegbar'] = dosen_verfuegbar;
-        topush['impfungen'] = Math.min(topush['dosen_verfuegbar']-ruecklage,kapazitaet_verbleibend);
-        topush['impfungen_erst'] = topush['impfungen'];
-        kapazitaet_verbleibend = kapazitaet_verbleibend-topush['impfungen'];
-        topush['kapazitaet_verbleibend'] = kapazitaet_verbleibend;
-        topush['patienten_geimpft'] = 0;
-        if (theinput["anwendungen"] == 1) {
-        topush['patienten_geimpft'] = topush['dosen_verabreicht_erst'] +topush['impfungen'];
-        }
-        topush['dosenspeicher'] = topush['dosen_verfuegbar'] -topush['impfungen'];
-        result_erstimpfungen.push(topush); 
-        
-      }
 
 
       }
@@ -278,128 +276,125 @@ export class StartComponent implements OnInit {
       if ((thewoche > firstweek)) { //  && (thewoche <=(firstweek+10))
         // Schleife Hersteller Zweitimpfung
         for (const thehersteller of hersteller) {
-          let theinput = this.filterArray(this.filterArray(myinput, "hersteller", thehersteller), "kw", thewoche)[0];  
-          let abstand = 4 ;  
-          if (theinput['abstand']){
-            abstand = theinput['abstand'];
-          }
+          let theinput = this.filterArray(this.filterArray(myinput, "hersteller", thehersteller), "kw", thewoche)[0];
+          let abstand = theinput['abstand'];
           // Nur falls Hersteller 2 Anwendungen
           if (theinput["anwendungen"] == 2) {
-            let vorwoche = thewoche-1;
-            let lastweek_erst = this.filterArray(this.filterArray(result_erstimpfungen, "hersteller", thehersteller), "kw",vorwoche )[0];
+            let vorwoche = thewoche - 1;
+            let lastweek_erst = this.filterArray(this.filterArray(result_erstimpfungen, "hersteller", thehersteller), "kw", vorwoche)[0];
             let lastweek_zweit = this.filterArray(this.filterArray(result_zweitimpfungen, "hersteller", thehersteller), "kw", vorwoche)[0];
             // Bedarf aus zurückliegenden Erstimpfungen seit firstweek
             let previous_erst = 0;
-            if ((thewoche-abstand)>=firstweek){
-              let tocheck = this.filterArray(this.filterArray(result_erstimpfungen, "hersteller", thehersteller), "kw",thewoche-abstand)[0]['impfungen'];
-              if (tocheck){
+            if ((thewoche - abstand) >= firstweek) {
+              let tocheck = this.filterArray(this.filterArray(result_erstimpfungen, "hersteller", thehersteller), "kw", thewoche - abstand)[0]['impfungen'];
+              if (tocheck) {
                 previous_erst = tocheck;
               }
-            }            
+            }
             let topush = {};
             topush['hersteller'] = thehersteller;
             topush['kw'] = thewoche;
             topush['anwendungen'] = 2;
-            topush['population'] = theinput['ueber18'];  
+            topush['population'] = theinput['ueber18'];
             topush['kapazitaet__vorher'] = kapazitaet_verbleibend;
-            topush['dosenlieferung_kw'] = theinput["dosen_kw"]* liefermenge;
-            topush['dosen_verfuegbar'] = theinput['dosen_kw']* liefermenge + lastweek_erst['dosenspeicher'];
+            topush['dosenlieferung_kw'] = theinput["dosen_kw"] * liefermenge;
+            topush['dosen_verfuegbar'] = theinput['dosen_kw'] * liefermenge + lastweek_erst['dosenspeicher'];
             topush['bedarf_neu_erstimpfungen_abstand'] = previous_erst;
-            topush['bedarf_aus_warteschlange'] = theinput['warteschlange_zweit_kw']+lastweek_zweit['verbleibend_in_warteschlange_zweit_kw'];
-            topush['bedarf__gesamt']=topush['bedarf_neu_erstimpfungen_abstand']+topush['bedarf_aus_warteschlange'];
-            topush['impfungen'] = Math.min(topush['dosen_verfuegbar'],kapazitaet_verbleibend,topush['bedarf__gesamt']);
+            topush['bedarf_aus_warteschlange'] = theinput['warteschlange_zweit_kw'] + lastweek_zweit['verbleibend_in_warteschlange_zweit_kw'];
+            topush['bedarf__gesamt'] = topush['bedarf_neu_erstimpfungen_abstand'] + topush['bedarf_aus_warteschlange'];
+            topush['impfungen'] = Math.min(topush['dosen_verfuegbar'], kapazitaet_verbleibend, topush['bedarf__gesamt']);
             topush['impfungen_zweit'] = topush['impfungen'];
-            topush['verbleibend_in_warteschlange_zweit_kw']= topush['bedarf__gesamt']-topush['impfungen'];
-            kapazitaet_verbleibend = kapazitaet_verbleibend-topush['impfungen'];
+            topush['verbleibend_in_warteschlange_zweit_kw'] = topush['bedarf__gesamt'] - topush['impfungen'];
+            kapazitaet_verbleibend = kapazitaet_verbleibend - topush['impfungen'];
             topush['kapazitaet_verbleibend'] = kapazitaet_verbleibend;
-            topush['patienten_geimpft'] = lastweek_zweit['patienten_geimpft'] +topush['impfungen'];
-            topush['dosenspeicher'] = topush['dosen_verfuegbar'] -topush['impfungen']; 
+            topush['patienten_geimpft'] = lastweek_zweit['patienten_geimpft'] + topush['impfungen'];
+            topush['dosenspeicher'] = topush['dosen_verfuegbar'] - topush['impfungen'];
             result_zweitimpfungen.push(topush);
           }
         }
 
         // Schleife Hersteller Erstimpfung
-       for (const thehersteller of hersteller) {
-        let theinput = this.filterArray(this.filterArray(myinput, "hersteller", thehersteller), "kw", thewoche)[0];
-        let vorwoche = thewoche-1;
-        let lastweek_erst = this.filterArray(this.filterArray(result_erstimpfungen, "hersteller", thehersteller), "kw",vorwoche )[0];
-        let info_zweitimpfungen_aktuelle_woche = 0;
-        let dosen_verfuegbar = theinput['dosen_kw']* liefermenge + lastweek_erst['dosenspeicher'];
-        if (theinput["anwendungen"] == 2) {
-        info_zweitimpfungen_aktuelle_woche = this.filterArray(this.filterArray(result_zweitimpfungen, "hersteller", thehersteller), "kw", thewoche)[0];
-        dosen_verfuegbar = info_zweitimpfungen_aktuelle_woche['dosenspeicher'];
+        for (const thehersteller of hersteller) {
+          let theinput = this.filterArray(this.filterArray(myinput, "hersteller", thehersteller), "kw", thewoche)[0];
+          let vorwoche = thewoche - 1;
+          let lastweek_erst = this.filterArray(this.filterArray(result_erstimpfungen, "hersteller", thehersteller), "kw", vorwoche)[0];
+          let info_zweitimpfungen_aktuelle_woche = 0;
+          let dosen_verfuegbar = theinput['dosen_kw'] * liefermenge + lastweek_erst['dosenspeicher'];
+          if (theinput["anwendungen"] == 2) {
+            info_zweitimpfungen_aktuelle_woche = this.filterArray(this.filterArray(result_zweitimpfungen, "hersteller", thehersteller), "kw", thewoche)[0];
+            dosen_verfuegbar = info_zweitimpfungen_aktuelle_woche['dosenspeicher'];
+          }
+
+          let ruecklage = Math.round(dosen_verfuegbar * theinput['ruecklage']);
+          let topush = {};
+          topush['hersteller'] = thehersteller;
+          topush['kw'] = thewoche;
+          topush['kapazitaet__vorher'] = kapazitaet_verbleibend;
+          topush['dosenlieferung_kw'] = theinput["dosen_kw"];
+          topush['dosen_verfuegbar'] = dosen_verfuegbar;
+          topush['impfungen'] = Math.min(topush['dosen_verfuegbar'] - ruecklage, kapazitaet_verbleibend);
+          topush['impfungen_erst'] = topush['impfungen'];
+          kapazitaet_verbleibend = kapazitaet_verbleibend - topush['impfungen'];
+          topush['kapazitaet_verbleibend'] = kapazitaet_verbleibend;
+          topush['patienten_geimpft'] = 0;
+          if (theinput["anwendungen"] == 1) {
+            topush['patienten_geimpft'] = theinput['dosen_verabreicht_erst'] + topush['impfungen'];
+          }
+          topush['dosenspeicher'] = topush['dosen_verfuegbar'] - topush['impfungen'];
+          result_erstimpfungen.push(topush);
         }
-        
-        let ruecklage = Math.round(dosen_verfuegbar*theinput['ruecklage']);
-        let topush = {};  
-        topush['hersteller'] = thehersteller;
-        topush['kw'] = thewoche;      
-        topush['kapazitaet__vorher'] = kapazitaet_verbleibend;
-        topush['dosenlieferung_kw'] = theinput["dosen_kw"]* liefermenge;
-        topush['dosen_verfuegbar'] = dosen_verfuegbar;
-        topush['impfungen'] = Math.min(topush['dosen_verfuegbar']-ruecklage,kapazitaet_verbleibend);
-        topush['impfungen_erst'] = topush['impfungen'];
-        kapazitaet_verbleibend = kapazitaet_verbleibend-topush['impfungen'];
-        topush['kapazitaet_verbleibend'] = kapazitaet_verbleibend;
-        topush['patienten_geimpft'] = 0;
-        if (theinput["anwendungen"] == 1) {
-        topush['patienten_geimpft'] = topush['dosen_verabreicht_erst'] +topush['impfungen'];
-        }
-        topush['dosenspeicher'] = topush['dosen_verfuegbar'] -topush['impfungen'];
-        result_erstimpfungen.push(topush);         
-      }        
-      }      
+      }
     }
     // Aggregation der Ergebnisse
     for (const thewoche of time) {
-      let gesamtinput_immunisierung = this.filterArray(this.filterArray(result_zweitimpfungen,'kw',thewoche),"anwendungen",2).concat(this.filterArray(this.filterArray(result_erstimpfungen,'kw',thewoche),"anwendungen",1));
-      let gesamtinput_alle = this.filterArray(result_zweitimpfungen,'kw',thewoche).concat(this.filterArray(result_erstimpfungen,'kw',thewoche));
+      let gesamtinput_immunisierung = this.filterArray(this.filterArray(result_zweitimpfungen, 'kw', thewoche), "anwendungen", 2).concat(this.filterArray(this.filterArray(result_erstimpfungen, 'kw', thewoche), "anwendungen", 1));
+      let gesamtinput_alle = this.filterArray(result_zweitimpfungen, 'kw', thewoche).concat(this.filterArray(result_erstimpfungen, 'kw', thewoche));
 
-      if (gesamtinput_immunisierung.length>0){
-      let topush = {};
-      topush['kw'] = thewoche;
-      topush['date'] = this.getDateOfISOWeek(thewoche,2020);
-      topush['kapazitaet'] = kapazitaet;
-      topush['population'] = this.getValues(gesamtinput_immunisierung,'population')[0];
-      topush['Gelieferte Dosen'] = this.sumArray(this.getValues(gesamtinput_immunisierung,'dosenlieferung_kw'));
-      topush['Verfügbare Dosen'] = this.sumArray(this.getValues(gesamtinput_immunisierung,'dosen_verfuegbar'));
-      topush['Verimpfte Dosen'] = this.sumArray(this.getValues(gesamtinput_alle,'impfungen'));
-      topush['Auslastung'] = 100 * (topush['Verimpfte Dosen'] / kapazitaet) ;
-      topush['Unverimpfte Dosen'] = topush['Verfügbare Dosen']-topush['Verimpfte Dosen'];
-      topush['immunisierungen'] = this.sumArray(this.getValues(gesamtinput_immunisierung,'impfungen'));      
-      topush['patienten_durchgeimpft'] = this.sumArray(this.getValues(gesamtinput_immunisierung,'patienten_geimpft'));
-      topush['Anteil Durchimpfung'] = 100* (topush['patienten_durchgeimpft']/ topush['population']);
-      if (topush['Anteil Durchimpfung']>100 ){
-        topush['Anteil Durchimpfung']=100;
-        topush['patienten_durchgeimpft']=topush['population'];
-        topush['Auslastung']= 0;
-        // topush['Unverimpfte Dosen']  = topush['Unverimpfte Dosen'] + topush['Verimpfte Dosen'] ;
-        topush['Verimpfte Dosen'] = 0;                
-      }
+      if (gesamtinput_immunisierung.length > 0) {
+        let topush = {};
+        topush['kw'] = thewoche;
+        topush['date'] = this.getDateOfISOWeek(thewoche, 2020);
+        topush['kapazitaet'] = kapazitaet;
+        topush['population'] = this.getValues(gesamtinput_immunisierung, 'population')[0];
+        topush['Gelieferte Dosen'] = this.sumArray(this.getValues(gesamtinput_immunisierung, 'dosenlieferung_kw'));
+        topush['Verfügbare Dosen'] = this.sumArray(this.getValues(gesamtinput_immunisierung, 'dosen_verfuegbar'));
+        topush['Verimpfte Dosen'] = this.sumArray(this.getValues(gesamtinput_alle, 'impfungen'));
+        topush['Auslastung'] = 100 * (topush['Verimpfte Dosen'] / kapazitaet);
+        topush['Unverimpfte Dosen'] = topush['Verfügbare Dosen'] - topush['Verimpfte Dosen'];
+        topush['immunisierungen'] = this.sumArray(this.getValues(gesamtinput_immunisierung, 'impfungen'));
+        topush['patienten_durchgeimpft'] = this.sumArray(this.getValues(gesamtinput_immunisierung, 'patienten_geimpft'));
+        topush['Anteil Durchimpfung'] = 100 * (topush['patienten_durchgeimpft'] / topush['population']);
+        if (topush['Anteil Durchimpfung'] > 100) {
+          topush['Anteil Durchimpfung'] = 100;
+          topush['patienten_durchgeimpft'] = topush['population'];
+          topush['Auslastung'] = 0;
+          topush['Unverimpfte Dosen'] = 0;
+          topush['Verimpfte Dosen'] = 0;
+        }
 
-      // Check who is done
-    if (riskgroup.length >= (riskgroup_i + 1)) {
-      if ((topush['Anteil Durchimpfung'] / 100) >= riskgroup[riskgroup_i].anteil) {
-        topush['riskgroup_done'] = riskgroup[riskgroup_i].Stufe;
-        riskinfo = riskgroup[riskgroup_i];
-        riskinfo["kw"] = thewoche;
-        riskinfo["Datum"] = this.getDateOfISOWeek(thewoche,2020);
-        riskinfo["_Quote"] = topush['Anteil Durchimpfung'] / 100;
-        this.risktimes.push(riskinfo);
-        riskgroup_i = riskgroup_i + 1;
-      };
-    }
+        // Check who is done
+        if (riskgroup.length >= (riskgroup_i + 1)) {
+          if ((topush['Anteil Durchimpfung'] / 100) >= riskgroup[riskgroup_i].anteil) {
+            topush['riskgroup_done'] = riskgroup[riskgroup_i].Stufe;
+            riskinfo = riskgroup[riskgroup_i];
+            riskinfo["kw"] = thewoche;
+            riskinfo["Datum"] = this.getDateOfISOWeek(thewoche, 2020);
+            riskinfo["_Quote"] = topush['Anteil Durchimpfung'] / 100;
+            this.risktimes.push(riskinfo);
+            riskgroup_i = riskgroup_i + 1;
+          };
+        }
 
-      finalresult.push(topush);
+        finalresult.push(topush);
       }
     }
 
     this.new_simresult = finalresult;
 
 
-    
 
-    console.log('Datenstruktur finalresult:',finalresult[0]);
+
+    console.log('Datenstruktur finalresult:', finalresult[0]);
 
 
 
@@ -516,9 +511,9 @@ export class StartComponent implements OnInit {
   getValues(array, key) {
     let values = [];
     for (let item of array) {
-      if (item[key]){
+      if (item[key]) {
         values.push(item[key]);
-      }      
+      }
     }
     return values;
   }
@@ -554,8 +549,8 @@ export class StartComponent implements OnInit {
 
   }
 
-  sumArray(array){
-    return array.reduce((a, b) => a + b, 0);    
+  sumArray(array) {
+    return array.reduce((a, b) => a + b, 0);
   }
 
   getDateOfISOWeek(w, y) {
@@ -563,9 +558,9 @@ export class StartComponent implements OnInit {
     var dow = simple.getDay();
     var ISOweekStart = simple;
     if (dow <= 4)
-        ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
+      ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
     else
-        ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
+      ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
     return ISOweekStart.toISOString().substring(0, 10);
-}
+  }
 }
