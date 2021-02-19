@@ -365,11 +365,12 @@ export class StartComponent implements OnInit {
           topush['Auslastung'] = 0;
           topush['Unverimpfte Dosen'] = 0;
           topush['Verimpfte Dosen'] = 0;
+          topush['Wartschlange Zweitimpfung'] = 0;
         }
 
         // Check who is done
         if (riskgroup.length >= (riskgroup_i + 1)) {
-          if ((topush['Anteil Durchimpfung'] / 100) >= riskgroup[riskgroup_i].anteil) {
+          if ((topush['Anteil Durchimpfung'] / 100) >= riskgroup[riskgroup_i+1].anteil) {
             topush['riskgroup_done'] = riskgroup[riskgroup_i].Stufe;
             riskinfo = riskgroup[riskgroup_i];
             riskinfo["kw"] = thewoche;
@@ -380,9 +381,19 @@ export class StartComponent implements OnInit {
           };
         }
 
+
         finalresult.push(topush);
       }
     }
+
+    while ((riskgroup_i + 1) <= 6) {
+      riskinfo = riskgroup[riskgroup_i];
+      riskinfo["Datum"] = "nie";
+      this.risktimes.push(riskinfo);
+      riskgroup_i = riskgroup_i + 1;
+    }
+
+
 
     this.new_simresult = finalresult;    
   }
