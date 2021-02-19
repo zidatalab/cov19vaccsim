@@ -12,13 +12,15 @@
 <div *ngIf="this.token && this.dosen_projektion_all" class="container" fxLayout="row wrap" fxLayoutGap="1rem"
     fxLayoutAllign="space-around">
     <div fxFlex=100>
-        <mat-card *ngIf="this.stand_impfungen_bund">
+        <mat-card *ngIf="this.stand_impfungen_data_aktuell_current">
             <mat-card-title>Stand der Impfkampagne
                 <span *ngIf="this.current_bl!='Gesamt'"> in {{this.current_bl}}</span>
                 <span *ngIf="this.current_bl=='Gesamt'"> in Deutschland</span>
             </mat-card-title>
+            <mat-card-subtitle>Datenbasis: Impfungen lt. RKI (tagesaktuell), Lieferungen lt. BMG (wöchentlich aktualisiert), Kapazität lt. GMK</mat-card-subtitle>
+            
             <mat-card-content class="mat-padding">
-                <div *ngIf="this.stand_impfungen_bund" fxLayout="row wrap" fxLayoutGap="2rem"
+                <div fxLayout="row wrap" fxLayoutGap="2rem"
                     fxLayoutAllign="space-around">
                     <div fxFlex>
 
@@ -36,40 +38,39 @@
                     </div>
                     <div fxFlex=15 fxFlex.lt-md=100 class="mat-padding">
                         <p>
-                            <span *ngIf="this.stand_impfungen_bund['Zahl der Impfungen gesamt']>=1e6"
-                                class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen gesamt']/1e6
+                            <span *ngIf="this.stand_impfungen_data_aktuell_current['Zahl der Impfungen gesamt']>=1e6"
+                                class="accentcolor bignum">{{this.stand_impfungen_data_aktuell_current['Zahl der Impfungen gesamt']/1e6
                                 |
                                 number:'1.2-2'}}</span>
-                            <span *ngIf="this.stand_impfungen_bund['Zahl der Impfungen gesamt']<1e6"
-                                class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen gesamt']/1e3
+                            <span *ngIf="this.stand_impfungen_data_aktuell_current['Zahl der Impfungen gesamt']<1e6"
+                                class="accentcolor bignum">{{this.stand_impfungen_data_aktuell_current['Zahl der Impfungen gesamt']/1e3
                                 |
                                 number:'1.0-0'}}</span>
                             <br>
-                            <span *ngIf="this.stand_impfungen_bund['Zahl der Impfungen gesamt']>=1e6">Mio. Dosen
+                            <span *ngIf="this.stand_impfungen_data_aktuell_current['Zahl der Impfungen gesamt']>=1e6">Mio. Dosen
                                 verimpft</span>
-                            <span *ngIf="this.stand_impfungen_bund['Zahl der Impfungen gesamt']<1e6">Tsd. Dosen
+                            <span *ngIf="this.stand_impfungen_data_aktuell_current['Zahl der Impfungen gesamt']<1e6">Tsd. Dosen
                                 verimpft</span>
                         </p>
                     </div>
                     <div fxFlex=15 fxFlex.lt-md=100 class="mat-padding">
                         <p>
-                            <span class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen
+                            <span class="accentcolor bignum">{{this.stand_impfungen_data_aktuell_current['Zahl der Impfungen
                                 gesamt']/(this.days_since_start/7)/1e3 |
                                 number:'1.0-0'}}</span><br>
-                            Tsd. pro Woche
+                            Tsd. letzte Woche
                         </p>
                     </div>
                     <div fxFlex=15 fxFlex.lt-md=100 class="mat-padding">
                         <p>
-                            <span class="accentcolor bignum">{{this.stand_impfungen_bund['Zahl der Impfungen
-                                gesamt']/(this.days_since_start) |
+                            <span class="accentcolor bignum">{{this.stand_impfungen_data_aktuell_current['impfungen_letzter_tag'] |
                                 number:'1.0-0'}}</span><br>
-                            pro Tag
+                            gestern
                         </p>
                     </div>
                     <div fxFlex=15 fxFlex.lt-md=100 class="mat-padding">
                         <p>
-                            <span class="accentcolor bignum">{{this.stand_impfungen_bund['Gesamt 2x']}} %</span><br>
+                            <span class="accentcolor bignum">{{this.stand_impfungen_data_aktuell_current['Gesamt 2x']}} %</span><br>
                             Durchimpfung
                         </p>
                     </div>
@@ -82,9 +83,9 @@
     <div fxFlex fxFlex.lt-md=100>
         <mat-card>
             <mat-card-title>Kapazität</mat-card-title>
-            <mat-card-subtitle>Geschätzte Impfkapazität</mat-card-subtitle>
+            <mat-card-subtitle>Gemeldete Impfkapazität</mat-card-subtitle>
             <mat-card-content>
-                <div *ngIf="this.stand_impfungen_bund" fxLayout="column">
+                <div *ngIf="this.stand_impfungen_data_aktuell_current" fxLayout="column">
                     <div fxFlex=100 fxLayout="column wrap" fxLayoutGap="0rem">
                         <div fxLayout="row wrap" fxLayoutGap="2rem">
                             <div fxFlex fxFlex.lt-md=100>
@@ -100,8 +101,7 @@
                                 <div class="mat-padding">
                                     <p>
                                         <span class="accentcolor bignum">
-                                            {{100*this.stand_impfungen_bund['Zahl der Impfungen
-                                            gesamt']/(this.days_since_start) / this.params.kapazitaet_pro_tag |
+                                            {{100*this.stand_impfungen_data_aktuell_current['impfungen_letzter_tag'] / this.params.kapazitaet_pro_tag |
                                             number:'1.0-0'}} %</span><br>
                                         aktuelle Ausschöpfung
                                     </p>

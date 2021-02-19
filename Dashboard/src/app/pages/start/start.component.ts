@@ -28,8 +28,9 @@ export class StartComponent implements OnInit {
   ewz_bl: any;
   stand_impfungen_data: any;
   bl_liste: Array<string>;
-  stand_impfungen_bund: any;
   stand_impfungen_hersteller: any;
+  stand_impfungen_data_aktuell:any;
+  stand_impfungen_data_aktuell_current:any;
   bev_anteil_land: number;
   impfkapazitaet_land: number;
   impfkapazitaet_bund: number;
@@ -105,6 +106,12 @@ export class StartComponent implements OnInit {
         this.stand_impfungen_data = data;
       });
 
+      this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/tabledata/vacc_table_vaccsim.json')
+      .subscribe(data => {
+        this.stand_impfungen_data_aktuell = data;
+      });
+
+
     this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/tabledata/impfsim_lieferungen.json')
       .subscribe(data => {
         this.dosen_projektion_all_hersteller = data;
@@ -120,19 +127,15 @@ export class StartComponent implements OnInit {
     this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/tabledata/impfsim_data.json')
       .subscribe(data => {
         this.dosen_projektion_all = data;
-
-
-
       });
 
   }
 
   update_kapazitaet() {
     this.dosen_projektion = this.filterArray(this.filterArray(this.dosen_projektion_all, "geo", this.current_bl), "Verteilungsszenario", this.params.verteilungszenario);
-    this.stand_impfungen_bund = this.filterArray(this.stand_impfungen_data, "Bundesland", this.current_bl)[0];
+    this.stand_impfungen_data_aktuell_current = this.filterArray(this.stand_impfungen_data_aktuell, "Bundesland", this.current_bl)[0];
     this.filter_newdata();
-    this.update_params();
-
+    this.update_params();    
   }
 
 
