@@ -290,9 +290,9 @@
                 <div fxFlex=45 fxFlex.lt-md=100>
                     <h2>Gelieferte und verimpfte Dosen</h2>
                     <div>
-                        <app-plot [(data)]="this.sim_result" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
-                            xvalue="maxdate" [colorscheme]="['crimson','green']"
-                            [outcomes]="['Dosen verfügbar','Anwendung']" plottype="area"></app-plot>
+                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
+                            xvalue="date" [colorscheme]="['crimson','green']"
+                            [outcomes]="['Gelieferte Dosen','Verimpfte Dosen']" plottype="area"></app-plot>
                     </div>
                     <div class="padding lightgreycolor">
                         <p class="mat-caption">
@@ -302,10 +302,10 @@
 
                 </div>
                 <div fxFlex=45 fxFlex.lt-md=100>
-                    <h2>Unverimpfte Dosen (bei Kapazitätsmangel)</h2>
+                    <h2>Unverimpfbare Dosen</h2>
                     <div>
-                        <app-plot [(data)]="this.sim_result" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
-                            xvalue="maxdate" [colorscheme]="['orange']" [outcomes]="['Rest_Dosen']" plottype="area">
+                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
+                            xvalue="date" [colorscheme]="['orange']" [outcomes]="['Unverimpfte Dosen']" plottype="area">
                         </app-plot>
                     </div>
                     <div class="padding lightgreycolor">
@@ -317,10 +317,10 @@
                 </div>
 
                 <div fxFlex=45 fxFlex.lt-md=100>
-                    <h2>Durchführbare Impfungen</h2>
+                    <h2>Abgeschlossene Immunisierungen</h2>
                     <div>
-                        <app-plot [(data)]="this.sim_result" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
-                            xvalue="maxdate" [colorscheme]="['green']" [outcomes]="['Anwendung_kum']" plottype="area">
+                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
+                            xvalue="date" [colorscheme]="['green']" [outcomes]="['patienten_durchgeimpft']" plottype="area">
                         </app-plot>
                     </div>
                     <div class="padding lightgreycolor">
@@ -332,10 +332,10 @@
                 </div>
 
                 <div  *ngIf="this.showdurchimpfung" fxFlex=45 fxFlex.lt-md=100>
-                    <h2>Vereinfacht modellierte Impfquote in %</h2>
+                    <h2>Modellierte Impfquote in %</h2>
                     <div>
-                        <app-plot [(data)]="this.sim_result" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
-                            xvalue="maxdate" [outcomes]="['Impfquote']" plottype="area"></app-plot>
+                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
+                            xvalue="date" [outcomes]="['Anteil Durchimpfung']" plottype="area"></app-plot>
                     </div>
                     <div class="padding lightgreycolor">
                         <p class="mat-caption">

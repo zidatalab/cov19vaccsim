@@ -16,7 +16,7 @@ export class StartComponent implements OnInit {
     private route: ActivatedRoute) { }
 
   // Plan B
-  showdurchimpfung = false;
+  showdurchimpfung = true;
 
   mode = "simple";
   simple_aerzte_impfen = false;
@@ -41,6 +41,7 @@ export class StartComponent implements OnInit {
   dosen_projektion_all_hersteller_filtered: any;
   current_bl = "Gesamt";
   sim_result: any;
+  new_simresult:any;
 
   days_since_start: number;
   risktimes = [];
@@ -69,7 +70,7 @@ export class StartComponent implements OnInit {
     liefermenge: 1.0,
     impflinge: 67864036,
     impfstoffart: "zugelassen",
-    verteilungszenario: this.verteilungszenarien[0] // CHANGE to 1
+    verteilungszenario: this.verteilungszenarien[1] 
   };
   updateinput: any;
 
@@ -150,7 +151,7 @@ export class StartComponent implements OnInit {
         params.varzt_tage * params.n_varzt * params.n_varzt_pat) * 1 / 7;
     this.params.kapazitaet_pro_woche = this.params.kapazitaet_pro_tag * 7;
     this.do_simulation(this.dosen_projektion, this.params);
-    // this.do_simulation_new(this.dosen_projektion_all_hersteller_filtered, this.params);
+    this.do_simulation_new(this.dosen_projektion_all_hersteller_filtered, this.params);
     this.simple_aerzte_impfen = this.params.varzt_tage > 0;
     this.simple_alle_zulassen = this.params.impfstoffart != "zugelassen";
   }
@@ -198,6 +199,7 @@ export class StartComponent implements OnInit {
     let riskinfo = {};
     let riskgroup = this.n_risikogruppen;
     let riskgroup_i = 0;
+    this.risktimes = [];
 
     console.log("NEW SIM");
     console.log("TIME", time);
@@ -220,10 +222,12 @@ export class StartComponent implements OnInit {
             let topush = {};
             topush['hersteller'] = thehersteller;
             topush['kw'] = thewoche;
+            topush['population'] = theinput['ueber18'];
             topush['anwendungen'] = 2;
-            topush['kapazitaet_vorher'] = kapazitaet_verbleibend;
-            topush['dosen_geliefert'] = theinput['dosen_kw'] + impfstand_hersteller['dosen_geliefert'];
-            topush['dosen_verfuegbar'] = theinput['dosen_kw'] + impfstand_hersteller['dosen_geliefert']-theinput['dosen_verabreicht_erst']-theinput['dosen_verabreicht_zweit'];
+            topush['kapazitaet__vorher'] = kapazitaet_verbleibend;
+            topush['dosen_geliefert'] = theinput['dosen_kw'] * liefermenge + impfstand_hersteller['dosen_geliefert'];
+            topush['dosenlieferung_kw'] = theinput["dosen_kw"] * liefermenge;
+            topush['dosen_verfuegbar'] = theinput['dosen_kw'] * liefermenge + impfstand_hersteller['dosen_geliefert']-theinput['dosen_verabreicht_erst']-theinput['dosen_verabreicht_zweit'];
             topush['impfungen'] = Math.min(topush['dosen_verfuegbar'],kapazitaet_verbleibend,theinput['warteschlange_zweit_kw']);
             topush['impfungen_zweit'] = Math.min(topush['dosen_verfuegbar'],kapazitaet_verbleibend,theinput['warteschlange_zweit_kw']);
             topush['verbleibend_in_warteschlange_zweit_kw']= theinput['warteschlange_zweit_kw']-topush['impfungen'];
@@ -238,17 +242,25 @@ export class StartComponent implements OnInit {
         // Schleife Hersteller Erstimpfung
        for (const thehersteller of hersteller) {
         let theinput = this.filterArray(this.filterArray(myinput, "hersteller", thehersteller), "kw", thewoche)[0];
-        let info_zweitimpfungen_aktuelle_woche = this.filterArray(this.filterArray(result_zweitimpfungen, "hersteller", thehersteller), "kw", thewoche)[0];
-        let dosen_verfuegbar = info_zweitimpfungen_aktuelle_woche['dosenspeicher'];
+        let impfstand_hersteller = this.filterArray(impfstand, "hersteller", thehersteller)[0];
+        let info_zweitimpfungen_aktuelle_woche = 0;
+        let dosen_verfuegbar = theinput['dosen_kw']* liefermenge + impfstand_hersteller['dosen_geliefert']-theinput['dosen_verabreicht_erst']-theinput['dosen_verabreicht_zweit'];
+        if (theinput["anwendungen"] == 2) {
+        info_zweitimpfungen_aktuelle_woche = this.filterArray(this.filterArray(result_zweitimpfungen, "hersteller", thehersteller), "kw", thewoche)[0];
+        dosen_verfuegbar = info_zweitimpfungen_aktuelle_woche['dosenspeicher'];
+        }
+        
         let ruecklage = Math.round(dosen_verfuegbar*theinput['ruecklage']);
         let topush = {};  
         topush['hersteller'] = thehersteller;
-        topush['kw'] = thewoche;   
+        topush['kw'] = thewoche; 
+        topush['population'] = theinput['ueber18'];  
         topush['anwendungen'] = theinput['anwendungen'];   
-        topush['kapazitaet_vorher'] = kapazitaet_verbleibend;
+        topush['kapazitaet__vorher'] = kapazitaet_verbleibend;
+        topush['dosenlieferung_kw'] = theinput["dosen_kw"]* liefermenge;
         topush['dosen_verfuegbar'] = dosen_verfuegbar;
         topush['impfungen'] = Math.min(topush['dosen_verfuegbar']-ruecklage,kapazitaet_verbleibend);
-        topush['impfungen_erst'] = Math.min(topush['dosen_verfuegbar']-ruecklage,kapazitaet_verbleibend);
+        topush['impfungen_erst'] = topush['impfungen'];
         kapazitaet_verbleibend = kapazitaet_verbleibend-topush['impfungen'];
         topush['kapazitaet_verbleibend'] = kapazitaet_verbleibend;
         topush['patienten_geimpft'] = 0;
@@ -263,38 +275,41 @@ export class StartComponent implements OnInit {
 
       }
       //  Folgewochen
-      if ((thewoche > firstweek) && (thewoche <=(firstweek+5))) {
+      if ((thewoche > firstweek)) { //  && (thewoche <=(firstweek+10))
         // Schleife Hersteller Zweitimpfung
         for (const thehersteller of hersteller) {
           let theinput = this.filterArray(this.filterArray(myinput, "hersteller", thehersteller), "kw", thewoche)[0];  
-          let abstand = 4;  
+          let abstand = 4 ;  
           if (theinput['abstand']){
             abstand = theinput['abstand'];
           }
-
           // Nur falls Hersteller 2 Anwendungen
           if (theinput["anwendungen"] == 2) {
             let vorwoche = thewoche-1;
             let lastweek_erst = this.filterArray(this.filterArray(result_erstimpfungen, "hersteller", thehersteller), "kw",vorwoche )[0];
             let lastweek_zweit = this.filterArray(this.filterArray(result_zweitimpfungen, "hersteller", thehersteller), "kw", vorwoche)[0];
+            // Bedarf aus zurückliegenden Erstimpfungen seit firstweek
             let previous_erst = 0;
             if ((thewoche-abstand)>=firstweek){
               let tocheck = this.filterArray(this.filterArray(result_erstimpfungen, "hersteller", thehersteller), "kw",thewoche-abstand)[0]['impfungen'];
               if (tocheck){
                 previous_erst = tocheck;
               }
-            }
-            
-
+            }            
             let topush = {};
             topush['hersteller'] = thehersteller;
             topush['kw'] = thewoche;
             topush['anwendungen'] = 2;
-            topush['kapazitaet_vorher'] = kapazitaet_verbleibend;
-            topush['dosen_verfuegbar'] = theinput['dosen_kw'] + lastweek_erst['dosenspeicher'];
-            topush['impfungen'] = Math.min(topush['dosen_verfuegbar'],kapazitaet_verbleibend,theinput['warteschlange_zweit_kw']+lastweek_zweit['verbleibend_in_warteschlange_zweit_kw']+previous_erst);
-            topush['impfungen_zweit'] = Math.min(topush['dosen_verfuegbar'],kapazitaet_verbleibend,theinput['warteschlange_zweit_kw']+lastweek_zweit['verbleibend_in_warteschlange_zweit_kw']);
-            topush['verbleibend_in_warteschlange_zweit_kw']= theinput['warteschlange_zweit_kw']+lastweek_zweit['verbleibend_in_warteschlange_zweit_kw']-topush['impfungen'];
+            topush['population'] = theinput['ueber18'];  
+            topush['kapazitaet__vorher'] = kapazitaet_verbleibend;
+            topush['dosenlieferung_kw'] = theinput["dosen_kw"]* liefermenge;
+            topush['dosen_verfuegbar'] = theinput['dosen_kw']* liefermenge + lastweek_erst['dosenspeicher'];
+            topush['bedarf_neu_erstimpfungen_abstand'] = previous_erst;
+            topush['bedarf_aus_warteschlange'] = theinput['warteschlange_zweit_kw']+lastweek_zweit['verbleibend_in_warteschlange_zweit_kw'];
+            topush['bedarf__gesamt']=topush['bedarf_neu_erstimpfungen_abstand']+topush['bedarf_aus_warteschlange'];
+            topush['impfungen'] = Math.min(topush['dosen_verfuegbar'],kapazitaet_verbleibend,topush['bedarf__gesamt']);
+            topush['impfungen_zweit'] = topush['impfungen'];
+            topush['verbleibend_in_warteschlange_zweit_kw']= topush['bedarf__gesamt']-topush['impfungen'];
             kapazitaet_verbleibend = kapazitaet_verbleibend-topush['impfungen'];
             topush['kapazitaet_verbleibend'] = kapazitaet_verbleibend;
             topush['patienten_geimpft'] = lastweek_zweit['patienten_geimpft'] +topush['impfungen'];
@@ -306,16 +321,24 @@ export class StartComponent implements OnInit {
         // Schleife Hersteller Erstimpfung
        for (const thehersteller of hersteller) {
         let theinput = this.filterArray(this.filterArray(myinput, "hersteller", thehersteller), "kw", thewoche)[0];
-        let info_zweitimpfungen_aktuelle_woche = this.filterArray(this.filterArray(result_zweitimpfungen, "hersteller", thehersteller), "kw", thewoche)[0];
-        let dosen_verfuegbar = info_zweitimpfungen_aktuelle_woche['dosenspeicher'];
+        let vorwoche = thewoche-1;
+        let lastweek_erst = this.filterArray(this.filterArray(result_erstimpfungen, "hersteller", thehersteller), "kw",vorwoche )[0];
+        let info_zweitimpfungen_aktuelle_woche = 0;
+        let dosen_verfuegbar = theinput['dosen_kw']* liefermenge + lastweek_erst['dosenspeicher'];
+        if (theinput["anwendungen"] == 2) {
+        info_zweitimpfungen_aktuelle_woche = this.filterArray(this.filterArray(result_zweitimpfungen, "hersteller", thehersteller), "kw", thewoche)[0];
+        dosen_verfuegbar = info_zweitimpfungen_aktuelle_woche['dosenspeicher'];
+        }
+        
         let ruecklage = Math.round(dosen_verfuegbar*theinput['ruecklage']);
         let topush = {};  
         topush['hersteller'] = thehersteller;
         topush['kw'] = thewoche;      
-        topush['kapazitaet_vorher'] = kapazitaet_verbleibend;
+        topush['kapazitaet__vorher'] = kapazitaet_verbleibend;
+        topush['dosenlieferung_kw'] = theinput["dosen_kw"]* liefermenge;
         topush['dosen_verfuegbar'] = dosen_verfuegbar;
         topush['impfungen'] = Math.min(topush['dosen_verfuegbar']-ruecklage,kapazitaet_verbleibend);
-        topush['impfungen_erst'] = Math.min(topush['dosen_verfuegbar']-ruecklage,kapazitaet_verbleibend);
+        topush['impfungen_erst'] = topush['impfungen'];
         kapazitaet_verbleibend = kapazitaet_verbleibend-topush['impfungen'];
         topush['kapazitaet_verbleibend'] = kapazitaet_verbleibend;
         topush['patienten_geimpft'] = 0;
@@ -327,25 +350,56 @@ export class StartComponent implements OnInit {
       }        
       }      
     }
-
+    // Aggregation der Ergebnisse
     for (const thewoche of time) {
-      let gesamtinput = this.filterArray(this.filterArray(result_zweitimpfungen,'kw',thewoche),"anwendungen",2).concat(this.filterArray(this.filterArray(result_erstimpfungen,'kw',thewoche),"anwendungen",1));
+      let gesamtinput_immunisierung = this.filterArray(this.filterArray(result_zweitimpfungen,'kw',thewoche),"anwendungen",2).concat(this.filterArray(this.filterArray(result_erstimpfungen,'kw',thewoche),"anwendungen",1));
+      let gesamtinput_alle = this.filterArray(result_zweitimpfungen,'kw',thewoche).concat(this.filterArray(result_erstimpfungen,'kw',thewoche));
 
+      if (gesamtinput_immunisierung.length>0){
       let topush = {};
       topush['kw'] = thewoche;
-      topush['impfungen'] = this.sumArray(this.getValues(gesamtinput,'impfungen'));
-      topush['impfungen_erst'] = this.sumArray(this.getValues(gesamtinput,'impfungen_zweit'));
-      topush['impfungen_zweit'] = this.sumArray(this.getValues(gesamtinput,'impfungen_zweit'));
-      topush['dosenspeicher'] = this.sumArray(this.getValues(gesamtinput,'dosenspeicher'));
-      topush['patienten_geimpft'] = this.sumArray(this.getValues(gesamtinput,'patienten_geimpft'));
-      finalresult.push(topush);
+      topush['date'] = this.getDateOfISOWeek(thewoche,2020);
+      topush['kapazitaet'] = kapazitaet;
+      topush['population'] = this.getValues(gesamtinput_immunisierung,'population')[0];
+      topush['Gelieferte Dosen'] = this.sumArray(this.getValues(gesamtinput_immunisierung,'dosenlieferung_kw'));
+      topush['Verfügbare Dosen'] = this.sumArray(this.getValues(gesamtinput_immunisierung,'dosen_verfuegbar'));
+      topush['Verimpfte Dosen'] = this.sumArray(this.getValues(gesamtinput_alle,'impfungen'));
+      topush['Auslastung'] = 100 * (topush['Verimpfte Dosen'] / kapazitaet) ;
+      topush['Unverimpfte Dosen'] = topush['Verfügbare Dosen']-topush['Verimpfte Dosen'];
+      topush['immunisierungen'] = this.sumArray(this.getValues(gesamtinput_immunisierung,'impfungen'));      
+      topush['patienten_durchgeimpft'] = this.sumArray(this.getValues(gesamtinput_immunisierung,'patienten_geimpft'));
+      topush['Anteil Durchimpfung'] = 100* (topush['patienten_durchgeimpft']/ topush['population']);
+      if (topush['Anteil Durchimpfung']>100 ){
+        topush['Anteil Durchimpfung']=100;
+        topush['patienten_durchgeimpft']=topush['population'];
+        topush['Auslastung']= 0;
+        // topush['Unverimpfte Dosen']  = topush['Unverimpfte Dosen'] + topush['Verimpfte Dosen'] ;
+        topush['Verimpfte Dosen'] = 0;                
+      }
+
+      // Check who is done
+    if (riskgroup.length >= (riskgroup_i + 1)) {
+      if ((topush['Anteil Durchimpfung'] / 100) >= riskgroup[riskgroup_i].anteil) {
+        topush['riskgroup_done'] = riskgroup[riskgroup_i].Stufe;
+        riskinfo = riskgroup[riskgroup_i];
+        riskinfo["kw"] = thewoche;
+        riskinfo["Datum"] = this.getDateOfISOWeek(thewoche,2020);
+        riskinfo["_Quote"] = topush['Anteil Durchimpfung'] / 100;
+        this.risktimes.push(riskinfo);
+        riskgroup_i = riskgroup_i + 1;
+      };
     }
 
-    console.log("DONE")
-    console.log("Result Zweit BNT", this.filterArray(result_zweitimpfungen,'hersteller',"BNT/Pfizer"));
-    console.log("Result Erst BNT",this.filterArray(result_erstimpfungen,'hersteller',"BNT/Pfizer"));
-    console.log("Result",finalresult);
+      finalresult.push(topush);
+      }
+    }
+
+    this.new_simresult = finalresult;
+
+
     
+
+    console.log('Datenstruktur finalresult:',finalresult[0]);
 
 
 
@@ -504,5 +558,14 @@ export class StartComponent implements OnInit {
     return array.reduce((a, b) => a + b, 0);    
   }
 
-
+  getDateOfISOWeek(w, y) {
+    var simple = new Date(y, 0, 1 + (w - 1) * 7);
+    var dow = simple.getDay();
+    var ISOweekStart = simple;
+    if (dow <= 4)
+        ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
+    else
+        ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
+    return ISOweekStart.toISOString().substring(0, 10);
+}
 }
