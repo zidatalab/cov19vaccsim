@@ -105,7 +105,7 @@ export class StartComponent implements OnInit {
         this.stand_impfungen_data = data;
       });
 
-    this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/tabledata/impfsim_lieferungen_ohnejj.json')
+    this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/tabledata/impfsim_lieferungen.json')
       .subscribe(data => {
         this.dosen_projektion_all_hersteller = data;
         this.update_kapazitaet();
@@ -338,7 +338,7 @@ export class StartComponent implements OnInit {
           topush['kapazitaet_verbleibend'] = kapazitaet_verbleibend;
           topush['patienten_geimpft'] = 0;
           if (theinput["anwendungen"] == 1) {
-            topush['patienten_geimpft'] = theinput['dosen_verabreicht_erst'] + topush['impfungen'];
+            topush['patienten_geimpft'] = lastweek_erst['patienten_geimpft'] + topush['impfungen'];
           }
           topush['dosenspeicher'] = topush['dosen_verfuegbar'] - topush['impfungen'];
           result_erstimpfungen.push(topush);
@@ -349,6 +349,11 @@ export class StartComponent implements OnInit {
     for (const thewoche of time) {
       let gesamtinput_immunisierung = this.filterArray(this.filterArray(result_zweitimpfungen, 'kw', thewoche), "anwendungen", 2).concat(this.filterArray(this.filterArray(result_erstimpfungen, 'kw', thewoche), "anwendungen", 1));
       let gesamtinput_alle = this.filterArray(result_zweitimpfungen, 'kw', thewoche).concat(this.filterArray(result_erstimpfungen, 'kw', thewoche));
+
+      if (thewoche<firstweek+10){
+        console.log('Immunisierung KW'+thewoche,this.getValues(gesamtinput_alle,'patienten_geimpft'));
+        //console.log('Alle Dosen KW'+thewoche,gesamtinput_alle);
+      }
 
       if (gesamtinput_immunisierung.length > 0) {
         let topush = {};
@@ -362,7 +367,10 @@ export class StartComponent implements OnInit {
         topush['Auslastung'] = 100 * (topush['Verimpfte Dosen'] / kapazitaet);
         topush['Unverimpfte Dosen'] = topush['Verfügbare Dosen'] - topush['Verimpfte Dosen'];
         topush['immunisierungen'] = this.sumArray(this.getValues(gesamtinput_immunisierung, 'impfungen'));
-        topush['patienten_durchgeimpft'] = this.sumArray(this.getValues(gesamtinput_immunisierung, 'patienten_geimpft'));
+        topush['patienten_durchgeimpft'] = this.sumArray(
+          this.getValues(gesamtinput_alle, 'patienten_geimpft'));
+        
+        // Korrektur Durchimpfung abgeschlossen
         topush['Anteil Durchimpfung'] = 100 * (topush['patienten_durchgeimpft'] / topush['population']);
         if (topush['Anteil Durchimpfung'] > 100) {
           topush['Anteil Durchimpfung'] = 100;
@@ -395,10 +403,8 @@ export class StartComponent implements OnInit {
 
 
     console.log('Datenstruktur finalresult:', finalresult[0]);
-
-
-
-
+    console.log('Check JJ Result',this.getValues(this.filterArray(result_erstimpfungen,'hersteller',"J&J"),'patienten_geimpft'));
+    console.log('Check Curevac Result',this.getValues(this.filterArray(result_zweitimpfungen,'hersteller',"Curevac"),'patienten_geimpft'));
   }
 
   do_simulation(myinput, params) {
@@ -517,6 +523,7 @@ export class StartComponent implements OnInit {
     }
     return values;
   }
+
   getKeys(array) {
     return Object.keys(array[0]);
   }
