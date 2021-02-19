@@ -22,7 +22,7 @@
             <mat-card-content class="mat-padding">
                 <div fxLayout="row wrap" fxLayoutGap="2rem"
                     fxLayoutAllign="space-around">
-                    <div fxFlex>
+                    <div fxFlex xFlex.lt-md=100>
 
                         <mat-form-field color="accent" appearance="outline">
                             <mat-label>Bundesland</mat-label>
@@ -36,7 +36,7 @@
                         </mat-form-field>
 
                     </div>
-                    <div fxFlex=15 fxFlex.lt-md=100 class="mat-padding">
+                    <div fxFlex fxFlex.lt-sm=100 class="mat-padding">
                         <p>
                             <span *ngIf="this.stand_impfungen_data_aktuell_current['Zahl der Impfungen gesamt']>=1e6"
                                 class="accentcolor bignum">{{this.stand_impfungen_data_aktuell_current['Zahl der Impfungen gesamt']/1e6
@@ -53,7 +53,7 @@
                                 verimpft</span>
                         </p>
                     </div>
-                    <div fxFlex=15 fxFlex.lt-md=100 class="mat-padding">
+                    <div fxFlex fxFlex.lt-sm=100 class="mat-padding">
                         <p>
                             <span class="accentcolor bignum">{{this.stand_impfungen_data_aktuell_current['Zahl der Impfungen
                                 gesamt']/(this.days_since_start/7)/1e3 |
@@ -61,14 +61,14 @@
                             Tsd. letzte Woche
                         </p>
                     </div>
-                    <div fxFlex=15 fxFlex.lt-md=100 class="mat-padding">
+                    <div fxFlex fxFlex.lt-sm=100 class="mat-padding">
                         <p>
                             <span class="accentcolor bignum">{{this.stand_impfungen_data_aktuell_current['impfungen_letzter_tag'] |
                                 number:'1.0-0'}}</span><br>
                             gestern
                         </p>
                     </div>
-                    <div fxFlex=15 fxFlex.lt-md=100 class="mat-padding">
+                    <div fxFlex fxFlex.lt-sm=100 class="mat-padding">
                         <p>
                             <span class="accentcolor bignum">{{this.stand_impfungen_data_aktuell_current['Gesamt 2x']}} %</span><br>
                             Durchimpfung
