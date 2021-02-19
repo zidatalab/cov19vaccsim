@@ -71,6 +71,7 @@ export class StartComponent implements OnInit {
     liefermenge: 1.0,
     impflinge: 67864036,
     impfstoffart: "zugelassen",
+    ruecklage:true,
     verteilungszenario: this.verteilungszenarien[1]
   };
   updateinput: any;
@@ -244,6 +245,9 @@ export class StartComponent implements OnInit {
           }
 
           let ruecklage = Math.round(dosen_verfuegbar * theinput['ruecklage']);
+          if (!params.ruecklage){
+            ruecklage = 0;
+          }
           let topush = {};
           topush['hersteller'] = thehersteller;
           topush['kw'] = thewoche;
@@ -373,7 +377,7 @@ export class StartComponent implements OnInit {
 
         // Check who is done
         if (riskgroup.length > (riskgroup_i +1)) {
-          if ((topush['Anteil Durchimpfung'] ) >= 100*riskgroup[riskgroup_i+1].anteil) {
+          if ((topush['Anteil Durchimpfung'] ) >= 100*riskgroup[riskgroup_i].anteil) {
             topush['riskgroup_done'] = riskgroup[riskgroup_i].Stufe;
             riskinfo = riskgroup[riskgroup_i];
             riskinfo["kw"] = thewoche;

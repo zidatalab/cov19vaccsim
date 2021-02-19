@@ -226,6 +226,15 @@
                                 </p>
                             </div>
                             <div>
+                                <p>Rückstellungen für Zweitimpfungen<span fxHide.lt-md="true"><br></span>
+                                    <mat-slide-toggle [(ngModel)]="this.params.ruecklage"
+                                    (change)="this.update_kapazitaet();">                                    
+                                    <span *ngIf="this.params.ruecklage">Ja</span>
+                                    <span *ngIf="!this.params.ruecklage">Nein</span>
+                                </mat-slide-toggle>
+                                </p>
+                            </div>
+                            <div>
                                 <span>Art der Impfstoffe:</span>
                                 <mat-radio-group class="my-radio-group" [(ngModel)]="this.params.impfstoffart"
                                     (change)="this.update_kapazitaet();">
@@ -247,9 +256,10 @@
                             </div>
                             <div>
                                 <span>Durchimpfung anzeigen</span><br>
-                                <mat-slide-toggle [(ngModel)]="this.showdurchimpfung">
-                                            
+                                <mat-slide-toggle [(ngModel)]="this.showdurchimpfung">                                           
                                         </mat-slide-toggle>
+                                        <span *ngIf="this.showdurchimpfung">Ja</span>
+                                        <span *ngIf="!this.showdurchimpfung">Nein</span>
                             </div>
                         </div>
                     </div>
@@ -262,7 +272,7 @@
         <mat-card>
             <mat-card-title>Simulation</mat-card-title>
             <div fxLayout="row wrap" fxLayoutGap="2rem" fxLayoutAllign="space-between">
-                <div *ngIf="this.showdurchimpfung && false" fxFlex=100 fxFlex.lt-md=100 fxLayout="row wrap" fxLayoutGap="1rem" fxLayoutAllign="space-between">
+                <div *ngIf="this.showdurchimpfung" fxFlex=100 fxFlex.lt-md=100 fxLayout="row wrap" fxLayoutGap="1rem" fxLayoutAllign="space-between">
                     <div fxFlex=100>
                         <h2>Durchimpfung</h2>
                     </div>
@@ -280,9 +290,7 @@
 
                     <div fxFlex=100>
                         <p class="mat-caption lightgreycolor">
-                            Diese Schätzung erfolgt nur näherungsweise anhand des Zeitpunktes, zu dem die notwendige
-                            Zahl
-                            von Impfdosen zur Durchimpfung verabreicht wurden.
+                            Die Risikostufen wurden laut STIKO-Empfehlung gebildet.
                         </p>
                     </div>
                 </div>
