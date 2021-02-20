@@ -34,7 +34,6 @@ export class StartComponent implements OnInit {
   bev_anteil_land: number;
   impfkapazitaet_land: number;
   impfkapazitaet_bund: number;
-  dosen_projektion: any;
   herstellerliste: any;
   land_changed: boolean;
   dosen_projektion_all: any;
@@ -93,47 +92,34 @@ export class StartComponent implements OnInit {
           this.ewz_bl = data;
           this.bl_liste = this.getValues(this.ewz_bl, "Bundesland");
           this.impfkapazitaet_bund = this.getValues(this.filterArray(this.ewz_bl, "Bundesland", "Gesamt"), "Impfkapazitaet")[0];
+          this.getexternaldata();
         });
 
       // Import some public data    
-      this.getexternaldata();
+      
     }
   }
 
 
   getexternaldata() {
-    this.http.get('https://www.zidatasciencelab.de/covid19dashboard/data/tabledata/vacc_table_faktenblatt.json')
-      .subscribe(data => {
-        this.stand_impfungen_data = data;
-      });
-
       this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/tabledata/vacc_table_vaccsim.json')
       .subscribe(data => {
         this.stand_impfungen_data_aktuell = data;
-      });
-
-
-    this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/tabledata/impfsim_lieferungen.json')
-      .subscribe(data => {
-        this.dosen_projektion_all_hersteller = data;
-        this.update_kapazitaet();
-      });
-
-    this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/tabledata/impfsim_start.json')
-      .subscribe(data => {
-        this.stand_impfungen_hersteller = data;
-      });
-
-
-    this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/tabledata/impfsim_data.json')
-      .subscribe(data => {
-        this.dosen_projektion_all = data;
+        this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/tabledata/impfsim_start.json')
+        .subscribe(data => {
+          this.stand_impfungen_hersteller = data;
+          this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/tabledata/impfsim_lieferungen.json')
+        .subscribe(data => {
+          this.dosen_projektion_all_hersteller = data;
+          this.update_kapazitaet();
+        });
+        });
+  
       });
 
   }
 
   update_kapazitaet() {
-    this.dosen_projektion = this.filterArray(this.filterArray(this.dosen_projektion_all, "geo", this.current_bl), "Verteilungsszenario", this.params.verteilungszenario);
     this.stand_impfungen_data_aktuell_current = this.filterArray(this.stand_impfungen_data_aktuell, "Bundesland", this.current_bl)[0];
     this.filter_newdata();
     this.update_params();    
