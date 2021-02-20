@@ -13,17 +13,19 @@ export class AppComponent {
   public currentuser : any;
   loginoption = false;
   public loginstatus:boolean;
-  
+  today:any; 
   constructor(
     private _auth : AuthService,
     private _api : ApiService    
   ) { }
 
   ngOnInit() {
+    this.today = new Date();
     this._auth.currentUser.subscribe(data => {
       if (data){
         this.loginstatus = true;
         this.currentuser = data.data;
+        
       }
       else {
         this.loginstatus = false;
