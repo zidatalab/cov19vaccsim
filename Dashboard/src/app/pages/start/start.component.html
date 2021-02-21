@@ -235,6 +235,14 @@
                                 </p>
                             </div>
                             <div>
+                                <p>Abstand Erst- zu Zweitimpfung:<span fxHide.lt-md="true"><br></span>
+                                    <mat-slider [(ngModel)]="this.params.addweekstoabstand" min="0" max="12" step="1"
+                                        (change)="this.update_kapazitaet();"></mat-slider>
+                                    <span *ngIf="this.params.addweekstoabstand==0"> laut Herstellerangabe</span>
+                                    <span *ngIf="this.params.addweekstoabstand>0"><strong>{{this.params.addweekstoabstand}} Wochen länger</strong></span>
+                                </p>
+                            </div>
+                            <div>
                                 <span>Art der Impfstoffe:</span>
                                 <mat-radio-group class="my-radio-group" [(ngModel)]="this.params.impfstoffart"
                                     (change)="this.update_kapazitaet();">
@@ -341,7 +349,7 @@
                     <h2>Abgeschlossene Immunisierungen</h2>
                     <div>
                         <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
-                            xvalue="date" [colorscheme]="['green']" [outcomes]="['patienten_durchgeimpft']" plottype="area">
+                            xvalue="date" [colorscheme]="['#1976d2']" [outcomes]="['patienten_durchgeimpft']" plottype="area">
                         </app-plot>
                     </div>
                     <div class="padding lightgreycolor">
@@ -356,7 +364,7 @@
                     <h2>Modellierte Impfquote in %</h2>
                     <div>
                         <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
-                            xvalue="date" [outcomes]="['Anteil Durchimpfung']" plottype="area"></app-plot>
+                            xvalue="date" [colorscheme]="['#c8e6c9','green']" [outcomes]="['Anteil Erst-Dosis','Anteil Durchimpfung']" plottype="area"></app-plot>
                     </div>
                     <div class="padding lightgreycolor">
                         <p class="mat-caption">

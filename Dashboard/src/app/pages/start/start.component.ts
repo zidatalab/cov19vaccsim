@@ -69,6 +69,7 @@ export class StartComponent implements OnInit {
     warten_dosis_2: 5,
     liefermenge: 1.0,
     impflinge: 67864036,
+    addweekstoabstand:0,
     impfstoffart: "zugelassen",
     ruecklage:true,
     verteilungszenario: this.verteilungszenarien[1]
@@ -243,7 +244,7 @@ export class StartComponent implements OnInit {
           topush['dosenlieferung_kw'] = theinput["dosen_kw"] * liefermenge;
           topush['dosen_verfuegbar'] = dosen_verfuegbar;
           topush['impfungen'] = Math.min(topush['dosen_verfuegbar'] - ruecklage, kapazitaet_verbleibend);
-          topush['impfungen_erst'] = topush['impfungen'];
+          topush['impfungen_erst_kum'] = topush['impfungen'] + impfstand_hersteller['dosen_verabreicht_erst'] ;
           kapazitaet_verbleibend = kapazitaet_verbleibend - topush['impfungen'];
           topush['kapazitaet_verbleibend'] = kapazitaet_verbleibend;
           topush['patienten_geimpft'] = 0;
@@ -262,7 +263,7 @@ export class StartComponent implements OnInit {
         // Schleife Hersteller Zweitimpfung
         for (const thehersteller of hersteller) {
           let theinput = this.filterArray(this.filterArray(myinput, "hersteller", thehersteller), "kw", thewoche)[0];
-          let abstand = theinput['abstand'];
+          let abstand = theinput['abstand']+params.addweekstoabstand;
           // Nur falls Hersteller 2 Anwendungen
           if (theinput["anwendungen"] == 2) {
             let vorwoche = thewoche - 1;
@@ -318,7 +319,7 @@ export class StartComponent implements OnInit {
           topush['dosenlieferung_kw'] = theinput["dosen_kw"];
           topush['dosen_verfuegbar'] = dosen_verfuegbar;
           topush['impfungen'] = Math.min(topush['dosen_verfuegbar'] - ruecklage, kapazitaet_verbleibend);
-          topush['impfungen_erst'] = topush['impfungen'];
+          topush['impfungen_erst_kum'] = topush['impfungen'] + lastweek_erst['impfungen_erst_kum'];
           kapazitaet_verbleibend = kapazitaet_verbleibend - topush['impfungen'];
           topush['kapazitaet_verbleibend'] = kapazitaet_verbleibend;
           topush['patienten_geimpft'] = 0;
@@ -344,6 +345,7 @@ export class StartComponent implements OnInit {
         topush['Gelieferte Dosen'] = this.sumArray(this.getValues(gesamtinput_immunisierung, 'dosenlieferung_kw'));
         topush['Verfügbare Dosen'] = this.sumArray(this.getValues(gesamtinput_immunisierung, 'dosen_verfuegbar'));
         topush['Verimpfte Dosen'] = this.sumArray(this.getValues(gesamtinput_alle, 'impfungen'));
+        topush['Verimpfte Erst-Dosen'] = this.sumArray(this.getValues(gesamtinput_alle, 'impfungen_erst_kum'));
         topush['Auslastung'] = 100 * (topush['Verimpfte Dosen'] / kapazitaet);
         topush['Unverimpfte Dosen'] = topush['Verfügbare Dosen'] - topush['Verimpfte Dosen'];
         topush['patienten_durchgeimpft'] = this.sumArray(
@@ -352,6 +354,7 @@ export class StartComponent implements OnInit {
         
         // Korrektur Durchimpfung abgeschlossen
         topush['Anteil Durchimpfung'] = 100 * (topush['patienten_durchgeimpft'] / topush['population']);
+        topush['Anteil Erst-Dosis'] = 100 * (topush['Verimpfte Erst-Dosen'] / topush['population']);
         if (topush['Anteil Durchimpfung'] > 100) {
           topush['Anteil Durchimpfung'] = 100;
           topush['patienten_durchgeimpft'] = topush['population'];
@@ -359,6 +362,11 @@ export class StartComponent implements OnInit {
           topush['Unverimpfte Dosen'] = 0;
           topush['Verimpfte Dosen'] = 0;
           topush['Wartschlange Zweitimpfung'] = 0;
+        }
+
+        if (topush['Anteil Erst-Dosis']>100) {
+          topush['Anteil Erst-Dosis']=100;
+          topush['Verimpfte Erst-Dosen']= topush['population'];
         }
 
         // Check who is done
