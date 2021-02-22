@@ -42,6 +42,7 @@ export class StartComponent implements OnInit {
   current_bl = "Gesamt";
   sim_result: any;
   new_simresult: any;
+  all_bl_simresults:any;
 
   days_since_start: number;
   risktimes = [];
@@ -397,7 +398,8 @@ export class StartComponent implements OnInit {
 
 
 
-    this.new_simresult = finalresult;    
+    //this.new_simresult = finalresult;    
+    return finalresult;
   }
 
   
