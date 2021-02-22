@@ -47,6 +47,7 @@ export class StartComponent implements OnInit {
 
   days_since_start: number;
   risktimes = [];
+  risktimes_firstdose = [];
   n_risikogruppen = [
     { Stufe: 1, n: 8.6, anteil: 0.12672396908 },
     { Stufe: 2, n: 7.0, anteil: 0.22987138578 },
@@ -129,7 +130,6 @@ export class StartComponent implements OnInit {
   update_kapazitaet() {
     this.stand_impfungen_data_aktuell_current = this.filterArray(this.stand_impfungen_data_aktuell, "Bundesland", this.current_bl)[0];
     this.geo_lieferungen_bisher=this.sumArray(this.getValues(this.filterArray(this.stand_impfungen_hersteller,'geo',this.current_bl),'dosen_geliefert'));
-    console.log("LIEFERUNGEN",this.geo_lieferungen_bisher);
     this.filter_newdata();
     this.update_params();
     
@@ -151,8 +151,10 @@ export class StartComponent implements OnInit {
         params.varzt_tage * params.n_varzt * params.n_varzt_pat) * 1 / 7;
     this.params.kapazitaet_pro_woche = this.params.kapazitaet_pro_tag * 7;
     this.new_simresult = this.do_simulation_new(this.dosen_projektion_all_hersteller_filtered, this.params);
-    this.risktimes= this.update_risktimes(this.new_simresult);
+    this.risktimes= this.update_risktimes(this.new_simresult,'Anteil Durchimpfung');
+    this.risktimes_firstdose= this.update_risktimes(this.new_simresult,'Anteil Erst-Dosis');
     // this.all_bl_simresults = this.all_region_sim();
+    // console.log("ALL REGIONs",this.all_bl_simresults);
     
     this.simple_aerzte_impfen = this.params.varzt_tage > 0;
     this.simple_alle_zulassen = this.params.impfstoffart != "zugelassen";
@@ -187,6 +189,8 @@ export class StartComponent implements OnInit {
   do_simulation_new(myinput, params) {
     let kapazitaet = params.kapazitaet_pro_woche;
     let liefermenge = params.liefermenge;
+    let theruecklage = params.ruecklage;
+    let addtheweekstoabstand = params.addweekstoabstand;
     let input = myinput;
     let hersteller = this.herstellerliste;
     let time: Array<number> = this.getValues(this.sortArray(this.filterArray(input, "hersteller", hersteller[0]), 'kw'), "kw");
@@ -240,7 +244,7 @@ export class StartComponent implements OnInit {
           }
 
           let ruecklage = Math.round(dosen_verfuegbar * theinput['ruecklage']);
-          if (!params.ruecklage) {
+          if (!theruecklage) {
             ruecklage = 0;
           }
           let topush = {};
@@ -271,7 +275,7 @@ export class StartComponent implements OnInit {
         // Schleife Hersteller Zweitimpfung
         for (const thehersteller of hersteller) {
           let theinput = this.filterArray(this.filterArray(myinput, "hersteller", thehersteller), "kw", thewoche)[0];
-          let abstand = theinput['abstand'] + params.addweekstoabstand;
+          let abstand = theinput['abstand'] + addtheweekstoabstand;
           // Nur falls Hersteller 2 Anwendungen
           if (theinput["anwendungen"] == 2) {
             let vorwoche = thewoche - 1;
@@ -384,7 +388,7 @@ export class StartComponent implements OnInit {
   }
 
 
-  update_risktimes(simresult) {
+  update_risktimes(simresult,indicator) {
     let time: Array<number> = this.getValues(this.sortArray(simresult, 'kw'), "kw");
     let riskinfo = {};
     let riskgroup = this.n_risikogruppen;
@@ -394,14 +398,15 @@ export class StartComponent implements OnInit {
 
     // Check who is done
     for (const thewoche of time) {
-      let topush = this.filterArray(simresult, 'kw', thewoche)[0];
+      let anteil_durchimpfung = this.filterArray(simresult, 'kw', thewoche)[0][indicator]/100;
+      let Stufe = riskgroup[riskgroup_i]['Stufe']
+      let kapazitaet = this.filterArray(simresult, 'kw', thewoche)[0]['kapazitaet'];
       if (riskgroup.length > (riskgroup_i + 1)) {
-        if ((topush['Anteil Durchimpfung']) >= 100 * riskgroup[riskgroup_i].anteil) {
-          topush['riskgroup_done'] = riskgroup[riskgroup_i].Stufe;
-          riskinfo = riskgroup[riskgroup_i];
-          riskinfo["kw"] = thewoche;
+        if (anteil_durchimpfung >= riskgroup[riskgroup_i].anteil) {
+          riskinfo = {'Stufe': Stufe};
           riskinfo["Datum"] = this.getDateOfISOWeek(thewoche, 2021);
-          riskinfo["_Quote"] = topush['Anteil Durchimpfung'] / 100;
+          riskinfo["_Quote"] = anteil_durchimpfung;
+          riskinfo["_kapazitaet"] = kapazitaet;
           risktimes.push(riskinfo);
           riskgroup_i = riskgroup_i + 1;
         };
@@ -428,10 +433,21 @@ export class StartComponent implements OnInit {
       fulldata = this.filterArray(fulldata, 'zugelassen', 1);      
     }
 
+    let inputparams = this.params;
+    let soll_impfkapazitaet = this.impfkapazitaet_land*7;
+    let ist_impfkapazitaet = this.params.kapazitaet_pro_woche;
+    let vh_zu_soll= (ist_impfkapazitaet/soll_impfkapazitaet);
+    
     for (let bundesland of regions){
       let batch = this.filterArray(fulldata, "Bundesland", bundesland);
-      let localresult = this.do_simulation_new(batch, this.params);
-      let localrisktimes = {'Bundesland': bundesland, risktimes: this.update_risktimes(localresult)};
+      let impfkapazitaet_land = this.getValues(this.filterArray(this.ewz_bl, "Bundesland", bundesland), "Impfkapazitaet")[0];
+      let localparams = {};
+      localparams['kapazitaet_pro_woche']=impfkapazitaet_land*vh_zu_soll;
+      localparams['liefermenge']=inputparams.liefermenge;
+      localparams['ruecklage']=inputparams.ruecklage;
+      localparams['addweekstoabstand']=inputparams.addweekstoabstand;
+      let localresult = this.do_simulation_new(batch, localparams);
+      let localrisktimes = {'Bundesland': bundesland, risktimes: this.update_risktimes(localresult,'Anteil Durchimpfung')};
       result.push(localrisktimes);
     }
     

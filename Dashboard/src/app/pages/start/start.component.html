@@ -17,11 +17,11 @@
                 <span *ngIf="this.current_bl!='Gesamt'"> in {{this.current_bl}}</span>
                 <span *ngIf="this.current_bl=='Gesamt'"> in Deutschland</span>
             </mat-card-title>
-            <mat-card-subtitle>Datenbasis: Impfungen lt. RKI (tagesaktuell), Lieferungen lt. BMG (wöchentlich aktualisiert), Kapazität lt. GMK</mat-card-subtitle>
-            
+            <mat-card-subtitle>Datenbasis: Impfungen lt. RKI (tagesaktuell), Lieferungen lt. BMG (wöchentlich
+                aktualisiert), Kapazität lt. GMK</mat-card-subtitle>
+
             <mat-card-content class="mat-padding">
-                <div fxLayout="row wrap" fxLayoutGap="2rem"
-                    fxLayoutAllign="space-around">
+                <div fxLayout="row wrap" fxLayoutGap="2rem" fxLayoutAllign="space-around">
                     <div fxFlex=100>
 
                         <mat-form-field color="accent" appearance="outline">
@@ -55,30 +55,34 @@
                     </div>
                     <div fxFlex fxFlex.lt-sm=100 class="mat-padding">
                         <p>
-                            <span  class="accentcolor bignum">{{100*this.stand_impfungen_data_aktuell_current['Zahl der Impfungen gesamt']/this.geo_lieferungen_bisher |
-                                    number:'1.0-0'}} %</span>
+                            <span class="accentcolor bignum">{{100*this.stand_impfungen_data_aktuell_current['Zahl der
+                                Impfungen gesamt']/this.geo_lieferungen_bisher |
+                                number:'1.0-0'}} %</span>
                             <br>
-                            <span >der Dosen<br>verimpft</span>                            
+                            <span>bisher verimpft<br></span>
                         </p>
                     </div>
                     <div fxFlex fxFlex.lt-sm=100 class="mat-padding">
                         <p>
                             <span class="accentcolor bignum">
-                                {{this.stand_impfungen_data_aktuell_current['Zahl der Impfungen gesamt']/(this.days_since_start/7)/1e3 | number:'1.0-0'}}
+                                {{this.stand_impfungen_data_aktuell_current['impfungen_letzte_woche']/1e3 | number:'1.0-0'}}
                             </span><br>
-                            Tsd. letzte Woche<br>verimpft
+                            Tsd. verimpft in <br>letzter Meldewoche
                         </p>
                     </div>
                     <div fxFlex fxFlex.lt-sm=100 class="mat-padding">
                         <p>
-                            <span class="accentcolor bignum">{{this.stand_impfungen_data_aktuell_current['impfungen_letzter_tag'] |
+                            <span
+                                class="accentcolor bignum">{{this.stand_impfungen_data_aktuell_current['impfungen_letzter_tag']
+                                |
                                 number:'1.0-0'}}</span><br>
-                            gestern<br>verimpft
+                            Impfungen am<br>letzten Meldetag
                         </p>
                     </div>
                     <div fxFlex fxFlex.lt-sm=100 class="mat-padding">
                         <p>
-                            <span class="accentcolor bignum">{{this.stand_impfungen_data_aktuell_current['Gesamt 2x']}} %</span><br>
+                            <span class="accentcolor bignum">{{this.stand_impfungen_data_aktuell_current['Gesamt 2x']}}
+                                %</span><br>
                             Durchimpfung
                         </p>
                     </div>
@@ -109,9 +113,10 @@
                                 <div class="mat-padding">
                                     <p>
                                         <span class="accentcolor bignum">
-                                            {{100*this.stand_impfungen_data_aktuell_current['impfungen_letzter_tag'] / this.params.kapazitaet_pro_tag |
+                                            {{100*this.stand_impfungen_data_aktuell_current['impfungen_letzte_woche'] /
+                                            this.params.kapazitaet_pro_woche |
                                             number:'1.0-0'}} %</span><br>
-                                        aktuelle Ausschöpfung
+                                        Ausschöpfung wöchentliche Kapazität
                                     </p>
                                 </div>
                             </div>
@@ -236,10 +241,10 @@
                             <div>
                                 <p>Rückstellungen für Zweitimpfungen<span fxHide.lt-md="true"><br></span>
                                     <mat-slide-toggle [(ngModel)]="this.params.ruecklage"
-                                    (change)="this.update_kapazitaet();">                                    
-                                    <span *ngIf="this.params.ruecklage">Ja</span>
-                                    <span *ngIf="!this.params.ruecklage">Nein</span>
-                                </mat-slide-toggle>
+                                        (change)="this.update_kapazitaet();">
+                                        <span *ngIf="this.params.ruecklage">Ja</span>
+                                        <span *ngIf="!this.params.ruecklage">Nein</span>
+                                    </mat-slide-toggle>
                                 </p>
                             </div>
                             <div>
@@ -247,7 +252,8 @@
                                     <mat-slider [(ngModel)]="this.params.addweekstoabstand" min="0" max="12" step="1"
                                         (change)="this.update_kapazitaet();"></mat-slider>
                                     <span *ngIf="this.params.addweekstoabstand==0"> laut STIKO</span>
-                                    <span *ngIf="this.params.addweekstoabstand>0"><strong>{{this.params.addweekstoabstand}} Wochen länger</strong></span>
+                                    <span *ngIf="this.params.addweekstoabstand>0"><strong>{{this.params.addweekstoabstand}}
+                                            Wochen länger</strong></span>
                                 </p>
                             </div>
                             <div>
@@ -269,14 +275,7 @@
                                         </mat-radio-button>
                                     </ng-container>
                                 </mat-radio-group>
-                            </div>
-                            <div>
-                                <span>Durchimpfung anzeigen</span><br>
-                                <mat-slide-toggle [(ngModel)]="this.showdurchimpfung">                                           
-                                        </mat-slide-toggle>
-                                        <span *ngIf="this.showdurchimpfung">Ja</span>
-                                        <span *ngIf="!this.showdurchimpfung">Nein</span>
-                            </div>
+                            </div>      
                         </div>
                     </div>
                 </div>
@@ -300,20 +299,43 @@
                 <span *ngIf="this.current_bl=='Gesamt'"> für Deutschland</span>
             </mat-card-title>
             <div fxLayout="row wrap" fxLayoutGap="2rem" fxLayoutAllign="space-between">
-                <div *ngIf="this.showdurchimpfung" fxFlex=100 fxFlex.lt-md=100 fxLayout="row wrap" fxLayoutGap="1rem" fxLayoutAllign="space-between">
-                    <div fxFlex=100>
-                        <h2>Durchimpfung</h2>
+                <div *ngIf="this.showdurchimpfung" fxFlex=100 fxFlex.lt-md=100 fxLayout="row wrap" fxLayoutGap="1rem"
+                    fxLayoutAllign="space-between">
+                    <div>
+                        <p class="primarycolor"><string>Erstimpfungen bis ..</string></p>
                     </div>
-                    <div *ngFor="let group of this.risktimes" fxFlex.lt-md=100>
-                        <p>
-                            <span *ngIf="group.Datum!='nie'" class="accentcolor bignum" style="font-size: 2rem;">
-                                {{group.Datum | date : 'dd.M.'}} </span>
-                            <span *ngIf="group.Datum=='nie'" class="accentcolor bignum" style="font-size: 2rem;">
-                                später </span>
-                            <span fxHide.lt-md="true"><br></span>
-                            <strong>Risikostufe {{group.Stufe}}</strong><br>
+                    <div fxLayout="row wrap" fxLayoutGap="1rem" fxFlex=100>
+                        
+                            
+                        
+                        <div *ngFor="let group of this.risktimes_firstdose" fxFlex.lt-md=100>
+                            <p>
+                                <span *ngIf="group.Datum!='nie'" class="primarycolor bignum" style="font-size: 2rem;">
+                                    {{group.Datum | date : 'dd.M.'}} </span>
+                                <span *ngIf="group.Datum=='nie'" class="primarycolor bignum" style="font-size: 2rem;">
+                                    später </span>
+                                <span fxHide.lt-md="true"><br></span>
+                                <strong>Risikostufe {{group.Stufe}}</strong><br>
 
-                        </p>
+                            </p>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="accentcolor"><string>Durchimpfung bis ..</string></p>
+                    </div>
+                    <div fxLayout="row wrap" fxLayoutGap="1rem" fxFlex=100>
+                 
+                        <div *ngFor="let group of this.risktimes" fxFlex.lt-md=100>
+                            <p>
+                                <span *ngIf="group.Datum!='nie'" class="accentcolor bignum" style="font-size: 2rem;">
+                                    {{group.Datum | date : 'dd.M.'}} </span>
+                                <span *ngIf="group.Datum=='nie'" class="accentcolor bignum" style="font-size: 2rem;">
+                                    später </span>
+                                <span fxHide.lt-md="true"><br></span>
+                                <strong>Risikostufe {{group.Stufe}}</strong><br>
+
+                            </p>
+                        </div>
                     </div>
 
                     <div fxFlex=100>
@@ -340,7 +362,8 @@
                     <h2>Warteschlange Zweitimpfung</h2>
                     <div>
                         <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
-                            xvalue="date" [colorscheme]="['navy']" [outcomes]="['Wartschlange Zweitimpfung']" plottype="area">
+                            xvalue="date" [colorscheme]="['navy']" [outcomes]="['Wartschlange Zweitimpfung']"
+                            plottype="area">
                         </app-plot>
                     </div>
                     <div class="padding lightgreycolor">
@@ -369,7 +392,8 @@
                     <h2>Abgeschlossene Immunisierungen</h2>
                     <div>
                         <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
-                            xvalue="date" [colorscheme]="['#1976d2']" [outcomes]="['patienten_durchgeimpft']" plottype="area">
+                            xvalue="date" [colorscheme]="['green']" [outcomes]="['patienten_durchgeimpft']"
+                            plottype="area">
                         </app-plot>
                     </div>
                     <div class="padding lightgreycolor">
@@ -380,11 +404,12 @@
 
                 </div>
 
-                <div  *ngIf="this.showdurchimpfung" fxFlex=45 fxFlex.lt-md=100>
+                <div *ngIf="this.showdurchimpfung" fxFlex=45 fxFlex.lt-md=100>
                     <h2>Modellierte Impfquote in %</h2>
                     <div>
                         <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
-                            xvalue="date" [colorscheme]="['#c8e6c9','green']" [outcomes]="['Anteil Erst-Dosis','Anteil Durchimpfung']" plottype="area"></app-plot>
+                            xvalue="date" [colorscheme]="['#1976d2','green']"
+                            [outcomes]="['Anteil Erst-Dosis','Anteil Durchimpfung']" plottype="area"></app-plot>
                     </div>
                     <div class="padding lightgreycolor">
                         <p class="mat-caption">
@@ -403,7 +428,8 @@
 
     <div fxFlex fxFlex.lt-md=100>
         <div style="min-width: 300px;padding:10px;">
-            <p>Mehr methodische Informationen zu den durchgeführten Rechnungen erhalten Sie <a routerLink="/Methoden">hier</a>.</p>
+            <p>Mehr methodische Informationen zu den durchgeführten Rechnungen erhalten Sie <a
+                    routerLink="/Methoden">hier</a>.</p>
         </div>
     </div>
 </div>
