@@ -10,6 +10,7 @@ export class MethodsComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    window.scrollTo(0, 0);
   }
 
 }

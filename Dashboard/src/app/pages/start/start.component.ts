@@ -80,6 +80,7 @@ export class StartComponent implements OnInit {
 
 
   ngOnInit(): void {
+    window.scrollTo(0, 0);
     this.update_days_since_start();
     this.token = this.route.snapshot.queryParams['token'] === this.valid_token;
 
