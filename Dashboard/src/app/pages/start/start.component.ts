@@ -29,8 +29,9 @@ export class StartComponent implements OnInit {
   stand_impfungen_data: any;
   bl_liste: Array<string>;
   stand_impfungen_hersteller: any;
-  stand_impfungen_data_aktuell:any;
-  stand_impfungen_data_aktuell_current:any;
+  stand_impfungen_data_aktuell: any;
+  geo_lieferungen_bisher:any;
+  stand_impfungen_data_aktuell_current: any;
   bev_anteil_land: number;
   impfkapazitaet_land: number;
   impfkapazitaet_bund: number;
@@ -42,7 +43,7 @@ export class StartComponent implements OnInit {
   current_bl = "Gesamt";
   sim_result: any;
   new_simresult: any;
-  all_bl_simresults:any;
+  all_bl_simresults: any;
 
   days_since_start: number;
   risktimes = [];
@@ -70,9 +71,9 @@ export class StartComponent implements OnInit {
     warten_dosis_2: 5,
     liefermenge: 1.0,
     impflinge: 67864036,
-    addweekstoabstand:0,
+    addweekstoabstand: 0,
     impfstoffart: "zugelassen",
-    ruecklage:true,
+    ruecklage: true,
     verteilungszenario: this.verteilungszenarien[1]
   };
   updateinput: any;
@@ -99,33 +100,36 @@ export class StartComponent implements OnInit {
         });
 
       // Import some public data    
-      
+
     }
   }
 
 
   getexternaldata() {
-      this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/tabledata/vacc_table_vaccsim.json')
+    this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/tabledata/vacc_table_vaccsim.json')
       .subscribe(data => {
         this.stand_impfungen_data_aktuell = data;
         this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/tabledata/impfsim_start.json')
-        .subscribe(data => {
-          this.stand_impfungen_hersteller = data;
-          this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/tabledata/impfsim_lieferungen.json')
-        .subscribe(data => {
-          this.dosen_projektion_all_hersteller = data;
-          this.update_kapazitaet();
-        });
-        });
-  
+          .subscribe(data => {
+            this.stand_impfungen_hersteller = data;
+            this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/tabledata/impfsim_lieferungen.json')
+              .subscribe(data => {
+                this.dosen_projektion_all_hersteller = data;
+                this.update_kapazitaet();
+              });
+          });
+
       });
 
   }
 
   update_kapazitaet() {
     this.stand_impfungen_data_aktuell_current = this.filterArray(this.stand_impfungen_data_aktuell, "Bundesland", this.current_bl)[0];
+    this.geo_lieferungen_bisher=this.sumArray(this.getValues(this.filterArray(this.stand_impfungen_hersteller,'geo',this.current_bl),'dosen_geliefert'));
+    console.log("LIEFERUNGEN",this.geo_lieferungen_bisher);
     this.filter_newdata();
-    this.update_params();    
+    this.update_params();
+    
   }
 
 
@@ -143,7 +147,10 @@ export class StartComponent implements OnInit {
       (params.impfzentren_tage * params.n_impfzentren * params.n_impfzentren_pat +
         params.varzt_tage * params.n_varzt * params.n_varzt_pat) * 1 / 7;
     this.params.kapazitaet_pro_woche = this.params.kapazitaet_pro_tag * 7;
-    this.do_simulation_new(this.dosen_projektion_all_hersteller_filtered, this.params);
+    this.new_simresult = this.do_simulation_new(this.dosen_projektion_all_hersteller_filtered, this.params);
+    this.risktimes= this.update_risktimes(this.new_simresult);
+    this.all_bl_simresults = this.all_region_sim();
+    
     this.simple_aerzte_impfen = this.params.varzt_tage > 0;
     this.simple_alle_zulassen = this.params.impfstoffart != "zugelassen";
   }
@@ -185,15 +192,11 @@ export class StartComponent implements OnInit {
     let result_erstimpfungen = [];
     let result_zweitimpfungen = [];
     let finalresult = [];
-    let riskinfo = {};
-    let riskgroup = this.n_risikogruppen;
-    let riskgroup_i = 0;
-    this.risktimes = [];
-    
+
     // Schleife Zeit
     for (const thewoche of time) {
       let kapazitaet_verbleibend = kapazitaet;
-      
+
       // Zweitimpfungen Startwoche
       if (thewoche == firstweek) {
         // Schleife Hersteller Zweitimpfung
@@ -234,7 +237,7 @@ export class StartComponent implements OnInit {
           }
 
           let ruecklage = Math.round(dosen_verfuegbar * theinput['ruecklage']);
-          if (!params.ruecklage){
+          if (!params.ruecklage) {
             ruecklage = 0;
           }
           let topush = {};
@@ -246,7 +249,7 @@ export class StartComponent implements OnInit {
           topush['dosenlieferung_kw'] = theinput["dosen_kw"] * liefermenge;
           topush['dosen_verfuegbar'] = dosen_verfuegbar;
           topush['impfungen'] = Math.min(topush['dosen_verfuegbar'] - ruecklage, kapazitaet_verbleibend);
-          topush['impfungen_erst_kum'] = topush['impfungen'] + impfstand_hersteller['dosen_verabreicht_erst'] ;
+          topush['impfungen_erst_kum'] = topush['impfungen'] + impfstand_hersteller['dosen_verabreicht_erst'];
           kapazitaet_verbleibend = kapazitaet_verbleibend - topush['impfungen'];
           topush['kapazitaet_verbleibend'] = kapazitaet_verbleibend;
           topush['patienten_geimpft'] = 0;
@@ -265,7 +268,7 @@ export class StartComponent implements OnInit {
         // Schleife Hersteller Zweitimpfung
         for (const thehersteller of hersteller) {
           let theinput = this.filterArray(this.filterArray(myinput, "hersteller", thehersteller), "kw", thewoche)[0];
-          let abstand = theinput['abstand']+params.addweekstoabstand;
+          let abstand = theinput['abstand'] + params.addweekstoabstand;
           // Nur falls Hersteller 2 Anwendungen
           if (theinput["anwendungen"] == 2) {
             let vorwoche = thewoche - 1;
@@ -341,7 +344,7 @@ export class StartComponent implements OnInit {
       if (gesamtinput_immunisierung.length > 0) {
         let topush = {};
         topush['kw'] = thewoche;
-        topush['date'] = this.getDateOfISOWeek(thewoche, 2020);
+        topush['date'] = this.getDateOfISOWeek(thewoche, 2021);
         topush['kapazitaet'] = kapazitaet;
         topush['population'] = this.getValues(gesamtinput_alle, 'population')[0];
         topush['Gelieferte Dosen'] = this.sumArray(this.getValues(gesamtinput_immunisierung, 'dosenlieferung_kw'));
@@ -352,8 +355,8 @@ export class StartComponent implements OnInit {
         topush['Unverimpfte Dosen'] = topush['Verfügbare Dosen'] - topush['Verimpfte Dosen'];
         topush['patienten_durchgeimpft'] = this.sumArray(
           this.getValues(gesamtinput_alle, 'patienten_geimpft'));
-        topush['Wartschlange Zweitimpfung'] =  this.sumArray(this.getValues(gesamtinput_alle, 'verbleibend_in_warteschlange_zweit_kw')); 
-        
+        topush['Wartschlange Zweitimpfung'] = this.sumArray(this.getValues(gesamtinput_alle, 'verbleibend_in_warteschlange_zweit_kw'));
+
         // Korrektur Durchimpfung abgeschlossen
         topush['Anteil Durchimpfung'] = 100 * (topush['patienten_durchgeimpft'] / topush['population']);
         topush['Anteil Erst-Dosis'] = 100 * (topush['Verimpfte Erst-Dosen'] / topush['population']);
@@ -366,50 +369,83 @@ export class StartComponent implements OnInit {
           topush['Wartschlange Zweitimpfung'] = 0;
         }
 
-        if (topush['Anteil Erst-Dosis']>100) {
-          topush['Anteil Erst-Dosis']=100;
-          topush['Verimpfte Erst-Dosen']= topush['population'];
+        if (topush['Anteil Erst-Dosis'] > 100) {
+          topush['Anteil Erst-Dosis'] = 100;
+          topush['Verimpfte Erst-Dosen'] = topush['population'];
         }
-
-        // Check who is done
-        if (riskgroup.length > (riskgroup_i +1)) {
-          if ((topush['Anteil Durchimpfung'] ) >= 100*riskgroup[riskgroup_i].anteil) {
-            topush['riskgroup_done'] = riskgroup[riskgroup_i].Stufe;
-            riskinfo = riskgroup[riskgroup_i];
-            riskinfo["kw"] = thewoche;
-            riskinfo["Datum"] = this.getDateOfISOWeek(thewoche, 2021);
-            riskinfo["_Quote"] = topush['Anteil Durchimpfung'] / 100;
-            this.risktimes.push(riskinfo);
-            riskgroup_i = riskgroup_i + 1;
-          };
-        }
-
 
         finalresult.push(topush)
+      }
+    }
+    return finalresult;
+  }
+
+
+  update_risktimes(simresult) {
+    let time: Array<number> = this.getValues(this.sortArray(simresult, 'kw'), "kw");
+    let riskinfo = {};
+    let riskgroup = this.n_risikogruppen;
+    let riskgroup_i = 0;
+    let risktimes = [];
+    
+
+    // Check who is done
+    for (const thewoche of time) {
+      let topush = this.filterArray(simresult, 'kw', thewoche)[0];
+      if (riskgroup.length > (riskgroup_i + 1)) {
+        if ((topush['Anteil Durchimpfung']) >= 100 * riskgroup[riskgroup_i].anteil) {
+          topush['riskgroup_done'] = riskgroup[riskgroup_i].Stufe;
+          riskinfo = riskgroup[riskgroup_i];
+          riskinfo["kw"] = thewoche;
+          riskinfo["Datum"] = this.getDateOfISOWeek(thewoche, 2021);
+          riskinfo["_Quote"] = topush['Anteil Durchimpfung'] / 100;
+          risktimes.push(riskinfo);
+          riskgroup_i = riskgroup_i + 1;
+        };
       }
     }
 
     while ((riskgroup_i + 1) <= 6) {
       riskinfo = riskgroup[riskgroup_i];
       riskinfo["Datum"] = "nie";
-      this.risktimes.push(riskinfo);
+      risktimes.push(riskinfo);
       riskgroup_i = riskgroup_i + 1;
     }
 
-
-
-    //this.new_simresult = finalresult;    
-    return finalresult;
+    return risktimes;
   }
 
-  
+
+  all_region_sim(){
+    let result = [];
+    let regions = this.bl_liste;
+    // Full dataset
+    let fulldata = this.filterArray(this.dosen_projektion_all_hersteller, "Verteilungsszenario", this.params.verteilungszenario);
+    if (this.params.impfstoffart == 'zugelassen') {
+      fulldata = this.filterArray(fulldata, 'zugelassen', 1);      
+    }
+
+    for (let bundesland of regions){
+      let batch = this.filterArray(fulldata, "Bundesland", bundesland);
+      let localresult = this.do_simulation_new(batch, this.params);
+      let localrisktimes = {'Bundesland': bundesland, risktimes: this.update_risktimes(localresult)};
+      result.push(localrisktimes);
+    }
+    
+    return result;    
+  }
+
+  make_nice_regiontable(){
+    return ;
+  }
+
   update_days_since_start() {
     let date1 = new Date("2020-12-26");
     let date2 = new Date();
     this.days_since_start = Number((date2.getTime() - date1.getTime()) / (1000 * 3600 * 24));
-
-
   }
+
+
 
   // HELPER FUNCTIONS
 

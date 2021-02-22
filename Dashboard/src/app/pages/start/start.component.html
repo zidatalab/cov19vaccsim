@@ -22,7 +22,7 @@
             <mat-card-content class="mat-padding">
                 <div fxLayout="row wrap" fxLayoutGap="2rem"
                     fxLayoutAllign="space-around">
-                    <div fxFlex xFlex.lt-md=100>
+                    <div fxFlex=100>
 
                         <mat-form-field color="accent" appearance="outline">
                             <mat-label>Bundesland</mat-label>
@@ -38,34 +38,42 @@
                     </div>
                     <div fxFlex fxFlex.lt-sm=100 class="mat-padding">
                         <p>
-                            <span *ngIf="this.stand_impfungen_data_aktuell_current['Zahl der Impfungen gesamt']>=1e6"
-                                class="accentcolor bignum">{{this.stand_impfungen_data_aktuell_current['Zahl der Impfungen gesamt']/1e6
+                            <span *ngIf="this.geo_lieferungen_bisher>=1e6"
+                                class="accentcolor bignum">{{this.geo_lieferungen_bisher/1e6
                                 |
                                 number:'1.2-2'}}</span>
-                            <span *ngIf="this.stand_impfungen_data_aktuell_current['Zahl der Impfungen gesamt']<1e6"
-                                class="accentcolor bignum">{{this.stand_impfungen_data_aktuell_current['Zahl der Impfungen gesamt']/1e3
+                            <span *ngIf="this.geo_lieferungen_bisher<1e6"
+                                class="accentcolor bignum">{{this.geo_lieferungen_bisher/1e3
                                 |
                                 number:'1.0-0'}}</span>
                             <br>
-                            <span *ngIf="this.stand_impfungen_data_aktuell_current['Zahl der Impfungen gesamt']>=1e6">Mio. Dosen
-                                verimpft</span>
-                            <span *ngIf="this.stand_impfungen_data_aktuell_current['Zahl der Impfungen gesamt']<1e6">Tsd. Dosen
-                                verimpft</span>
+                            <span *ngIf="this.geo_lieferungen_bisher>=1e6">Mio. Dosen
+                                geliefert</span>
+                            <span *ngIf="this.geo_lieferungen_bisher<1e6">Tsd. Dosen
+                                geliefert</span>
                         </p>
                     </div>
                     <div fxFlex fxFlex.lt-sm=100 class="mat-padding">
                         <p>
-                            <span class="accentcolor bignum">{{this.stand_impfungen_data_aktuell_current['Zahl der Impfungen
-                                gesamt']/(this.days_since_start/7)/1e3 |
-                                number:'1.0-0'}}</span><br>
-                            Tsd. letzte Woche
+                            <span  class="accentcolor bignum">{{100*this.stand_impfungen_data_aktuell_current['Zahl der Impfungen gesamt']/this.geo_lieferungen_bisher |
+                                    number:'1.0-0'}} %</span>
+                            <br>
+                            <span >der Dosen<br>verimpft</span>                            
+                        </p>
+                    </div>
+                    <div fxFlex fxFlex.lt-sm=100 class="mat-padding">
+                        <p>
+                            <span class="accentcolor bignum">
+                                {{this.stand_impfungen_data_aktuell_current['Zahl der Impfungen gesamt']/(this.days_since_start/7)/1e3 | number:'1.0-0'}}
+                            </span><br>
+                            Tsd. letzte Woche<br>verimpft
                         </p>
                     </div>
                     <div fxFlex fxFlex.lt-sm=100 class="mat-padding">
                         <p>
                             <span class="accentcolor bignum">{{this.stand_impfungen_data_aktuell_current['impfungen_letzter_tag'] |
                                 number:'1.0-0'}}</span><br>
-                            gestern
+                            gestern<br>verimpft
                         </p>
                     </div>
                     <div fxFlex fxFlex.lt-sm=100 class="mat-padding">
@@ -238,7 +246,7 @@
                                 <p>Abstand Erst- zu Zweitimpfung:<span fxHide.lt-md="true"><br></span>
                                     <mat-slider [(ngModel)]="this.params.addweekstoabstand" min="0" max="12" step="1"
                                         (change)="this.update_kapazitaet();"></mat-slider>
-                                    <span *ngIf="this.params.addweekstoabstand==0"> laut Herstellerangabe</span>
+                                    <span *ngIf="this.params.addweekstoabstand==0"> laut STIKO</span>
                                     <span *ngIf="this.params.addweekstoabstand>0"><strong>{{this.params.addweekstoabstand}} Wochen länger</strong></span>
                                 </p>
                             </div>
@@ -276,9 +284,21 @@
         </mat-card>
 
     </div>
+    <div fxFlex=100 *ngIf="this.risktimes && false">
+        <mat-card>
+            <mat-card-title>Überblick nach Bundesland</mat-card-title>
+            <div>
+
+            </div>
+        </mat-card>
+    </div>
+
     <div fxFlex=100 *ngIf="this.risktimes">
         <mat-card>
-            <mat-card-title>Simulation</mat-card-title>
+            <mat-card-title>Detaillierte Simulation
+                <span *ngIf="this.current_bl!='Gesamt'"> für {{this.current_bl}}</span>
+                <span *ngIf="this.current_bl=='Gesamt'"> für Deutschland</span>
+            </mat-card-title>
             <div fxLayout="row wrap" fxLayoutGap="2rem" fxLayoutAllign="space-between">
                 <div *ngIf="this.showdurchimpfung" fxFlex=100 fxFlex.lt-md=100 fxLayout="row wrap" fxLayoutGap="1rem" fxLayoutAllign="space-between">
                     <div fxFlex=100>
