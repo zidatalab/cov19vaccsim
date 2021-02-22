@@ -383,7 +383,7 @@ export class StartComponent implements OnInit {
         }
 
 
-        finalresult.push(topush);
+        finalresult.push(topush)
       }
     }
 
