@@ -5,6 +5,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { StartComponent } from './pages/start/start.component';
 import { AuthGuardService } from './services/auth-guard.service';
 import {PrivateComponent} from './pages/private/private.component'
+import { MethodsComponent } from "./pages/methods/methods.component";
 
 const routes: Routes = [
   { path: '', component: StartComponent },
@@ -16,6 +17,9 @@ const routes: Routes = [
   {
     path: 'private', component: PrivateComponent,
     canActivate: [AuthGuardService]
+  },
+  {
+    path: 'Methoden', component: MethodsComponent,    
   }
 
 ];

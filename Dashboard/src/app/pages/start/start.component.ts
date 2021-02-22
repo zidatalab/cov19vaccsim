@@ -375,7 +375,7 @@ export class StartComponent implements OnInit {
             topush['riskgroup_done'] = riskgroup[riskgroup_i].Stufe;
             riskinfo = riskgroup[riskgroup_i];
             riskinfo["kw"] = thewoche;
-            riskinfo["Datum"] = this.getDateOfISOWeek(thewoche, 2020);
+            riskinfo["Datum"] = this.getDateOfISOWeek(thewoche, 2021);
             riskinfo["_Quote"] = topush['Anteil Durchimpfung'] / 100;
             this.risktimes.push(riskinfo);
             riskgroup_i = riskgroup_i + 1;
