@@ -77,14 +77,15 @@ export class StartComponent implements OnInit {
     verteilungszenario: this.verteilungszenarien[1]
   };
   updateinput: any;
-
-
+  timer:Date;
+  startdate= new Date();
 
 
   ngOnInit(): void {
     window.scrollTo(0, 0);
     this.update_days_since_start();
     this.token = this.route.snapshot.queryParams['token'] === this.valid_token;
+    
 
     if (this.token) {
       // Import Local data
@@ -98,6 +99,8 @@ export class StartComponent implements OnInit {
           this.impfkapazitaet_bund = this.getValues(this.filterArray(this.ewz_bl, "Bundesland", "Gesamt"), "Impfkapazitaet")[0];
           this.getexternaldata();
         });
+
+
 
       // Import some public data    
 
@@ -149,7 +152,7 @@ export class StartComponent implements OnInit {
     this.params.kapazitaet_pro_woche = this.params.kapazitaet_pro_tag * 7;
     this.new_simresult = this.do_simulation_new(this.dosen_projektion_all_hersteller_filtered, this.params);
     this.risktimes= this.update_risktimes(this.new_simresult);
-    this.all_bl_simresults = this.all_region_sim();
+    // this.all_bl_simresults = this.all_region_sim();
     
     this.simple_aerzte_impfen = this.params.varzt_tage > 0;
     this.simple_alle_zulassen = this.params.impfstoffart != "zugelassen";
