@@ -44,7 +44,8 @@ export class StartComponent implements OnInit {
   sim_result: any;
   new_simresult: any;
   all_bl_simresults: any;
-
+  notstarted=true;
+  time_until_start:number;
   days_since_start: number;
   risktimes = [];
   risktimes_firstdose = [];
@@ -80,17 +81,31 @@ export class StartComponent implements OnInit {
   updateinput: any;
   timer:Date;
   startdate= new Date();
+  startportal= new Date("2021-02-24 08:30 UTC+1");
 
 
   ngOnInit(): void {
     window.scrollTo(0, 0);
+    if (Number(this.startdate)-Number(this.startportal)<0){
+      this.check_portal_online();
+    }
+    else {
+      this.notstarted=false;
+    }
+    
     this.update_days_since_start();
     this.token = this.route.snapshot.queryParams['token'] === this.valid_token;
     
 
-    if (this.token) {
-      // Import Local data
-      this.http.get('https://www.zidatasciencelab.de/cov19vaccsim/assets/data/bl.geojson')
+    if (this.token || !this.notstarted) {
+     this.loaddata();
+     // Import some public data    
+
+    }
+  }
+
+  loaddata(){
+    this.http.get('https://www.zidatasciencelab.de/cov19vaccsim/assets/data/bl.geojson')
         .subscribe(data => { this.map = data; })
 
       this.http.get('https://www.zidatasciencelab.de/cov19vaccsim/assets/data/ewz_bl.json')
@@ -100,14 +115,7 @@ export class StartComponent implements OnInit {
           this.impfkapazitaet_bund = this.getValues(this.filterArray(this.ewz_bl, "Bundesland", "Gesamt"), "Impfkapazitaet")[0];
           this.getexternaldata();
         });
-
-
-
-      // Import some public data    
-
-    }
   }
-
 
   getexternaldata() {
     this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/tabledata/vacc_table_vaccsim.json')
@@ -464,7 +472,22 @@ export class StartComponent implements OnInit {
     this.days_since_start = Number((date2.getTime() - date1.getTime()) / (1000 * 3600 * 24));
   }
 
-
+  check_portal_online() {
+    let date1 = this.startportal;
+    let date2 = new Date();
+    let timediff = Number((date2.getTime() - date1.getTime()) / (1000));
+    setInterval(() => {
+       timediff=timediff+1;
+       this.time_until_start=timediff;   
+       if (timediff>0 && this.notstarted){
+        this.notstarted=false;
+        this.loaddata();
+        return;
+       }
+  }, 1000);  
+   
+          
+  }
 
   // HELPER FUNCTIONS
 

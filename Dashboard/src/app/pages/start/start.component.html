@@ -1,15 +1,17 @@
-<div *ngIf="!this.token" class="container" fxLayout="row wrap" fxLayoutGap="1rem">
-    <div>
-        <h1>Nicht autorisiert</h1>
-        <h3>Wenden Sie sich bitte an das Zi für Zugangsdaten.</h3>
+<div *ngIf="!this.token && this.notstarted" class="container" fxLayout="row wrap" fxLayoutGap="1rem">
+    <div fxFlex style="padding:5rem;">
+        <h1>Die Freischaltung des Online Tools zur Impfkampagne erfolgt</h1>
+        <span class="bignum">am <span class="accentcolor">{{this.startportal | date: 'shortDate'}}</span> um <span class="accentcolor">{{this.startportal | date: 'h:m'}} Uhr</span></span>        
+        <p><br><br>Bei Rückfragen wenden Sie sich bitte an <span class="primarycolor"><strong>presse(at)zi.de</strong></span>           
+        </p>
     </div>
 </div>
-<div *ngIf="this.token && !this.new_simresult" class="container" fxLayout="row wrap" fxLayoutGap="1rem">
+<div *ngIf="(this.token || !this.notstarted) && !this.new_simresult" class="container" fxLayout="row wrap" fxLayoutGap="1rem">
     <div>
         <mat-spinner color="accent"></mat-spinner>
     </div>
 </div>
-<div *ngIf="this.token && this.new_simresult" class="container" fxLayout="row wrap" fxLayoutGap="1rem"
+<div *ngIf="(this.token || !this.notstarted) && this.new_simresult" class="container" fxLayout="row wrap" fxLayoutGap="1rem"
     fxLayoutAllign="space-around">
     <div fxFlex=100>
         <mat-card *ngIf="this.stand_impfungen_data_aktuell_current">
