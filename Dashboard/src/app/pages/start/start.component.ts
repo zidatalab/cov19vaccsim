@@ -162,7 +162,7 @@ export class StartComponent implements OnInit {
     this.risktimes= this.update_risktimes(this.new_simresult,'Anteil Durchimpfung');
     this.risktimes_firstdose= this.update_risktimes(this.new_simresult,'Anteil Erst-Dosis');
     // this.all_bl_simresults = this.all_region_sim();
-    console.log(this.risktimes,this.risktimes_firstdose);
+    // console.log(this.risktimes,this.risktimes_firstdose);
     
     this.simple_aerzte_impfen = this.params.varzt_tage > 0;
     this.simple_alle_zulassen = this.params.impfstoffart != "zugelassen";
