@@ -1,23 +1,38 @@
 <div class="container" fxLayout="row wrap" fxLayoutGap="1rem">
     <div class="methodswrapper">
-        <h1 style="color:crimson;">ACHTUNG VORLÄUFIGE ENTWURFSFASSUNG</h1>
-        <h1>Methodischer Hintergrund zur Impfmodellierung des Zi</h1>
+        <h1>Methodischer Hintergrund zum Simulationsrechner des Zi zur Covid-19-Impfkampagne</h1>
         <p><em>Dr. Lars Eric Kroll, Dr. Edgar Steiger, Thomas Czihal</em></p>
-        <p>Stand: 23.2.2021, 9:30 Uhr</p>
-        
+        <p>Stand: 23.2.2021, 11:00 Uhr</p>
+        <h2>Hintergrund</h2>
         <p>
             Ziel der vorliegenden Modellrechnungen ist die Entwicklung eines quantitativen Gerüsts für den zukünftigen
             Verlauf der nationalen Impfkampagne. Grundlage sind die im Rahmen des Impfgipfels bereitgestellten
-            Informationen zu möglichen Liefermengen und zur bundesweiten Kapazität der Impfzentren.</p>
-        <p>
+            Informationen zu möglichen Liefermengen und zur bundesweiten Kapazität der Impfzentren.
             Der Verlauf der Impfkampagne wird anhand eines iterativen Algorithmus simuliert. Dabei müssen einerseits die
-            Anforderungen der verschiedenen
-            Impfstoffe und andererseits die Kapazitäten der jeweiligen Bundesländer bzw. des Bundes berücksichtigt
-            werden. Das Online Tool ermöglich eine
-            Anpassung der Parameter der Simulation um Auswirkungen von verschiedenen politischen Strategien, aber auch
-            Änderungen von Kapazitäten einschätzen zu können.
-
+            Anforderungen der verschiedenen Impfstoffe und andererseits die Kapazitäten der jeweiligen Bundesländer bzw.
+            des Bundes berücksichtigt werden. Das Online Tool ermöglich eine Anpassung der Parameter der Simulation um
+            Auswirkungen von verschiedenen politischen Strategien, aber auch Änderungen von Kapazitäten einschätzen zu
+            können.
         </p>
+        <h2>Welche Fragen kann das Tool beantworten?</h2>
+        <ul>
+            <li><strong>Wieviel Impfstoff ist wann verfügbar?</strong><br>
+
+            </li>
+            <li><strong>Welche Impfkapazitäten sind notwendig, um den verfügbaren Impfstoff zeitnah zu
+                    verimpfen?</strong></li>
+            <li><strong>Wie sollte die Impfkapazität zwischen Impfzentren und Arztpraxen verteilt werden?</strong></li>
+            <li><strong> Welcher bevölkerungsbezogene Impfschutz lässt sich mit unterschiedlichen Impfstoffmengen,
+                    Impfkapazitäten und Impfstrategien erreichen?</strong></li>
+        </ul>
+        <p>
+            Mit dem Simulationsrechner zur Covid-19-Impfkampagne des Zi soll ein Beitrag geleistet werden, um diese
+            Fragen auf der Bundes-und Landesebene vorrausschauend beantworten und planungsrelevante Schlussfolgerungen
+            ziehen zu können. Verantwortliche aber auch die Betroffenen Menschen in der Bevölkerung können so sehen, 
+            wie die Impfkampagne in Deutschland bzw. in Ihrem Bundesland voranschreiten kann. Auswirkungen von politischen 
+            Entscheidungen zu Kapazitäten oder zur Ausgestaltung der Impfungen werden so direkt sichtbar.
+        </p>
+        <h2>Detaillierte Informationen zur Simulation</h2>
         <p>
             Um die Simulation durchführen zu können, wurden eine Reihe von Setzungen gemacht, die einen optimalen Ablauf
             der Impfkampagne unter
@@ -30,7 +45,8 @@
                 werden.<br><br>
             </li>
             <li><strong>Impfstoffe mit nur einer Impfung für Immunität werden priorisiert</strong><br>Bisher gibt es
-                einen in der Zulassung befindlichen Impfstoff (Johnson &amp; Johnson), der lediglich eine Dosis für einen
+                einen in der Zulassung befindlichen Impfstoff (Johnson &amp; Johnson), der lediglich eine Dosis für
+                einen
                 vollständigen Impfschutz benötigt. Sobald dieser Impfstoff zur Verfügung steht, sollte er sofort
                 prioritär verimpft werden, da mit jeder Impfung hier eine Immunisierung erzielt werden kann, während
                 bei den anderen Impfstoffen 2 Impfungen (und damit doppelt so viel Impf-Kapazität) für eine
@@ -52,6 +68,7 @@
         </p>
         <p>
             <strong>Schaubild 1: Abflaufdiagramm des Algorithmus</strong><br>
+            <span class="mat-caption">Quelle: Zentralinstitut für die kassenärztliche Versorgung (Zi), 2021</span><br>
             <img src="https://www.zidatasciencelab.de/cov19vaccsim/assets/img/Algorithmus_Impfmodell.001.png" alt=""
                 class="methods_img">
         </p>
@@ -64,16 +81,21 @@
             eintreffen.
         </p>
         <p><strong>Schaubild 2: Datenfluss</strong><br>
+            <span class="mat-caption">Quelle: Zentralinstitut für die kassenärztliche Versorgung (Zi), 2021</span><br>
             <img src="https://www.zidatasciencelab.de/cov19vaccsim/assets/img/Algorithmus_Impfmodell.002.png" alt=""
                 class="methods_img">
         </p>
+        <h2>Fazit</h2>
         <p>
             Im Ergebnis der Simulation zeigt sich insgesamt, dass in Deutschland bereits jetzt Lieferungen für
             ausreichend viele Impfdosen zur vollständigen Immunisierung der Bevölkerung zugesagt sind. Diese Dosen
-            treffen bis zum Ende des 3. Quartals in hinreichender Anzahl ein und sorgen dafür, 
-            dass bei ausreichenden Kapazitäten bis Anfang September theoretisch eine vollständige Immunisierung der Bevölkerung möglich ist. 
-            Bei Zulassung des nur einmal zu verabreichenden Impfstoffs von J&amp;J würde sich dieses Ziel sogar noch im August erreichen lassen.
+            treffen bis zum Ende des 3. Quartals in hinreichender Anzahl ein und sorgen dafür,
+            dass bei ausreichenden Kapazitäten bis Anfang September theoretisch eine vollständige Immunisierung der
+            Bevölkerung möglich ist.
+            Bei Zulassung des nur einmal zu verabreichenden Impfstoffs von J&amp;J würde sich dieses Ziel sogar noch im
+            August erreichen lassen.
         </p>
+        <p class="mat-caption">Dieser Text wird fortlaufend aktualisiert.</p>
 
 
     </div>

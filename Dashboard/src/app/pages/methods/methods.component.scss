@@ -1,9 +1,12 @@
 .methods_img{
-    width: 100%; 
-    object-fit: contain;
-    max-width:900px;
+    padding:1rem;
+    width: 90%; 
+    object-fit: contain;    
 }
 
 .methodswrapper{
-    padding: 1rem;
+    margin: 2rem;
+    padding: 2rem;
+    max-width:700px;
+    background-color: white;
 }

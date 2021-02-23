@@ -211,7 +211,7 @@
                             </h3>
                             <p>Anzahl:<span fxHide.lt-md="true"><br></span>
                                 <mat-slider [(ngModel)]="this.params.n_varzt" min="0"
-                                    [max]="50000*(this.bev_anteil_land/100)" [step]="1000*(this.bev_anteil_land/100)"
+                                    [max]="75000*(this.bev_anteil_land/100)" [step]="1000*(this.bev_anteil_land/100)"
                                     (change)="this.update_kapazitaet();"></mat-slider>
                                 <strong>{{this.params.n_varzt | number: '1.0-0'}}</strong>
                                 <br>Patienten pro Tag:<span fxHide.lt-md="true"><br></span>
