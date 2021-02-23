@@ -103,12 +103,12 @@
                 <div *ngIf="this.stand_impfungen_data_aktuell_current" fxLayout="column">
                     <div fxFlex=100 fxLayout="column wrap" fxLayoutGap="0rem">
                         <div fxLayout="row wrap" fxLayoutGap="2rem">
-                            <div fxFlex fxFlex.lt-md=100>
-                                <div class="mat-padding">
+                            <div class="mat-padding" fxFlex=30 fxFlex.lt-md=100>
+                                <div>
                                     <p>
-                                        <span class="accentcolor bignum">{{this.params.kapazitaet_pro_tag |
+                                        <span class="accentcolor bignum">{{this.params.kapazitaet_pro_woche |
                                             number:'1.0-0'}}</span><br>
-                                        Dosen pro Tag
+                                        Dosen pro Woche
                                     </p>
                                 </div>
                             </div>
@@ -123,12 +123,12 @@
                                     </p>
                                 </div>
                             </div>
-                            <div class="mat-padding" fxFlex=30 fxFlex.lt-md=100>
-                                <div>
+                            <div fxFlex fxFlex.lt-md=100>
+                                <div class="mat-padding">
                                     <p>
-                                        <span class="accentcolor bignum">{{this.params.kapazitaet_pro_woche |
+                                        <span class="accentcolor bignum">{{this.params.kapazitaet_pro_tag |
                                             number:'1.0-0'}}</span><br>
-                                        Dosen pro Woche
+                                        Dosen pro Tag
                                     </p>
                                 </div>
                             </div>
@@ -353,7 +353,7 @@
 
                     <div fxFlex=100>
                         <p class="mat-caption lightgreycolor">
-                            Die Risikostufen wurden laut STIKO-Empfehlung gebildet. Die dargestellten Bevölkerungsanteile basieren auf Schätzungen der STIKO und wurden auf die Bevölkerung im Alter ab 18 Jahre angewendet.
+                            Die Risikostufen wurden laut STIKO-Empfehlung gebildet. Die dargestellten Bevölkerungsanteile basieren auf Schätzungen der STIKO und wurden auf die Bevölkerung im Alter ab 18 Jahre angewendet. Die Risikogruppe 1 nach STIKO entspricht § 2 (Höchste Priorität) der Impfverordnung; Risikogruppen 2 und 3 nach STIKO entsprechen § 3 (hohe Priorität) der Impfverordnung; Risikogruppen 4 und 5 nach STIKO entsprechen § 4 (erhöhte Priorität) der Impfverordnung des Bundesministeriums für Gesundheit. 
                         </p>
                     </div>
                 </div>

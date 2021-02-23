@@ -81,7 +81,7 @@ export class StartComponent implements OnInit {
   updateinput: any;
   timer:Date;
   startdate= new Date();
-  startportal= new Date("2021-02-24 08:30 UTC+1");
+  startportal= new Date("2021-02-24 06:30 UTC+1");
 
 
   ngOnInit(): void {
