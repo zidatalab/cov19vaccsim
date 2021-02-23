@@ -262,8 +262,8 @@ export class StartComponent implements OnInit {
           topush['anwendungen'] = theinput['anwendungen'];
           topush['kapazitaet__vorher'] = kapazitaet_verbleibend;
           topush['dosenlieferung_kw'] = theinput["dosen_kw"] * liefermenge;
-          topush['dosen_verfuegbar'] = dosen_verfuegbar;
-          topush['impfungen'] = Math.min(topush['dosen_verfuegbar'] - ruecklage, kapazitaet_verbleibend);
+          topush['dosen_verfuegbar'] = dosen_verfuegbar - ruecklage;
+          topush['impfungen'] = Math.min(topush['dosen_verfuegbar'] , kapazitaet_verbleibend);
           topush['impfungen_erst_kum'] = topush['impfungen'] + impfstand_hersteller['dosen_verabreicht_erst'];
           kapazitaet_verbleibend = kapazitaet_verbleibend - topush['impfungen'];
           topush['kapazitaet_verbleibend'] = kapazitaet_verbleibend;
@@ -271,7 +271,8 @@ export class StartComponent implements OnInit {
           if (theinput["anwendungen"] == 1) {
             topush['patienten_geimpft'] = theinput['dosen_verabreicht_erst'] + topush['impfungen'];
           }
-          topush['dosenspeicher'] = topush['dosen_verfuegbar'] - topush['impfungen'];
+          topush['dosenspeicher'] = topush['dosen_verfuegbar'] - topush['impfungen'] +  ruecklage;
+          topush['dosenspeicher_ruecklage'] = ruecklage;
           result_erstimpfungen.push(topush);
 
         }
@@ -332,13 +333,16 @@ export class StartComponent implements OnInit {
           }
 
           let ruecklage = Math.round(dosen_verfuegbar * theinput['ruecklage']);
+          if (!theruecklage) {
+            ruecklage = 0;
+          }
           let topush = {};
           topush['hersteller'] = thehersteller;
           topush['kw'] = thewoche;
           topush['kapazitaet__vorher'] = kapazitaet_verbleibend;
           topush['dosenlieferung_kw'] = theinput["dosen_kw"];
-          topush['dosen_verfuegbar'] = dosen_verfuegbar;
-          topush['impfungen'] = Math.min(topush['dosen_verfuegbar'] - ruecklage, kapazitaet_verbleibend);
+          topush['dosen_verfuegbar'] = dosen_verfuegbar  - ruecklage;
+          topush['impfungen'] = Math.min(topush['dosen_verfuegbar'], kapazitaet_verbleibend);
           topush['impfungen_erst_kum'] = topush['impfungen'] + lastweek_erst['impfungen_erst_kum'];
           kapazitaet_verbleibend = kapazitaet_verbleibend - topush['impfungen'];
           topush['kapazitaet_verbleibend'] = kapazitaet_verbleibend;
@@ -346,7 +350,8 @@ export class StartComponent implements OnInit {
           if (theinput["anwendungen"] == 1) {
             topush['patienten_geimpft'] = lastweek_erst['patienten_geimpft'] + topush['impfungen'];
           }
-          topush['dosenspeicher'] = topush['dosen_verfuegbar'] - topush['impfungen'];
+          topush['dosenspeicher'] = topush['dosen_verfuegbar'] - topush['impfungen']+ruecklage;
+          topush['dosenspeicher_ruecklage'] = ruecklage;
           result_erstimpfungen.push(topush);
         }
       }
