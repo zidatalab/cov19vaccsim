@@ -312,13 +312,18 @@
                             
                         
                         <div *ngFor="let group of this.risktimes_firstdose" fxFlex.lt-md=100>
-                            <p>
+                            <p class="mat-caption">
                                 <span *ngIf="group.Datum!='nie'" class="primarycolor bignum" style="font-size: 2rem;">
                                     {{group.Datum | date : 'dd.M.'}} </span>
                                 <span *ngIf="group.Datum=='nie'" class="primarycolor bignum" style="font-size: 2rem;">
                                     später </span>
                                 <span fxHide.lt-md="true"><br></span>
-                                <strong>Risikostufe {{group.Stufe}}</strong><br>
+                                <span *ngIf="group.Stufe!=6" >Risikostufe {{group.Stufe}}<br>
+                                    {{group['_Quote']*100 | number:'1.0-0'}}%
+                                </span>
+                                <span *ngIf="group.Stufe==6" >Risikostufe {{group.Stufe}}<br>
+                                    übrige Bevölkerung
+                                </span>
 
                             </p>
                         </div>
@@ -329,13 +334,18 @@
                     <div fxLayout="row wrap" fxLayoutGap="1rem" fxFlex=100>
                  
                         <div *ngFor="let group of this.risktimes" fxFlex.lt-md=100>
-                            <p>
+                            <p class="mat-caption">
                                 <span *ngIf="group.Datum!='nie'" class="accentcolor bignum" style="font-size: 2rem;">
                                     {{group.Datum | date : 'dd.M.'}} </span>
                                 <span *ngIf="group.Datum=='nie'" class="accentcolor bignum" style="font-size: 2rem;">
                                     später </span>
                                 <span fxHide.lt-md="true"><br></span>
-                                <strong>Risikostufe {{group.Stufe}}</strong><br>
+                                <span *ngIf="group.Stufe!=6" >Risikostufe {{group.Stufe}}<br>
+                                    {{group['_Quote']*100 | number:'1.0-0'}}%
+                                </span>
+                                <span *ngIf="group.Stufe==6" >Risikostufe {{group.Stufe}}<br>
+                                    übrige Bevölkerung
+                                </span>
 
                             </p>
                         </div>
@@ -343,7 +353,7 @@
 
                     <div fxFlex=100>
                         <p class="mat-caption lightgreycolor">
-                            Die Risikostufen wurden laut STIKO-Empfehlung gebildet.
+                            Die Risikostufen wurden laut STIKO-Empfehlung gebildet. Die dargestellten Bevölkerungsanteile basieren auf Schätzungen der STIKO und wurden auf die Bevölkerung im Alter ab 18 Jahre angewendet.
                         </p>
                     </div>
                 </div>
