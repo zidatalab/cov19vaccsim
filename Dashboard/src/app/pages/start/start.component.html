@@ -319,7 +319,7 @@
                                     später </span>
                                 <span fxHide.lt-md="true"><br></span>
                                 <span *ngIf="group.Stufe!=6" >Risikostufe {{group.Stufe}}<br>
-                                    {{group['_Quote']*100 | number:'1.0-0'}}%
+                                    {{group['Anteil']*100 | number:'1.0-0'}}%
                                 </span>
                                 <span *ngIf="group.Stufe==6" >Risikostufe {{group.Stufe}}<br>
                                     übrige Bevölkerung
@@ -341,7 +341,7 @@
                                     später </span>
                                 <span fxHide.lt-md="true"><br></span>
                                 <span *ngIf="group.Stufe!=6" >Risikostufe {{group.Stufe}}<br>
-                                    {{group['_Quote']*100 | number:'1.0-0'}}%
+                                    {{group['Anteil']*100 | number:'1.0-0'}}%
                                 </span>
                                 <span *ngIf="group.Stufe==6" >Risikostufe {{group.Stufe}}<br>
                                     übrige Bevölkerung
