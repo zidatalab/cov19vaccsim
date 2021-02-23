@@ -245,8 +245,9 @@ export class StartComponent implements OnInit {
         for (const thehersteller of hersteller) {
           let theinput = this.filterArray(this.filterArray(myinput, "hersteller", thehersteller), "kw", thewoche)[0];
           let impfstand_hersteller = this.filterArray(impfstand, "hersteller", thehersteller)[0];
+          let hersteller_restdosen= impfstand_hersteller['dosen_geliefert'] - theinput['dosen_verabreicht_erst'] - theinput['dosen_verabreicht_zweit'];
           let info_zweitimpfungen_aktuelle_woche = 0;
-          let dosen_verfuegbar = theinput['dosen_kw'] * liefermenge + impfstand_hersteller['dosen_geliefert'] - theinput['dosen_verabreicht_erst'] - theinput['dosen_verabreicht_zweit'];
+          let dosen_verfuegbar = theinput['dosen_kw'] * liefermenge + hersteller_restdosen/4;
           if (theinput["anwendungen"] == 2) {
             info_zweitimpfungen_aktuelle_woche = this.filterArray(this.filterArray(result_zweitimpfungen, "hersteller", thehersteller), "kw", thewoche)[0];
             dosen_verfuegbar = info_zweitimpfungen_aktuelle_woche['dosenspeicher'];
@@ -329,7 +330,12 @@ export class StartComponent implements OnInit {
           let vorwoche = thewoche - 1;
           let lastweek_erst = this.filterArray(this.filterArray(result_erstimpfungen, "hersteller", thehersteller), "kw", vorwoche)[0];
           let info_zweitimpfungen_aktuelle_woche = 0;
+          let impfstand_hersteller = this.filterArray(impfstand, "hersteller", thehersteller)[0];
+          let hersteller_restdosen= impfstand_hersteller['dosen_geliefert'] - theinput['dosen_verabreicht_erst'] - theinput['dosen_verabreicht_zweit'];
           let dosen_verfuegbar = theinput['dosen_kw'] * liefermenge + lastweek_erst['dosenspeicher'];
+          if ((thewoche- firstweek)<4){
+            dosen_verfuegbar=dosen_verfuegbar+hersteller_restdosen/4;
+          }
           let ruecklage = 0;
           if (theinput["anwendungen"] == 2) {
             info_zweitimpfungen_aktuelle_woche = this.filterArray(this.filterArray(result_zweitimpfungen, "hersteller", thehersteller), "kw", thewoche)[0];
