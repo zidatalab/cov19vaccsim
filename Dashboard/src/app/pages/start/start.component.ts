@@ -328,12 +328,14 @@ export class StartComponent implements OnInit {
           let lastweek_erst = this.filterArray(this.filterArray(result_erstimpfungen, "hersteller", thehersteller), "kw", vorwoche)[0];
           let info_zweitimpfungen_aktuelle_woche = 0;
           let dosen_verfuegbar = theinput['dosen_kw'] * liefermenge + lastweek_erst['dosenspeicher'];
+          let ruecklage = 0;
           if (theinput["anwendungen"] == 2) {
             info_zweitimpfungen_aktuelle_woche = this.filterArray(this.filterArray(result_zweitimpfungen, "hersteller", thehersteller), "kw", thewoche)[0];
             dosen_verfuegbar = info_zweitimpfungen_aktuelle_woche['dosenspeicher'];
+            ruecklage = Math.round(dosen_verfuegbar * theinput['ruecklage']);
           }
 
-          let ruecklage = Math.round(dosen_verfuegbar * theinput['ruecklage']);
+          
           if (!theruecklage) {
             ruecklage = 0;
           }
@@ -372,8 +374,8 @@ export class StartComponent implements OnInit {
           this.sumArray(this.getValues(this.filterArray(input_erst, 'anwendungen', 1), 'dosenlieferung_kw'))+
           this.sumArray(this.getValues(this.filterArray(input_zweit, 'anwendungen', 2), 'dosenlieferung_kw'));
         topush['Verfügbare Dosen'] = 
-          this.sumArray(this.getValues(this.filterArray(input_erst, 'anwendungen', 1), 'dosen_verfuegbar'))+
-          this.sumArray(this.getValues(this.filterArray(input_zweit, 'anwendungen', 2), 'dosen_verfuegbar'));       
+          this.sumArray(this.getValues(input_zweit, 'dosen_verfuegbar'));       
+          this.sumArray(this.getValues(input_erst, 'dosen_verfuegbar'));       
         topush['Verimpfte Dosen'] = 
           this.sumArray(this.getValues(input_erst, 'impfungen'))+
           this.sumArray(this.getValues(input_zweit, 'impfungen'));       
@@ -381,10 +383,6 @@ export class StartComponent implements OnInit {
           this.sumArray(this.getValues(input_erst, 'impfungen_erst_kum'));
         topush['Auslastung'] = 100 * (topush['Verimpfte Dosen'] / kapazitaet);
         topush['Unverimpfte Dosen'] = topush['Verfügbare Dosen'] - topush['Verimpfte Dosen'];
-        // HOTFIX
-        if (topush['Unverimpfte Dosen']<0){
-          topush['Unverimpfte Dosen']=0;
-        }
         topush['patienten_durchgeimpft'] = 
           this.sumArray(this.getValues(input_erst, 'patienten_geimpft'))+
           this.sumArray(this.getValues(input_zweit, 'patienten_geimpft'));  
