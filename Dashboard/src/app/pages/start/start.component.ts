@@ -162,7 +162,7 @@ export class StartComponent implements OnInit {
     this.risktimes= this.update_risktimes(this.new_simresult,'Anteil Durchimpfung');
     this.risktimes_firstdose= this.update_risktimes(this.new_simresult,'Anteil Erst-Dosis');
     // this.all_bl_simresults = this.all_region_sim();
-    // console.log("ALL REGIONs",this.all_bl_simresults);
+    console.log(this.risktimes,this.risktimes_firstdose);
     
     this.simple_aerzte_impfen = this.params.varzt_tage > 0;
     this.simple_alle_zulassen = this.params.impfstoffart != "zugelassen";
@@ -422,6 +422,7 @@ export class StartComponent implements OnInit {
     for (const thewoche of time) {
       let anteil_durchimpfung = this.filterArray(simresult, 'kw', thewoche)[0][indicator]/100;
       let Stufe = riskgroup[riskgroup_i]['Stufe']
+      let Anteil = riskgroup[riskgroup_i]['anteil']
       let kapazitaet = this.filterArray(simresult, 'kw', thewoche)[0]['kapazitaet'];
       if (riskgroup.length > (riskgroup_i + 1)) {
         if (anteil_durchimpfung >= riskgroup[riskgroup_i].anteil) {
@@ -429,6 +430,7 @@ export class StartComponent implements OnInit {
           riskinfo["Datum"] = this.getDateOfISOWeek(thewoche, 2021);
           riskinfo["_Quote"] = anteil_durchimpfung;
           riskinfo["_kapazitaet"] = kapazitaet;
+          riskinfo['Anteil'] = Anteil;
           risktimes.push(riskinfo);
           riskgroup_i = riskgroup_i + 1;
         };
