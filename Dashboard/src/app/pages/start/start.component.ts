@@ -282,7 +282,7 @@ export class StartComponent implements OnInit {
       }
       //  Folgewochen
       if ((thewoche > firstweek)) { //  && (thewoche <=(firstweek+10))
-        // Schleife Hersteller Zweitimpfung
+        // Zweitimpfung
         for (const thehersteller of hersteller) {
           let theinput = this.filterArray(this.filterArray(myinput, "hersteller", thehersteller), "kw", thewoche)[0];
           let abstand = theinput['abstand'] + addtheweekstoabstand;
@@ -291,6 +291,7 @@ export class StartComponent implements OnInit {
             let vorwoche = thewoche - 1;
             let lastweek_erst = this.filterArray(this.filterArray(result_erstimpfungen, "hersteller", thehersteller), "kw", vorwoche)[0];
             let lastweek_zweit = this.filterArray(this.filterArray(result_zweitimpfungen, "hersteller", thehersteller), "kw", vorwoche)[0];
+            let dosen_verfuegbar = theinput['dosen_kw'] * liefermenge + lastweek_erst['dosenspeicher'];
             // Bedarf aus zurückliegenden Erstimpfungen seit firstweek
             let previous_erst = 0;
             if ((thewoche - abstand) >= firstweek) {
@@ -306,11 +307,11 @@ export class StartComponent implements OnInit {
             topush['population'] = theinput['ueber18'];
             topush['kapazitaet__vorher'] = kapazitaet_verbleibend;
             topush['dosenlieferung_kw'] = theinput["dosen_kw"] * liefermenge;
-            topush['dosen_verfuegbar'] = theinput['dosen_kw'] * liefermenge + lastweek_erst['dosenspeicher'];
+            topush['dosen_verfuegbar'] = dosen_verfuegbar;
             topush['bedarf_neu_erstimpfungen_abstand'] = previous_erst;
             topush['bedarf_aus_warteschlange'] = theinput['warteschlange_zweit_kw'] + lastweek_zweit['verbleibend_in_warteschlange_zweit_kw'];
             topush['bedarf__gesamt'] = topush['bedarf_neu_erstimpfungen_abstand'] + topush['bedarf_aus_warteschlange'];
-            topush['impfungen'] = Math.min(topush['dosen_verfuegbar'], kapazitaet_verbleibend, topush['bedarf__gesamt']);
+            topush['impfungen'] = Math.min(topush['dosen_verfuegbar'], topush['kapazitaet__vorher'], topush['bedarf__gesamt']);
             topush['impfungen_zweit'] = topush['impfungen'];
             topush['verbleibend_in_warteschlange_zweit_kw'] = topush['bedarf__gesamt'] - topush['impfungen'];
             kapazitaet_verbleibend = kapazitaet_verbleibend - topush['impfungen'];
@@ -321,7 +322,7 @@ export class StartComponent implements OnInit {
           }
         }
 
-        // Schleife Hersteller Erstimpfung
+        // Erstimpfung
         for (const thehersteller of hersteller) {
           let theinput = this.filterArray(this.filterArray(myinput, "hersteller", thehersteller), "kw", thewoche)[0];
           let vorwoche = thewoche - 1;
@@ -336,7 +337,7 @@ export class StartComponent implements OnInit {
           }
 
           
-          if (!theruecklage) {
+          if (!theruecklage || theinput["anwendungen"] == 1) {
             ruecklage = 0;
           }
           let topush = {};
@@ -347,7 +348,7 @@ export class StartComponent implements OnInit {
           topush['dosen_verfuegbar'] = dosen_verfuegbar  - ruecklage;
           topush['impfungen'] = Math.min(topush['dosen_verfuegbar'], kapazitaet_verbleibend);
           topush['impfungen_erst_kum'] = topush['impfungen'] + lastweek_erst['impfungen_erst_kum'];
-          kapazitaet_verbleibend = kapazitaet_verbleibend - topush['impfungen'];
+          kapazitaet_verbleibend = topush['kapazitaet__vorher'] - topush['impfungen'];
           topush['kapazitaet_verbleibend'] = kapazitaet_verbleibend;
           topush['patienten_geimpft'] = 0;
           if (theinput["anwendungen"] == 1) {
