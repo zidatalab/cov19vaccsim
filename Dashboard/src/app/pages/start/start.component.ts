@@ -79,6 +79,7 @@ export class StartComponent implements OnInit {
     addweekstoabstand: 0,
     impfstoffart: "zugelassen",
     ruecklage: true,
+    anteil_impfbereit:1,
     verteilungszenario: this.verteilungszenarien[1]
   };
   updateinput: any;
@@ -201,6 +202,7 @@ export class StartComponent implements OnInit {
     let liefermenge = params.liefermenge;
     let theruecklage = params.ruecklage;
     let addtheweekstoabstand = params.addweekstoabstand;
+    let anteil_impfbereit = params.anteil_impfbereit;
     let input = myinput;
     let hersteller = this.herstellerliste;
     let time: Array<number> = this.getValues(this.sortArray(this.filterArray(input, "hersteller", hersteller[0]), 'kw'), "kw");
@@ -226,7 +228,7 @@ export class StartComponent implements OnInit {
             let topush = {};
             topush['hersteller'] = thehersteller;
             topush['kw'] = thewoche;
-            topush['population'] = theinput['ueber18'];
+            topush['population'] = theinput['ueber18']*anteil_impfbereit;
             topush['anwendungen'] = 2;
             topush['kapazitaet__vorher'] = kapazitaet_verbleibend;
             topush['dosen_geliefert'] = theinput['dosen_kw'] * liefermenge ;
