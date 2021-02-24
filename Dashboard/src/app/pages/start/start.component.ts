@@ -255,16 +255,18 @@ export class StartComponent implements OnInit {
           let hersteller_restdosen= impfstand_hersteller['dosen_geliefert'] - theinput['dosen_verabreicht_erst'] - theinput['dosen_verabreicht_zweit'];
           let info_zweitimpfungen_aktuelle_woche = 0;
           let dosen_verfuegbar = theinput['dosen_kw'] * liefermenge + hersteller_restdosen/4;
+          let topush = {};
           if (theinput["anwendungen"] == 2) {
             info_zweitimpfungen_aktuelle_woche = this.filterArray(this.filterArray(result_zweitimpfungen, "hersteller", thehersteller), "kw", thewoche)[0];
             dosen_verfuegbar = info_zweitimpfungen_aktuelle_woche['dosenspeicher']+ hersteller_restdosen/4;
+            topush['add_restdosen'] = hersteller_restdosen/4;
           }
 
           let ruecklage = Math.round(dosen_verfuegbar * theinput['ruecklage']);
           if (!theruecklage) {
             ruecklage = 0;
           }
-          let topush = {};
+          
           topush['hersteller'] = thehersteller;
           topush['kw'] = thewoche;
           topush['population'] = theinput['ueber18'];
@@ -341,6 +343,7 @@ export class StartComponent implements OnInit {
           let hersteller_restdosen= impfstand_hersteller['dosen_geliefert'] - theinput['dosen_verabreicht_erst'] - theinput['dosen_verabreicht_zweit'];
           let dosen_verfuegbar = theinput['dosen_kw'] * liefermenge + lastweek_erst['dosenspeicher'];
           let ruecklage = 0;
+          let topush = {};
           if (theinput["anwendungen"] == 2) {
             info_zweitimpfungen_aktuelle_woche = this.filterArray(this.filterArray(result_zweitimpfungen, "hersteller", thehersteller), "kw", thewoche)[0];
             dosen_verfuegbar = info_zweitimpfungen_aktuelle_woche['dosenspeicher'];
@@ -348,9 +351,10 @@ export class StartComponent implements OnInit {
           }
           if ((thewoche- firstweek)<4){
             dosen_verfuegbar=dosen_verfuegbar+hersteller_restdosen/4;
+            topush['add_restdosen'] = hersteller_restdosen/4;
           }
 
-          let topush = {};
+          
           if (!theruecklage || theinput["anwendungen"] == 1) {
             ruecklage = 0;
           }
@@ -390,7 +394,9 @@ export class StartComponent implements OnInit {
           this.sumArray(this.getValues(input_zweit, 'dosenlieferung_kw'));
         topush['Verfügbare Dosen'] = 
           this.sumArray(this.getValues(input_zweit, 'dosen_verfuegbar'))+
-          this.sumArray(this.getValues(input_erst, 'dosen_verfuegbar_initial'));                 
+          this.sumArray(this.getValues(input_erst, 'dosen_verfuegbar_initial'))+
+          this.sumArray(this.getValues(input_erst, 'add_restdosen'));      
+                     
         topush['Verimpfte Dosen'] = 
           this.sumArray(this.getValues(input_erst, 'impfungen'))+
           this.sumArray(this.getValues(input_zweit, 'impfungen'));       
