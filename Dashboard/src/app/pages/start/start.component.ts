@@ -38,6 +38,7 @@ export class StartComponent implements OnInit {
   bev_anteil_land: number;
   impfkapazitaet_land: number;
   impfkapazitaet_bund: number;
+  stand_bmg_lieferungen:any;
   herstellerliste: any;
   land_changed: boolean;
   dosen_projektion_all: any;
@@ -128,6 +129,8 @@ export class StartComponent implements OnInit {
         this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/tabledata/impfsim_start.json')
           .subscribe(data => {
             this.stand_impfungen_hersteller = data;
+            this.stand_bmg_lieferungen = new Date(data[0]['Stand_BMG']);
+            console.log('STANDBMG',this.stand_bmg_lieferungen);
             this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/tabledata/impfsim_lieferungen.json')
               .subscribe(data => {
                 this.dosen_projektion_all_hersteller = data;
@@ -337,14 +340,14 @@ export class StartComponent implements OnInit {
           let impfstand_hersteller = this.filterArray(impfstand, "hersteller", thehersteller)[0];
           let hersteller_restdosen= impfstand_hersteller['dosen_geliefert'] - theinput['dosen_verabreicht_erst'] - theinput['dosen_verabreicht_zweit'];
           let dosen_verfuegbar = theinput['dosen_kw'] * liefermenge + lastweek_erst['dosenspeicher'];
-          if ((thewoche- firstweek)<4){
-            dosen_verfuegbar=dosen_verfuegbar+hersteller_restdosen/4;
-          }
           let ruecklage = 0;
           if (theinput["anwendungen"] == 2) {
             info_zweitimpfungen_aktuelle_woche = this.filterArray(this.filterArray(result_zweitimpfungen, "hersteller", thehersteller), "kw", thewoche)[0];
             dosen_verfuegbar = info_zweitimpfungen_aktuelle_woche['dosenspeicher'];
             ruecklage = Math.round(dosen_verfuegbar * theinput['ruecklage']);
+          }
+          if ((thewoche- firstweek)<4){
+            dosen_verfuegbar=dosen_verfuegbar+hersteller_restdosen/4;
           }
 
           let topush = {};

@@ -102,7 +102,7 @@
     <div fxFlex fxFlex.lt-md=100>
         <mat-card>
             <mat-card-title>Kapazität</mat-card-title>
-            <mat-card-subtitle>Gemeldete Impfkapazität</mat-card-subtitle>
+            <mat-card-subtitle>Datenbasis: Gemeldete Impfkapazität lt. GMK, Lieferungen lt. BMG Stand {{this.stand_bmg_lieferungen | date:'shortDate'}}</mat-card-subtitle>
             <mat-card-content>
                 <div *ngIf="this.stand_impfungen_data_aktuell_current" fxLayout="column">
                     <div fxFlex=100 fxLayout="column wrap" fxLayoutGap="0rem">
