@@ -24,6 +24,7 @@ export class StartComponent implements OnInit {
   mode = "simple";
   simple_aerzte_impfen = false;
   simple_alle_zulassen = false;
+  impfstand_rki : any;
   map: any;
   token: any;
   // Einfacher Schutz, wer ihn aushebelt ist nicht nett. Kann sich aber bei mir melden,
@@ -126,6 +127,7 @@ export class StartComponent implements OnInit {
     this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/tabledata/vacc_table_vaccsim.json')
       .subscribe(data => {
         this.stand_impfungen_data_aktuell = data;
+        this.impfstand_rki = new Date(data[0]['Stand_letzteImpfung']);
         this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/tabledata/impfsim_start.json')
           .subscribe(data => {
             this.stand_impfungen_hersteller = data;
