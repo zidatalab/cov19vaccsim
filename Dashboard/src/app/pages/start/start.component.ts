@@ -254,7 +254,7 @@ export class StartComponent implements OnInit {
           let dosen_verfuegbar = theinput['dosen_kw'] * liefermenge + hersteller_restdosen/4;
           if (theinput["anwendungen"] == 2) {
             info_zweitimpfungen_aktuelle_woche = this.filterArray(this.filterArray(result_zweitimpfungen, "hersteller", thehersteller), "kw", thewoche)[0];
-            dosen_verfuegbar = info_zweitimpfungen_aktuelle_woche['dosenspeicher'];
+            dosen_verfuegbar = info_zweitimpfungen_aktuelle_woche['dosenspeicher']+ hersteller_restdosen/4;
           }
 
           let ruecklage = Math.round(dosen_verfuegbar * theinput['ruecklage']);
