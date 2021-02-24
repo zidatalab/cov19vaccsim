@@ -1,18 +1,21 @@
 <div *ngIf="!this.token && this.notstarted" class="container" fxLayout="row wrap" fxLayoutGap="1rem">
     <div fxFlex style="padding:5rem;">
         <h1>Die Freischaltung des Online Tools zur Impfkampagne erfolgt</h1>
-        <span class="bignum">am <span class="accentcolor">{{this.startportal | date: 'shortDate'}}</span> um <span class="accentcolor">{{this.startportal | date: 'h:m'}} Uhr</span></span>        
-        <p><br><br>Bei Rückfragen wenden Sie sich bitte an <span class="primarycolor"><strong>presse(at)zi.de</strong></span>           
+        <span class="bignum">am <span class="accentcolor">{{this.startportal | date: 'shortDate'}}</span> um <span
+                class="accentcolor">{{this.startportal | date: 'h:m'}} Uhr</span></span>
+        <p><br><br>Bei Rückfragen wenden Sie sich bitte an <span
+                class="primarycolor"><strong>presse(at)zi.de</strong></span>
         </p>
     </div>
 </div>
-<div *ngIf="(this.token || !this.notstarted) && !this.new_simresult" class="container" fxLayout="row wrap" fxLayoutGap="1rem">
+<div *ngIf="(this.token || !this.notstarted) && !this.new_simresult" class="container" fxLayout="row wrap"
+    fxLayoutGap="1rem">
     <div>
         <mat-spinner color="accent"></mat-spinner>
     </div>
 </div>
-<div *ngIf="(this.token || !this.notstarted) && this.new_simresult" class="container" fxLayout="row wrap" fxLayoutGap="1rem"
-    fxLayoutAllign="space-around">
+<div *ngIf="(this.token || !this.notstarted) && this.new_simresult" class="container" fxLayout="row wrap"
+    fxLayoutGap="1rem" fxLayoutAllign="space-around">
     <div fxFlex=100>
         <mat-card *ngIf="this.stand_impfungen_data_aktuell_current">
             <mat-card-title>Stand der Impfkampagne
@@ -67,10 +70,11 @@
                     <div fxFlex fxFlex.lt-sm=100 class="mat-padding">
                         <p>
                             <span class="accentcolor bignum">
-                                {{this.stand_impfungen_data_aktuell_current['impfungen_letzte_woche']/1e3 | number:'1.0-0'}}
+                                {{this.stand_impfungen_data_aktuell_current['impfungen_letzte_woche']/1e3 |
+                                number:'1.0-0'}}
                             </span><br>
                             Tsd. verimpft<br>in den letzten 7 Tagen
-                            
+
                         </p>
                     </div>
                     <div fxFlex fxFlex.lt-sm=100 class="mat-padding">
@@ -278,7 +282,14 @@
                                         </mat-radio-button>
                                     </ng-container>
                                 </mat-radio-group>
-                            </div>      
+                            </div>
+                            <div *ngIf="false">
+                                <span>Datenexport aktivieren </span><br>
+                                <mat-slide-toggle [(ngModel)]="this.datenexport">
+                                <span *ngIf="this.datenexport"> Ja</span>
+                                <span *ngIf="!this.datenexport"> Nein</span>
+                            </mat-slide-toggle>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -305,12 +316,14 @@
                 <div *ngIf="this.showdurchimpfung" fxFlex=100 fxFlex.lt-md=100 fxLayout="row wrap" fxLayoutGap="1rem"
                     fxLayoutAllign="space-between">
                     <div>
-                        <p class="primarycolor"><string>Erstimpfungen bis ..</string></p>
+                        <p class="primarycolor">
+                            <string>Erstimpfungen bis ..</string>
+                        </p>
                     </div>
                     <div fxLayout="row wrap" fxLayoutGap="1rem" fxFlex=100>
-                        
-                            
-                        
+
+
+
                         <div *ngFor="let group of this.risktimes_firstdose" fxFlex.lt-md=100>
                             <p class="mat-caption">
                                 <span *ngIf="group.Datum!='nie'" class="primarycolor bignum" style="font-size: 2rem;">
@@ -318,10 +331,10 @@
                                 <span *ngIf="group.Datum=='nie'" class="primarycolor bignum" style="font-size: 2rem;">
                                     später </span>
                                 <span fxHide.lt-md="true"><br></span>
-                                <span *ngIf="group.Stufe!=6" >Risikostufe {{group.Stufe}}<br>
+                                <span *ngIf="group.Stufe!=6">Risikostufe {{group.Stufe}}<br>
                                     {{group['Anteil']*100 | number:'1.0-0'}}%
                                 </span>
-                                <span *ngIf="group.Stufe==6" >Risikostufe {{group.Stufe}}<br>
+                                <span *ngIf="group.Stufe==6">Risikostufe {{group.Stufe}}<br>
                                     übrige Bevölkerung
                                 </span>
 
@@ -329,10 +342,12 @@
                         </div>
                     </div>
                     <div>
-                        <p class="accentcolor"><string>Durchimpfung bis ..</string></p>
+                        <p class="accentcolor">
+                            <string>Durchimpfung bis ..</string>
+                        </p>
                     </div>
                     <div fxLayout="row wrap" fxLayoutGap="1rem" fxFlex=100>
-                 
+
                         <div *ngFor="let group of this.risktimes" fxFlex.lt-md=100>
                             <p class="mat-caption">
                                 <span *ngIf="group.Datum!='nie'" class="accentcolor bignum" style="font-size: 2rem;">
@@ -340,10 +355,10 @@
                                 <span *ngIf="group.Datum=='nie'" class="accentcolor bignum" style="font-size: 2rem;">
                                     später </span>
                                 <span fxHide.lt-md="true"><br></span>
-                                <span *ngIf="group.Stufe!=6" >Risikostufe {{group.Stufe}}<br>
+                                <span *ngIf="group.Stufe!=6">Risikostufe {{group.Stufe}}<br>
                                     {{group['Anteil']*100 | number:'1.0-0'}}%
                                 </span>
-                                <span *ngIf="group.Stufe==6" >Risikostufe {{group.Stufe}}<br>
+                                <span *ngIf="group.Stufe==6">Risikostufe {{group.Stufe}}<br>
                                     übrige Bevölkerung
                                 </span>
 
@@ -353,7 +368,12 @@
 
                     <div fxFlex=100>
                         <p class="mat-caption lightgreycolor">
-                            Die Risikostufen wurden laut STIKO-Empfehlung gebildet. Die dargestellten Bevölkerungsanteile basieren auf Schätzungen der STIKO und wurden auf die Bevölkerung im Alter ab 18 Jahre angewendet. Die Risikogruppe 1 nach STIKO entspricht § 2 (Höchste Priorität) der Impfverordnung; Risikogruppen 2 und 3 nach STIKO entsprechen § 3 (hohe Priorität) der Impfverordnung; Risikogruppen 4 und 5 nach STIKO entsprechen § 4 (erhöhte Priorität) der Impfverordnung des Bundesministeriums für Gesundheit. 
+                            Die Risikostufen wurden laut STIKO-Empfehlung gebildet. Die dargestellten
+                            Bevölkerungsanteile basieren auf Schätzungen der STIKO und wurden auf die Bevölkerung im
+                            Alter ab 18 Jahre angewendet. Die Risikogruppe 1 nach STIKO entspricht § 2 (Höchste
+                            Priorität) der Impfverordnung; Risikogruppen 2 und 3 nach STIKO entsprechen § 3 (hohe
+                            Priorität) der Impfverordnung; Risikogruppen 4 und 5 nach STIKO entsprechen § 4 (erhöhte
+                            Priorität) der Impfverordnung des Bundesministeriums für Gesundheit.
                         </p>
                     </div>
                 </div>
@@ -438,7 +458,31 @@
         </mat-card>
 
     </div>
+    <div fxFlex=100 *ngIf="this.datenexport">
+        <mat-card>
+            <mat-card-title>Datenexport</mat-card-title>
+            <mat-card-content>
+                <div fxLayout="column" fxLayoutGap="1rem">
+                    <p>Über die nachfolgenden Buttons können Sie die Ergebnisse der Simulationsrechnungen ohne Gewähr als CSV-Datei exportieren. Wir
+                        behalten uns Änderungen an den Feldnamen vor. Die kommerzielle Nutzung der Informationen ist
+                        unter der Lizenz <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0</a>
+                        gestattet, wir bitten aber um Informationen zur Nutzung der Daten an <strong>presse(at)zi.de</strong>.</p>
 
+                    <div fxFlex=100 fxLayout="row wrap" fxLayoutGap="1rem" fxLayoutAlign="space-between">
+                        <div>
+                            <a mat-raised-button (click)="this.exportascsv('Parameter',this.params);" class="blackbtn">Parameter</a>
+                        </div>
+                        <div>
+                            <a mat-raised-button (click)="this.exportascsv('Durchimpfung',this.risktimes);"class="blackbtn">Risikogruppen</a>
+                        </div>
+                        <div>
+                            <a mat-raised-button (click)="this.exportascsv('Zeitreihe',this.new_simresult);" class="blackbtn">Zeitreihe</a>
+                        </div>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
     <div fxFlex fxFlex.lt-md=100>
         <div style="min-width: 300px;padding:10px;">
             <p>Mehr methodische Informationen zu den durchgeführten Rechnungen erhalten Sie <a

@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { CsvexportService } from 'src/app/services/csvexport.service';
+
 
 @Component({
   selector: 'app-start',
@@ -13,11 +15,12 @@ export class StartComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private csv: CsvexportService) { }
 
   // Plan B
   showdurchimpfung = true;
-
+  datenexport=false;
   mode = "simple";
   simple_aerzte_impfen = false;
   simple_alle_zulassen = false;
@@ -163,7 +166,6 @@ export class StartComponent implements OnInit {
     this.risktimes_firstdose= this.update_risktimes(this.new_simresult,'Anteil Erst-Dosis');
     // this.all_bl_simresults = this.all_region_sim();
     // console.log(this.risktimes,this.risktimes_firstdose);
-    
     this.simple_aerzte_impfen = this.params.varzt_tage > 0;
     this.simple_alle_zulassen = this.params.impfstoffart != "zugelassen";
   }
@@ -574,4 +576,10 @@ export class StartComponent implements OnInit {
       ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
     return ISOweekStart.toISOString().substring(0, 10);
   }
+
+exportascsv(name,data){
+  let result = this.csv.exportToCsv(name,data);
+  console.log(result);
+}
+
 }
