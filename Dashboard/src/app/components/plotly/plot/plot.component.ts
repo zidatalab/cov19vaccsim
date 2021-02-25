@@ -54,7 +54,7 @@ export class PlotComponent implements OnInit {
       xaxis: { fixedrange: false, type: 'category', automargin: false },
       yaxis: { fixedrange: true, title: '', automargin: true ,rangemode: 'tozero'},
       autosize: false, padding: 0,
-      legend: { x: 1,        xanchor: 'right',        y: .8      },
+      legend: { x: 1,        xanchor: 'right',        y: .8    , bgcolor: 'ffffffa7'  },
       margin: { l: 0, r: 100, b: 100, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
     };
     }
@@ -65,7 +65,7 @@ export class PlotComponent implements OnInit {
       xaxis: { fixedrange: false, automargin: false },
       yaxis: { fixedrange: true, title: '', automargin: true , rangemode: 'tozero'},
       autosize: false, padding: 0,
-      legend: { x: 1,        xanchor: 'right',        y: .8      },
+      legend: { x: 1,        xanchor: 'right',        y: .8    , bgcolor: 'ffffffa7'  },
       margin: { l: 0, r: 20, b: 20, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
     };
   }
@@ -76,7 +76,7 @@ export class PlotComponent implements OnInit {
       yaxis: { fixedrange: false, type: 'category', automargin: false ,rangemode: 'tozero'},
       xaxis: { fixedrange: true, title: '', automargin: true },
       autosize: false, padding: 0,
-      legend: { x: 1,        xanchor: 'right',        y: .8      },
+      legend: { x: 1,        xanchor: 'right',        y: .8   , bgcolor: 'ffffffa7'   },
       margin: { l: 200, r: 0, b: 20, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
       
     };
