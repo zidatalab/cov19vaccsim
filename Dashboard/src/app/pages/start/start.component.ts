@@ -81,7 +81,7 @@ export class StartComponent implements OnInit {
     addweekstoabstand: 0,
     impfstoffart: "zugelassen",
     ruecklage: true,
-    anteil_impfbereit:1,
+    anteil_impfbereit:1.0,
     verteilungszenario: this.verteilungszenarien[1]
   };
   updateinput: any;
@@ -271,7 +271,7 @@ export class StartComponent implements OnInit {
           
           topush['hersteller'] = thehersteller;
           topush['kw'] = thewoche;
-          topush['population'] = theinput['ueber18'];
+          topush['population'] = theinput['ueber18']*anteil_impfbereit;
           topush['anwendungen'] = theinput['anwendungen'];
           topush['kapazitaet__vorher'] = kapazitaet_verbleibend;
           topush['dosenlieferung_kw'] = theinput["dosen_kw"] * liefermenge;
@@ -317,7 +317,7 @@ export class StartComponent implements OnInit {
             topush['hersteller'] = thehersteller;
             topush['kw'] = thewoche;
             topush['anwendungen'] = 2;
-            topush['population'] = theinput['ueber18'];
+            topush['population'] = theinput['ueber18']*anteil_impfbereit;
             topush['kapazitaet__vorher'] = kapazitaet_verbleibend;
             topush['dosenlieferung_kw'] = theinput["dosen_kw"] * liefermenge;
             topush['dosen_verfuegbar'] = dosen_verfuegbar;

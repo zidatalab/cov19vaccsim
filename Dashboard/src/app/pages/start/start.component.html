@@ -282,6 +282,13 @@
                                     </ng-container>
                                 </mat-radio-group>
                             </div>
+                            <div>
+                                <p>Impfbereitschaft:<span fxHide.lt-md="true"><br></span>
+                                    <mat-slider [(ngModel)]="this.params.anteil_impfbereit" min=".5" max="1.0" step="0.05"
+                                        (change)="this.update_kapazitaet();"></mat-slider>
+                                    <strong>{{this.params.anteil_impfbereit*100 | number:'1.0-0'}} % </strong>impfbereit
+                                </p>
+                            </div>
                             <div >
                                 <span>Datenexport aktivieren </span><br>
                                 <mat-slide-toggle [(ngModel)]="this.datenexport">
@@ -316,7 +323,7 @@
                     fxLayoutAllign="space-between">
                     <div>
                         <p class="primarycolor">
-                            <string>Erstimpfungen bis ..</string>
+                            <strong>Erstimpfungen<span *ngIf="this.params.anteil_impfbereit<1.0"> der Impfwilligen</span> bis ..</strong>
                         </p>
                     </div>
                     <div fxLayout="row wrap" fxLayoutGap="1rem" fxFlex=100>
@@ -342,7 +349,7 @@
                     </div>
                     <div>
                         <p class="accentcolor">
-                            <string>Durchimpfung bis ..</string>
+                            <strong>Durchimpfung<span *ngIf="this.params.anteil_impfbereit<1.0"> der Impfwilligen</span> bis ..</strong>
                         </p>
                     </div>
                     <div fxLayout="row wrap" fxLayoutGap="1rem" fxFlex=100>
@@ -437,7 +444,7 @@
                 </div>
 
                 <div *ngIf="this.showdurchimpfung" fxFlex=45 fxFlex.lt-md=100>
-                    <h2>Modellierte Impfquote in %</h2>
+                    <h2>Modellierte Impfquote<span *ngIf="this.params.anteil_impfbereit<1.0"> der Impfwilligen</span> in %</h2>
                     <div>
                         <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
                             xvalue="date" [colorscheme]="['#1976d2','green']"
