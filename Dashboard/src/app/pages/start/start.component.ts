@@ -33,6 +33,7 @@ export class StartComponent implements OnInit {
   stand_impfungen_data: any;
   bl_liste: Array<string>;
   stand_impfungen_hersteller: any;
+  kapazitaetsstand:string;
   stand_impfungen_data_aktuell: any;
   geo_lieferungen_bisher:any;
   stand_impfungen_data_aktuell_current: any;
@@ -114,9 +115,10 @@ export class StartComponent implements OnInit {
     this.http.get('https://www.zidatasciencelab.de/cov19vaccsim/assets/data/bl.geojson')
         .subscribe(data => { this.map = data; })
 
-      this.http.get('https://www.zidatasciencelab.de/cov19vaccsim/assets/data/ewz_bl.json')
+      this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/static/kapazitaeten.json')
         .subscribe(data => {
-          this.ewz_bl = data;
+          this.kapazitaetsstand = data["stand"];
+          this.ewz_bl = data["data"];
           this.bl_liste = this.getValues(this.ewz_bl, "Bundesland");
           this.impfkapazitaet_bund = this.getValues(this.filterArray(this.ewz_bl, "Bundesland", "Gesamt"), "Impfkapazitaet")[0];
           this.getexternaldata();
