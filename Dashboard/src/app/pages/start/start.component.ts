@@ -112,9 +112,6 @@ export class StartComponent implements OnInit {
   }
 
   loaddata(){
-    this.http.get('https://www.zidatasciencelab.de/cov19vaccsim/assets/data/bl.geojson')
-        .subscribe(data => { this.map = data; })
-
       this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/static/kapazitaeten.json')
         .subscribe(data => {
           this.kapazitaetsstand = data["stand"];
