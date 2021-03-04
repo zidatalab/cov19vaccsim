@@ -57,7 +57,7 @@
                                 geliefert</span>
                         </p>
                     </div>
-                    <div fxFlex fxFlex.lt-sm=100 class="mat-padding">
+                    <div fxHide.lt-md=true fxFlex fxFlex.lt-sm=100 class="mat-padding">
                         <p>
                             <span class="accentcolor bignum">{{100*this.stand_impfungen_data_aktuell_current['Zahl der
                                 Impfungen gesamt']/this.geo_lieferungen_bisher |
@@ -85,12 +85,45 @@
                             Impfungen am<br>{{this.stand_impfungen_data_aktuell_current['Stand_letzteImpfung']| date}}
                         </p>
                     </div>
-                    <div fxFlex fxFlex.lt-sm=100 class="mat-padding">
+                    <div fxHide.lt-md=true fxFlex fxFlex.lt-sm=100 class="mat-padding">
                         <p>
                             <span class="accentcolor bignum">{{this.stand_impfungen_data_aktuell_current['Gesamt 2x']}}
                                 %</span><br>
                             Durchimpfung
                         </p>
+                    </div>
+                    <div fxFlex=100  fxLayout="row wrap" fxLayoutGap="2rem">
+                        <div *ngIf="this.showdurchimpfung" fxFlex=45 fxFlex.lt-md=100>
+                            <h2>Lagerbestand am {{this.impfstand_rki | date:'shortDate'}}</h2>
+                            <div>
+                                <app-plot [(data)]="this.hst_lager" 
+                                    xvalue="Hersteller" [colorscheme]="['green']"
+                                    [outcomes]="['Dosen auf Lager']" plottype="hbar"></app-plot>
+                            </div>
+                            <div class="padding lightgreycolor">
+                                <p class="mat-caption">
+                                    Legende:<br>Projektion auf Basis der aktuellen Verträge mit den Herstellern.
+                                </p>
+                            </div>
+        
+                        </div>
+                        <div fxHide.lt-md=true fxFlex>
+
+                        </div>
+                        <div *ngIf="this.showdurchimpfung" fxFlex=45 fxFlex.lt-md=100>
+                            <h2>Erwartete Lieferungen</h2>
+                            <div>
+                                <app-plot [(data)]="this.dosen_projektion_all_hersteller_filtered" 
+                                    xvalue="kw" colorby="hersteller"
+                                    [outcomes]="['dosen_kw']" plottype="stackedarea"></app-plot>
+                            </div>
+                            <div class="padding lightgreycolor">
+                                <p class="mat-caption">
+                                    Legende:<br>Projektion auf Basis der aktuellen Verträge mit den Herstellern.
+                                </p>
+                            </div>
+        
+                        </div>
                     </div>
                 </div>
             </mat-card-content>
@@ -106,7 +139,7 @@
                 <div *ngIf="this.stand_impfungen_data_aktuell_current" fxLayout="column">
                     <div fxFlex=100 fxLayout="column wrap" fxLayoutGap="0rem">
                         <div fxLayout="row wrap" fxLayoutGap="2rem">
-                            <div class="mat-padding" fxFlex=30 fxFlex.lt-md=100>
+                            <div class="mat-padding" fxFlex=30 >
                                 <div>
                                     <p>
                                         <span class="accentcolor bignum">{{this.params.kapazitaet_pro_woche |
@@ -115,7 +148,7 @@
                                     </p>
                                 </div>
                             </div>
-                            <div fxFlex fxFlex.lt-md=100>
+                            <div fxFlex >
                                 <div class="mat-padding">
                                     <p>
                                         <span class="accentcolor bignum">
@@ -126,7 +159,7 @@
                                     </p>
                                 </div>
                             </div>
-                            <div fxFlex fxFlex.lt-md=100>
+                            <div fxFlex >
                                 <div class="mat-padding">
                                     <p>
                                         <span class="accentcolor bignum">{{this.params.kapazitaet_pro_tag |
@@ -383,7 +416,7 @@
                         </p>
                     </div>
                 </div>
-                <div fxFlex=92 fxFlex.lt-md=100>
+                <div fxFlex=100>
                     <h2>Gelieferte und verimpfte Dosen</h2>
                     <div>
                         <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
@@ -412,6 +445,7 @@
                     </div>
 
                 </div>
+                <div fxHide.lt-md=true fxFlex></div>
                 <div fxFlex=45 fxFlex.lt-md=100>
                     <h2>Unverimpfte Dosen</h2>
                     <div>
@@ -442,6 +476,7 @@
                     </div>
 
                 </div>
+                <div fxFlex fxHide.lt-md=true></div>
 
                 <div *ngIf="this.showdurchimpfung" fxFlex=45 fxFlex.lt-md=100>
                     <h2>Modellierte Impfquote<span *ngIf="this.params.anteil_impfbereit<1.0"> der Impfwilligen</span> in %</h2>
@@ -457,34 +492,7 @@
                     </div>
 
                 </div>
-                <div *ngIf="this.showdurchimpfung" fxFlex=45 fxFlex.lt-md=100>
-                    <h2>Aktuueller Lagerbestand</h2>
-                    <div>
-                        <app-plot [(data)]="this.hst_lager" 
-                            xvalue="Hersteller" [colorscheme]="['green']"
-                            [outcomes]="['Dosen auf Lager']" plottype="hbar"></app-plot>
-                    </div>
-                    <div class="padding lightgreycolor">
-                        <p class="mat-caption">
-                            Legende:<br>Projektion auf Basis der aktuellen Verträge mit den Herstellern.
-                        </p>
-                    </div>
-
-                </div>
-                <div *ngIf="this.showdurchimpfung" fxFlex=45 fxFlex.lt-md=100>
-                    <h2>Lieferungen nach KW und Hersteller</h2>
-                    <div>
-                        <app-plot [(data)]="this.dosen_projektion_all_hersteller_filtered" 
-                            xvalue="kw" colorby="hersteller"
-                            [outcomes]="['dosen_kw']" plottype="stackedarea"></app-plot>
-                    </div>
-                    <div class="padding lightgreycolor">
-                        <p class="mat-caption">
-                            Legende:<br>Projektion auf Basis der aktuellen Verträge mit den Herstellern.
-                        </p>
-                    </div>
-
-                </div>
+                
                
 
             </div>

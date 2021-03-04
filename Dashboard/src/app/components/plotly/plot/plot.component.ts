@@ -105,8 +105,7 @@ export class PlotComponent implements OnInit {
   let outcomes = this.outcomes;
   if (this.colorby){
     outcomes = this.getuniqueValues(plotdata,this.colorby);
-    plotdata = this.make_colorbyvalues();  
-    console.log(plotdata);  
+    plotdata = this.make_colorbyvalues();      
   }
   
 
@@ -116,7 +115,7 @@ export class PlotComponent implements OnInit {
   make_colorbyvalues(){
     let newdata = [];
     let inputdata = this.data;
-    let thecolorvalues = this.getuniqueValues(inputdata,this.colorby);   
+    let thecolorvalues = this.getuniqueValues(inputdata,this.colorby).sort();   
     let thexvalues = this.getuniqueValues(inputdata,this.xvalue);   
     let theoutcome = this.outcomes[0];
     for (let xvalue of thexvalues){
