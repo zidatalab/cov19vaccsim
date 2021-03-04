@@ -1,5 +1,6 @@
+import { AnimationFactory } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CsvexportService } from 'src/app/services/csvexport.service';
 
@@ -42,6 +43,7 @@ export class StartComponent implements OnInit {
   impfkapazitaet_bund: number;
   stand_bmg_lieferungen:any;
   herstellerliste: any;
+  hst_lager : any;
   geo_impfstand:any;
   land_changed: boolean;
   dosen_projektion_all: any;
@@ -118,9 +120,17 @@ export class StartComponent implements OnInit {
           this.kapazitaetsstand = data["stand"];
           this.ewz_bl = data["data"];
           this.bl_liste = this.getValues(this.ewz_bl, "Bundesland");
+          this.sort_regions();
           this.impfkapazitaet_bund = this.getValues(this.filterArray(this.ewz_bl, "Bundesland", "Gesamt"), "Impfkapazitaet")[0];
           this.getexternaldata();
         });
+  }
+
+  sort_regions(){
+    let input = this.bl_liste;
+    input = input.filter(word => word!="Gesamt").sort();
+    this.bl_liste  = ["Gesamt"].concat(input);
+    
   }
 
   getexternaldata() {
@@ -151,7 +161,7 @@ export class StartComponent implements OnInit {
     this.geo_impfstand = this.filterArray(this.stand_impfungen_hersteller, "geo", this.current_bl);
     this.filter_newdata();
     this.update_params();
-    console.log('STANDHST',this.geo_impfstand);
+    this.hst_lager = this.make_hersteller_overview(this.geo_impfstand);    
   }
 
 
@@ -172,10 +182,8 @@ export class StartComponent implements OnInit {
     this.new_simresult = this.do_simulation_new(this.dosen_projektion_all_hersteller_filtered, this.params);
     this.risktimes= this.update_risktimes(this.new_simresult,'Anteil Durchimpfung');
     this.risktimes_firstdose= this.update_risktimes(this.new_simresult,'Anteil Erst-Dosis');
-    // this.all_bl_simresults = this.all_region_sim();
-    // console.log(this.risktimes,this.risktimes_firstdose);
     this.simple_aerzte_impfen = this.params.varzt_tage > 0;
-    this.simple_alle_zulassen = this.params.impfstoffart != "zugelassen";
+    this.simple_alle_zulassen = this.params.impfstoffart != "zugelassen";    
   }
 
   change_simple() {
@@ -215,7 +223,6 @@ export class StartComponent implements OnInit {
     let time: Array<number> = this.getValues(this.sortArray(this.filterArray(input, "hersteller", hersteller[0]), 'kw'), "kw");
     let firstweek = time[0];
     let impfstand = this.geo_impfstand;
-    console.log("IMPFSTAND",impfstand);
     let result_erstimpfungen = [];
     let result_zweitimpfungen = [];
     let finalresult = [];
@@ -601,8 +608,19 @@ export class StartComponent implements OnInit {
   }
 
 exportascsv(name,data){
-  let result = this.csv.exportToCsv(name,data);
-  console.log(result);
+  let result = this.csv.exportToCsv(name,data);  
+}
+
+make_hersteller_overview(data){
+  let result = [];
+  for (let row of data){
+    let output= {};
+    output['Dosen auf Lager']=row['dosen_geliefert']-row['dosen_verabreicht_erst']-row['dosen_verabreicht_zweit'];
+    output['Hersteller']= row['hersteller'];
+    result.push(output);    
+  }
+  this.sortArray(result,'Dosen auf Lager')
+  return result;
 }
 
 }
