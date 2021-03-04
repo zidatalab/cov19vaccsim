@@ -82,7 +82,7 @@ export class StartComponent implements OnInit {
     impflinge: 67864036,
     addweekstoabstand: 0,
     impfstoffart: "zugelassen",
-    ruecklage: true,
+    ruecklage: false,
     anteil_impfbereit:1.0,
     verteilungszenario: this.verteilungszenarien[1]
   };
@@ -307,6 +307,13 @@ export class StartComponent implements OnInit {
             let lastweek_erst = this.filterArray(this.filterArray(result_erstimpfungen, "hersteller", thehersteller), "kw", vorwoche)[0];
             let lastweek_zweit = this.filterArray(this.filterArray(result_zweitimpfungen, "hersteller", thehersteller), "kw", vorwoche)[0];
             let dosen_verfuegbar = theinput['dosen_kw'] * liefermenge + lastweek_erst['dosenspeicher'];
+
+            if ((thewoche- firstweek)<4){
+              let impfstand_hersteller = this.filterArray(impfstand, "hersteller", thehersteller)[0];
+              let hersteller_restdosen= impfstand_hersteller['dosen_geliefert'] - theinput['dosen_verabreicht_erst'] - theinput['dosen_verabreicht_zweit'];
+              dosen_verfuegbar=dosen_verfuegbar+hersteller_restdosen/4;              
+            }
+
             // Bedarf aus zurückliegenden Erstimpfungen seit firstweek
             let previous_erst = 0;
             if ((thewoche - abstand) >= firstweek) {
@@ -343,21 +350,24 @@ export class StartComponent implements OnInit {
           let vorwoche = thewoche - 1;
           let lastweek_erst = this.filterArray(this.filterArray(result_erstimpfungen, "hersteller", thehersteller), "kw", vorwoche)[0];
           let info_zweitimpfungen_aktuelle_woche = 0;
-          let impfstand_hersteller = this.filterArray(impfstand, "hersteller", thehersteller)[0];
-          let hersteller_restdosen= impfstand_hersteller['dosen_geliefert'] - theinput['dosen_verabreicht_erst'] - theinput['dosen_verabreicht_zweit'];
           let dosen_verfuegbar = theinput['dosen_kw'] * liefermenge + lastweek_erst['dosenspeicher'];
           let ruecklage = 0;
           let topush = {};
+
+          // Wenn 2 Anwendungen keine Restdosen da verfügbare Dosen = Dosenspeicher aus Zweitimpfungen
           if (theinput["anwendungen"] == 2) {
             info_zweitimpfungen_aktuelle_woche = this.filterArray(this.filterArray(result_zweitimpfungen, "hersteller", thehersteller), "kw", thewoche)[0];
             dosen_verfuegbar = info_zweitimpfungen_aktuelle_woche['dosenspeicher'];
             ruecklage = Math.round(dosen_verfuegbar * theinput['ruecklage']);
           }
-          if ((thewoche- firstweek)<4){
+          // Wenn 1 Anwendung Restdosen berücksichtigen
+          if ((theinput["anwendungen"] == 1) && ((thewoche- firstweek)<4)){
+            let impfstand_hersteller = this.filterArray(impfstand, "hersteller", thehersteller)[0];
+            let hersteller_restdosen= impfstand_hersteller['dosen_geliefert'] - theinput['dosen_verabreicht_erst'] - theinput['dosen_verabreicht_zweit'];
             dosen_verfuegbar=dosen_verfuegbar+hersteller_restdosen/4;
-            topush['add_restdosen'] = hersteller_restdosen/4;
             ruecklage = Math.round(dosen_verfuegbar * theinput['ruecklage']);
           }
+
           if (!theruecklage || theinput["anwendungen"] == 1) {
             ruecklage = 0;
           }
