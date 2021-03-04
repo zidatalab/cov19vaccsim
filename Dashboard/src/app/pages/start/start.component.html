@@ -457,6 +457,20 @@
                     </div>
 
                 </div>
+                <div *ngIf="this.showdurchimpfung && false" fxFlex fxFlex.lt-md=100>
+                    <h2>Lieferungen nach Herstellern</h2>
+                    <div>
+                        <app-plot [(data)]="this.geo_impfstand" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
+                            xvalue="hersteller" 
+                            [outcomes]="['dosen_geliefert']" plottype="bar"></app-plot>
+                    </div>
+                    <div class="padding lightgreycolor">
+                        <p class="mat-caption">
+                            Legende:<br>Projektion auf Basis der aktuellen Verträge mit den Herstellern.
+                        </p>
+                    </div>
+
+                </div>
 
 
             </div>

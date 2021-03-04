@@ -42,6 +42,7 @@ export class StartComponent implements OnInit {
   impfkapazitaet_bund: number;
   stand_bmg_lieferungen:any;
   herstellerliste: any;
+  geo_impfstand:any;
   land_changed: boolean;
   dosen_projektion_all: any;
   dosen_projektion_all_hersteller: any;
@@ -131,12 +132,13 @@ export class StartComponent implements OnInit {
           .subscribe(data => {
             this.stand_impfungen_hersteller = data;
             this.stand_bmg_lieferungen = new Date(data[0]['Stand_BMG']);
-            console.log('STANDBMG',this.stand_bmg_lieferungen);
+            
             this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/tabledata/impfsim_lieferungen.json')
               .subscribe(data => {
                 this.dosen_projektion_all_hersteller = data;
                 this.update_kapazitaet();
               });
+            
           });
 
       });
@@ -146,9 +148,10 @@ export class StartComponent implements OnInit {
   update_kapazitaet() {
     this.stand_impfungen_data_aktuell_current = this.filterArray(this.stand_impfungen_data_aktuell, "Bundesland", this.current_bl)[0];
     this.geo_lieferungen_bisher=this.sumArray(this.getValues(this.filterArray(this.stand_impfungen_hersteller,'geo',this.current_bl),'dosen_geliefert'));
+    this.geo_impfstand = this.filterArray(this.stand_impfungen_hersteller, "geo", this.current_bl);
     this.filter_newdata();
     this.update_params();
-    
+    console.log('STANDHST',this.geo_impfstand);
   }
 
 
@@ -211,7 +214,7 @@ export class StartComponent implements OnInit {
     let hersteller = this.herstellerliste;
     let time: Array<number> = this.getValues(this.sortArray(this.filterArray(input, "hersteller", hersteller[0]), 'kw'), "kw");
     let firstweek = time[0];
-    let impfstand = this.filterArray(this.stand_impfungen_hersteller, "geo", this.current_bl);
+    let impfstand = this.geo_impfstand;
     let result_erstimpfungen = [];
     let result_zweitimpfungen = [];
     let finalresult = [];
@@ -226,7 +229,8 @@ export class StartComponent implements OnInit {
         for (const thehersteller of hersteller) {
           let theinput = this.filterArray(this.filterArray(myinput, "hersteller", thehersteller), "kw", thewoche)[0];
           let impfstand_hersteller = this.filterArray(impfstand, "hersteller", thehersteller)[0];
-          let dosen_verfuegbar = theinput['dosen_kw'] * liefermenge + impfstand_hersteller['dosen_geliefert'] - theinput['dosen_verabreicht_erst'] - theinput['dosen_verabreicht_zweit'];
+          let hersteller_restdosen = (impfstand_hersteller['dosen_geliefert'] - theinput['dosen_verabreicht_erst'] - theinput['dosen_verabreicht_zweit']);
+          let dosen_verfuegbar = theinput['dosen_kw'] * liefermenge + hersteller_restdosen/4;
           // Nur falls Hersteller 2 Anwendungen
           if (theinput["anwendungen"] == 2) {            
             let topush = {};
@@ -259,8 +263,7 @@ export class StartComponent implements OnInit {
           let topush = {};
           if (theinput["anwendungen"] == 2) {
             info_zweitimpfungen_aktuelle_woche = this.filterArray(this.filterArray(result_zweitimpfungen, "hersteller", thehersteller), "kw", thewoche)[0];
-            dosen_verfuegbar = info_zweitimpfungen_aktuelle_woche['dosenspeicher']+ hersteller_restdosen/4;
-            topush['add_restdosen'] = hersteller_restdosen/4;
+            dosen_verfuegbar = info_zweitimpfungen_aktuelle_woche['dosenspeicher'];            
           }
 
           let ruecklage = Math.round(dosen_verfuegbar * theinput['ruecklage']);
@@ -353,9 +356,8 @@ export class StartComponent implements OnInit {
           if ((thewoche- firstweek)<4){
             dosen_verfuegbar=dosen_verfuegbar+hersteller_restdosen/4;
             topush['add_restdosen'] = hersteller_restdosen/4;
+            ruecklage = Math.round(dosen_verfuegbar * theinput['ruecklage']);
           }
-
-          
           if (!theruecklage || theinput["anwendungen"] == 1) {
             ruecklage = 0;
           }
@@ -395,9 +397,7 @@ export class StartComponent implements OnInit {
           this.sumArray(this.getValues(input_zweit, 'dosenlieferung_kw'));
         topush['Verfügbare Dosen'] = 
           this.sumArray(this.getValues(input_zweit, 'dosen_verfuegbar'))+
-          this.sumArray(this.getValues(input_erst, 'dosen_verfuegbar_initial'))+
-          this.sumArray(this.getValues(input_erst, 'add_restdosen'));      
-                     
+          this.sumArray(this.getValues(input_erst, 'dosen_verfuegbar_initial'));      
         topush['Verimpfte Dosen'] = 
           this.sumArray(this.getValues(input_erst, 'impfungen'))+
           this.sumArray(this.getValues(input_zweit, 'impfungen'));       
