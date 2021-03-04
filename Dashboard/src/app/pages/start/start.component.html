@@ -99,13 +99,7 @@
                                 <app-plot [(data)]="this.hst_lager" 
                                     xvalue="Hersteller" [colorscheme]="['green']"
                                     [outcomes]="['Dosen auf Lager']" plottype="hbar"></app-plot>
-                            </div>
-                            <div class="padding lightgreycolor">
-                                <p class="mat-caption">
-                                    Legende:<br>Projektion auf Basis der aktuellen Verträge mit den Herstellern.
-                                </p>
-                            </div>
-        
+                            </div> 
                         </div>
                         <div fxHide.lt-md=true fxFlex>
 
@@ -116,13 +110,7 @@
                                 <app-plot [(data)]="this.dosen_projektion_all_hersteller_filtered" 
                                     xvalue="kw" colorby="hersteller"
                                     [outcomes]="['dosen_kw']" plottype="stackedarea"></app-plot>
-                            </div>
-                            <div class="padding lightgreycolor">
-                                <p class="mat-caption">
-                                    Legende:<br>Projektion auf Basis der aktuellen Verträge mit den Herstellern.
-                                </p>
-                            </div>
-        
+                            </div>      
                         </div>
                     </div>
                 </div>
