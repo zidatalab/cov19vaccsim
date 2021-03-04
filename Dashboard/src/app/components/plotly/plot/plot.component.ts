@@ -8,7 +8,8 @@ import { Component, OnInit , Input} from '@angular/core';
 export class PlotComponent implements OnInit {
   @Input() data:any;
   @Input() xvalue:string;
-  @Input() outcomes:[]; 
+  @Input() colorby:string;
+  @Input() outcomes:any; 
   @Input() plottype:String ; // ["bar","hbar","tsline"]; 
   @Input() customdata:any;
   @Input() customconfig:any; 
@@ -59,7 +60,19 @@ export class PlotComponent implements OnInit {
     };
     }
 
-    if (this.plottype=="tsline" || this.plottype=="lines" || this.plottype=="area"){
+    if (this.plottype=="stackedbar"){
+      this.plotlytype="bar";
+      this.plotlayout = {
+        barmode:"stack",
+        xaxis: { fixedrange: false, type: 'category', automargin: false },
+        yaxis: { fixedrange: true, title: '', automargin: true ,rangemode: 'tozero'},
+        autosize: false, padding: 0,
+        legend: { x: 1,        xanchor: 'right',        y: .8    , bgcolor: 'ffffffa7'  },
+        margin: { l: 0, r: 100, b: 100, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
+      };
+      }
+
+    if (this.plottype=="tsline" || this.plottype=="lines" || this.plottype=="area" || this.plottype=="stackedarea"){
     this.plotlytype="lines";
     this.plotlayout = {
       xaxis: { fixedrange: false, automargin: false },
@@ -88,18 +101,52 @@ export class PlotComponent implements OnInit {
     this.plotlayout['showlegend'] = true;
   }
 
-  this.plotdata = this.make_plotdata(this.data,this.xvalue,this.outcomes,this.plotlytype);
+  let plotdata = this.data;
+  let outcomes = this.outcomes;
+  if (this.colorby){
+    outcomes = this.getuniqueValues(plotdata,this.colorby);
+    plotdata = this.make_colorbyvalues();  
+    console.log(plotdata);  
+  }
+  
+
+  this.plotdata = this.make_plotdata(plotdata,this.xvalue,outcomes,this.plotlytype);
+  }
+
+  make_colorbyvalues(){
+    let newdata = [];
+    let inputdata = this.data;
+    let thecolorvalues = this.getuniqueValues(inputdata,this.colorby);   
+    let thexvalues = this.getuniqueValues(inputdata,this.xvalue);   
+    let theoutcome = this.outcomes[0];
+    for (let xvalue of thexvalues){
+      let topush = {};
+      topush[this.xvalue]=xvalue;
+      for (let tocolor of thecolorvalues){
+        let datapoint = this.filterArray(this.filterArray(inputdata,this.colorby,tocolor),this.xvalue,xvalue)[0];
+        if (datapoint){
+          topush[tocolor]=datapoint[theoutcome];
+        } 
+      }
+      newdata.push(topush);
+    }
+    return newdata;
+
   }
 
   
 
   make_trace(xdata= [] ,ydata = [],name:string,type=""){
-    return {
+    let trace = {
       x: xdata,
       y: ydata,
       name: name,
       type: type
     }
+    if (this.plottype=="stackedarea"){
+      trace['stackgroup']="one";
+    }
+    return trace;
   }
 
 make_plotdata(source=[], xaxis="",ylist=[],type="bar",colors=this.colorscheme){
@@ -144,6 +191,11 @@ getValues(array, key) {
    return values;
 }
 
+getuniqueValues(array, key) {
+  let items = this.getValues(array, key);
+  return [...new Set(items)];
+}
+
 filterArray(array,key,value){
   let i =0
   let result = []
@@ -153,6 +205,8 @@ filterArray(array,key,value){
   }
   return result
 }
+
+
 
 
 }
