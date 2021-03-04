@@ -215,6 +215,7 @@ export class StartComponent implements OnInit {
     let time: Array<number> = this.getValues(this.sortArray(this.filterArray(input, "hersteller", hersteller[0]), 'kw'), "kw");
     let firstweek = time[0];
     let impfstand = this.geo_impfstand;
+    console.log("IMPFSTAND",impfstand);
     let result_erstimpfungen = [];
     let result_zweitimpfungen = [];
     let finalresult = [];
@@ -229,7 +230,7 @@ export class StartComponent implements OnInit {
         for (const thehersteller of hersteller) {
           let theinput = this.filterArray(this.filterArray(myinput, "hersteller", thehersteller), "kw", thewoche)[0];
           let impfstand_hersteller = this.filterArray(impfstand, "hersteller", thehersteller)[0];
-          let hersteller_restdosen = (impfstand_hersteller['dosen_geliefert'] - theinput['dosen_verabreicht_erst'] - theinput['dosen_verabreicht_zweit']);
+          let hersteller_restdosen= impfstand_hersteller['dosen_geliefert'] - impfstand_hersteller['dosen_verabreicht_erst'] - impfstand_hersteller['dosen_verabreicht_zweit'];
           let dosen_verfuegbar = theinput['dosen_kw'] * liefermenge + hersteller_restdosen/4;
           // Nur falls Hersteller 2 Anwendungen
           if (theinput["anwendungen"] == 2) {            
@@ -257,7 +258,7 @@ export class StartComponent implements OnInit {
         for (const thehersteller of hersteller) {
           let theinput = this.filterArray(this.filterArray(myinput, "hersteller", thehersteller), "kw", thewoche)[0];
           let impfstand_hersteller = this.filterArray(impfstand, "hersteller", thehersteller)[0];
-          let hersteller_restdosen= impfstand_hersteller['dosen_geliefert'] - theinput['dosen_verabreicht_erst'] - theinput['dosen_verabreicht_zweit'];
+          let hersteller_restdosen= impfstand_hersteller['dosen_geliefert'] - impfstand_hersteller['dosen_verabreicht_erst'] - impfstand_hersteller['dosen_verabreicht_zweit'];
           let info_zweitimpfungen_aktuelle_woche = 0;
           let dosen_verfuegbar = theinput['dosen_kw'] * liefermenge + hersteller_restdosen/4;
           let topush = {};
@@ -310,7 +311,7 @@ export class StartComponent implements OnInit {
 
             if ((thewoche- firstweek)<4){
               let impfstand_hersteller = this.filterArray(impfstand, "hersteller", thehersteller)[0];
-              let hersteller_restdosen= impfstand_hersteller['dosen_geliefert'] - theinput['dosen_verabreicht_erst'] - theinput['dosen_verabreicht_zweit'];
+              let hersteller_restdosen= impfstand_hersteller['dosen_geliefert'] - impfstand_hersteller['dosen_verabreicht_erst'] - impfstand_hersteller['dosen_verabreicht_zweit'];
               dosen_verfuegbar=dosen_verfuegbar+hersteller_restdosen/4;              
             }
 
@@ -363,7 +364,7 @@ export class StartComponent implements OnInit {
           // Wenn 1 Anwendung Restdosen berücksichtigen
           if ((theinput["anwendungen"] == 1) && ((thewoche- firstweek)<4)){
             let impfstand_hersteller = this.filterArray(impfstand, "hersteller", thehersteller)[0];
-            let hersteller_restdosen= impfstand_hersteller['dosen_geliefert'] - theinput['dosen_verabreicht_erst'] - theinput['dosen_verabreicht_zweit'];
+            let hersteller_restdosen= impfstand_hersteller['dosen_geliefert'] - impfstand_hersteller['dosen_verabreicht_erst'] - impfstand_hersteller['dosen_verabreicht_zweit'];
             dosen_verfuegbar=dosen_verfuegbar+hersteller_restdosen/4;
             ruecklage = Math.round(dosen_verfuegbar * theinput['ruecklage']);
           }
