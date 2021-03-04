@@ -4,7 +4,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { StartComponent } from './pages/start/start.component';
 import { AuthGuardService } from './services/auth-guard.service';
-import {PrivateComponent} from './pages/private/private.component'
+import { PrivateComponent } from './pages/private/private.component'
 import { MethodsComponent } from "./pages/methods/methods.component";
 
 const routes: Routes = [
@@ -19,8 +19,9 @@ const routes: Routes = [
     canActivate: [AuthGuardService]
   },
   {
-    path: 'Methoden', component: MethodsComponent,    
-  }
+    path: 'Methoden', component: MethodsComponent,
+  },
+  { path: '**', component: StartComponent }
 
 ];
 
