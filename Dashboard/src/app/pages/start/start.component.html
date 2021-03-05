@@ -18,9 +18,9 @@
     fxLayoutGap="1rem" fxLayoutAllign="space-around">
     <div fxFlex=100>
         <mat-card *ngIf="this.stand_impfungen_data_aktuell_current">
-            <mat-card-title>Stand der Impfkampagne
+            <mat-card-title><h1>Stand der Impfkampagne
                 <span *ngIf="this.current_bl!='Gesamt'"> in {{this.current_bl}}</span>
-                <span *ngIf="this.current_bl=='Gesamt'"> in Deutschland</span>
+                <span *ngIf="this.current_bl=='Gesamt'"> in Deutschland</span></h1>
             </mat-card-title>
             <mat-card-subtitle>Datenbasis: Impfungen lt. RKI (Stand {{this.impfstand_rki | date:'shortDate'}}), Lieferungen lt. BMG (Stand {{this.stand_bmg_lieferungen | date:'shortDate'}}), Kapazität lt. GMK (Stand {{this.kapazitaetsstand | date:'shortDate'}})</mat-card-subtitle>
 
@@ -108,7 +108,7 @@
                             <h2>Erwartete Lieferungen</h2>
                             <div>
                                 <app-plot [(data)]="this.dosen_projektion_all_hersteller_filtered" 
-                                    xvalue="Datum" colorby="hersteller" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
+                                    xvalue="Datum" colorby="hersteller" [custommargins]="{ l: 0, r: 0, b: 45, t: 0 }"
                                     [outcomes]="['dosen_kw']" plottype="stackedarea"></app-plot>
                             </div>      
                         </div>
@@ -125,9 +125,9 @@
             <mat-card-subtitle>Datenbasis: Gemeldete Impfkapazität lt. GMK (Stand 18.02.21), Lieferungen lt. BMG (Stand {{this.stand_bmg_lieferungen | date:'shortDate'}})</mat-card-subtitle>
             <mat-card-content>
                 <div *ngIf="this.stand_impfungen_data_aktuell_current" fxLayout="column">
-                    <div fxFlex=100 fxLayout="column wrap" fxLayoutGap="0rem">
+                    <div fxFlex=100 fxLayout="column wrap" fxLayoutGap="1rem">
                         <div fxLayout="row wrap" fxLayoutGap="2rem">
-                            <div class="mat-padding" fxFlex=30 >
+                            <div class="mat-padding" fxFlex=30 fxFlex.lt-md=100>
                                 <div>
                                     <p>
                                         <span class="accentcolor bignum">{{this.params.kapazitaet_pro_woche |
@@ -136,7 +136,7 @@
                                     </p>
                                 </div>
                             </div>
-                            <div fxFlex >
+                            <div fxFlex=30 fxFlex.lt-md=100 >
                                 <div class="mat-padding">
                                     <p>
                                         <span class="accentcolor bignum">
@@ -147,7 +147,7 @@
                                     </p>
                                 </div>
                             </div>
-                            <div fxFlex >
+                            <div fxFlex=30 fxFlex.lt-md=100 >
                                 <div class="mat-padding">
                                     <p>
                                         <span class="accentcolor bignum">{{this.params.kapazitaet_pro_tag |
@@ -335,9 +335,9 @@
 
     <div fxFlex=100 *ngIf="this.risktimes">
         <mat-card>
-            <mat-card-title>Detaillierte Simulation
+            <mat-card-title><h1>Detaillierte Simulation
                 <span *ngIf="this.current_bl!='Gesamt'"> für {{this.current_bl}}</span>
-                <span *ngIf="this.current_bl=='Gesamt'"> für Deutschland</span>
+                <span *ngIf="this.current_bl=='Gesamt'"> für Deutschland</span></h1> 
             </mat-card-title>
             <div fxLayout="row wrap" fxLayoutGap="2rem" fxLayoutAllign="space-between">
                 <div *ngIf="this.showdurchimpfung" fxFlex=100 fxFlex.lt-md=100 fxLayout="row wrap" fxLayoutGap="1rem"
@@ -358,11 +358,11 @@
                                 <span *ngIf="group.Datum=='nie'" class="primarycolor bignum" style="font-size: 2rem;">
                                     später </span>
                                 <span fxHide.lt-md="true"><br></span>
-                                <span *ngIf="group.Stufe!=6">Risikostufe {{group.Stufe}}<br>
-                                    {{group['Anteil']*100 | number:'1.0-0'}}%
+                                <span *ngIf="group.Stufe!=6">Risikostufe {{group.Stufe}}<span fxHide.lt-md="true"><br>
+                                    {{group['Anteil']*100 | number:'1.0-0'}}%</span>
                                 </span>
-                                <span *ngIf="group.Stufe==6">Risikostufe {{group.Stufe}}<br>
-                                    übrige Bevölkerung
+                                <span *ngIf="group.Stufe==6">Risikostufe {{group.Stufe}}<span fxHide.lt-md="true"><br>
+                                    übrige Bevölkerung</span>
                                 </span>
 
                             </p>
@@ -382,11 +382,11 @@
                                 <span *ngIf="group.Datum=='nie'" class="accentcolor bignum" style="font-size: 2rem;">
                                     später </span>
                                 <span fxHide.lt-md="true"><br></span>
-                                <span *ngIf="group.Stufe!=6">Risikostufe {{group.Stufe}}<br>
-                                    {{group['Anteil']*100 | number:'1.0-0'}}%
+                                <span *ngIf="group.Stufe!=6">Risikostufe {{group.Stufe}}<span fxHide.lt-md="true"><br>
+                                    {{group['Anteil']*100 | number:'1.0-0'}}%</span>
                                 </span>
-                                <span *ngIf="group.Stufe==6">Risikostufe {{group.Stufe}}<br>
-                                    übrige Bevölkerung
+                                <span *ngIf="group.Stufe==6">Risikostufe {{group.Stufe}}<span fxHide.lt-md="true"><br>
+                                    übrige Bevölkerung</span>
                                 </span>
 
                             </p>
@@ -407,7 +407,7 @@
                 <div fxFlex=100>
                     <h2>Gelieferte und verimpfte Dosen</h2>
                     <div>
-                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
+                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 45, t: 0 }"
                             xvalue="date" [colorscheme]="['crimson','green']"
                             [outcomes]="['Gelieferte Dosen','Verimpfte Dosen']" plottype="area"></app-plot>
                     </div>
@@ -421,7 +421,7 @@
                 <div fxFlex=45 fxFlex.lt-md=100>
                     <h2>Warteschlange Zweitimpfung</h2>
                     <div>
-                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
+                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 45, t: 0 }"
                             xvalue="date" [colorscheme]="['navy']" [outcomes]="['Wartschlange Zweitimpfung']"
                             plottype="area">
                         </app-plot>
@@ -437,7 +437,7 @@
                 <div fxFlex=45 fxFlex.lt-md=100>
                     <h2>Unverimpfte Dosen</h2>
                     <div>
-                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
+                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 45, t: 0 }"
                             xvalue="date" [colorscheme]="['orange']" [outcomes]="['Unverimpfte Dosen']" plottype="area">
                         </app-plot>
                     </div>
@@ -449,10 +449,10 @@
 
                 </div>
 
-                <div fxFlex=45 fxFlex.lt-md=100>
+                <div *ngIf="this.showdurchimpfung" fxFlex=45 fxFlex.lt-md=100>
                     <h2>Abgeschlossene Immunisierungen</h2>
                     <div>
-                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
+                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 45, t: 0 }"
                             xvalue="date" [colorscheme]="['green']" [outcomes]="['patienten_durchgeimpft']"
                             plottype="area">
                         </app-plot>
