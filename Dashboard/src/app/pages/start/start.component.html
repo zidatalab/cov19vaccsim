@@ -93,10 +93,10 @@
                         </p>
                     </div>
                     <div fxFlex=100  fxLayout="row wrap" fxLayoutGap="2rem">
-                        <div *ngIf="this.showdurchimpfung" fxFlex=45 fxFlex.lt-md=100>
+                        <div *ngIf="this.showdurchimpfung" fxFlex=35 fxFlex.lt-md=100>
                             <h2>Lagerbestand am {{this.impfstand_rki | date:'shortDate'}}</h2>
                             <div>
-                                <app-plot [(data)]="this.hst_lager" 
+                                <app-plot [(data)]="this.hst_lager" [custommargins]="{ l: 70, r: 0, b: 0, t: 0 }"
                                     xvalue="Hersteller" [colorscheme]="['green']"
                                     [outcomes]="['Dosen auf Lager']" plottype="hbar"></app-plot>
                             </div> 
@@ -104,11 +104,11 @@
                         <div fxHide.lt-md=true fxFlex>
 
                         </div>
-                        <div *ngIf="this.showdurchimpfung" fxFlex=45 fxFlex.lt-md=100>
+                        <div *ngIf="this.showdurchimpfung" fxFlex=55 fxFlex.lt-md=100>
                             <h2>Erwartete Lieferungen</h2>
                             <div>
                                 <app-plot [(data)]="this.dosen_projektion_all_hersteller_filtered" 
-                                    xvalue="kw" colorby="hersteller"
+                                    xvalue="Datum" colorby="hersteller" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
                                     [outcomes]="['dosen_kw']" plottype="stackedarea"></app-plot>
                             </div>      
                         </div>

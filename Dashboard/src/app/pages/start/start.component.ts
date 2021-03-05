@@ -205,11 +205,13 @@ export class StartComponent implements OnInit {
   }
 
   filter_newdata() {
-    this.dosen_projektion_all_hersteller_filtered = this.filterArray(this.filterArray(this.dosen_projektion_all_hersteller, "Bundesland", this.current_bl), "Verteilungsszenario", this.params.verteilungszenario);
+    this.dosen_projektion_all_hersteller_filtered = this.getDateforValueinArray(
+      this.filterArray(this.filterArray(this.dosen_projektion_all_hersteller, "Bundesland", this.current_bl), "Verteilungsszenario", this.params.verteilungszenario),"kw",2021);
     if (this.params.impfstoffart == 'zugelassen') {
       this.dosen_projektion_all_hersteller_filtered = this.filterArray(this.dosen_projektion_all_hersteller_filtered, 'zugelassen', 1);
     }
     this.herstellerliste = this.getValues(this.sortArray(this.filterArray(this.dosen_projektion_all_hersteller_filtered, "kw", this.dosen_projektion_all_hersteller_filtered[0]["kw"]), 'prioritaet'), "hersteller");
+    
   }
 
   do_simulation_new(myinput, params) {
@@ -607,6 +609,16 @@ export class StartComponent implements OnInit {
     return ISOweekStart.toISOString().substring(0, 10);
   }
 
+getDateforValueinArray(array,value,year,datename="Datum"){
+  let result = [];
+  for (let row of array){
+    let topush = row;
+    topush[datename] = this.getDateOfISOWeek(row[value],year,)
+    result.push(topush);
+  }
+  return result;
+}
+
 exportascsv(name,data){
   let result = this.csv.exportToCsv(name,data);  
 }
@@ -622,5 +634,7 @@ make_hersteller_overview(data){
   this.sortArray(result,'Dosen auf Lager')
   return result;
 }
+
+
 
 }
