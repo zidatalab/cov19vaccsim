@@ -581,6 +581,20 @@ export class StartComponent implements OnInit {
     return result
   }
 
+  filterkeys(array,keys){
+    let result =  [];
+    for (let item of array) {
+      let topush = {};
+      for (let key of keys){
+        if (item[key]){
+          topush[key]= item[key];
+        }        
+      }
+      result.push(topush);
+    }
+    return result;
+  }
+
   sortArray(array, key, order = "ascending") {
     let result = array;
     if (order == "ascending") {

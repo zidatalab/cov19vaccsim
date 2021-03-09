@@ -508,6 +508,13 @@
                         <div>
                             <a mat-raised-button (click)="this.exportascsv('Zeitreihe',this.new_simresult);" class="blackbtn">Zeitreihe</a>
                         </div>
+                        <div>
+                            <a mat-raised-button 
+                            (click)="this.exportascsv('Liefermengen',
+                            this.filterkeys(this.dosen_projektion_all_hersteller_filtered,
+                            ['Verteilungsszenario','kw','Bundesland','hersteller','dosen_kw'])
+                            );" class="blackbtn">Liefermengen</a>
+                        </div>
                     </div>
                 </div>
             </mat-card-content>
