@@ -500,17 +500,17 @@
 
                     <div fxFlex=100 fxLayout="row wrap" fxLayoutGap="1rem" fxLayoutAlign="space-between">
                         <div>
-                            <a mat-raised-button (click)="this.exportascsv('Parameter',this.params);" class="blackbtn">Parameter</a>
+                            <a mat-raised-button (click)="this.exportascsv('Parameter.csv',this.params);" class="blackbtn">Parameter</a>
                         </div>
                         <div>
-                            <a mat-raised-button (click)="this.exportascsv('Durchimpfung',this.risktimes);"class="blackbtn">Risikogruppen</a>
+                            <a mat-raised-button (click)="this.exportascsv('Durchimpfung.csv',this.risktimes);"class="blackbtn">Risikogruppen</a>
                         </div>
                         <div>
-                            <a mat-raised-button (click)="this.exportascsv('Zeitreihe',this.new_simresult);" class="blackbtn">Zeitreihe</a>
+                            <a mat-raised-button (click)="this.exportascsv('Zeitreihe.csv',this.new_simresult);" class="blackbtn">Zeitreihe</a>
                         </div>
                         <div>
                             <a mat-raised-button 
-                            (click)="this.exportascsv('Liefermengen',
+                            (click)="this.exportascsv('Liefermengen.csv',
                             this.filterkeys(this.dosen_projektion_all_hersteller_filtered,
                             ['Verteilungsszenario','kw','Bundesland','hersteller','dosen_kw'])
                             );" class="blackbtn">Liefermengen</a>
