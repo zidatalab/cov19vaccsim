@@ -288,6 +288,7 @@ export class StartComponent implements OnInit {
           topush['kapazitaet__vorher'] = kapazitaet_verbleibend;
           topush['dosen_verfuegbar'] = dosen_verfuegbar - ruecklage;
           topush['impfungen'] = Math.min(topush['dosen_verfuegbar'] , kapazitaet_verbleibend);
+          
           topush['impfungen_erst_kum'] = topush['impfungen'] + impfstand_hersteller['dosen_verabreicht_erst'];
           kapazitaet_verbleibend = kapazitaet_verbleibend - topush['impfungen'];
           topush['kapazitaet_verbleibend'] = kapazitaet_verbleibend;
