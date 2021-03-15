@@ -17,6 +17,17 @@
 <div *ngIf="(this.token || !this.notstarted) && this.new_simresult" class="container" fxLayout="row wrap"
     fxLayoutGap="1rem" fxLayoutAllign="space-around">
     <div fxFlex=100>
+        <mat-card style="background-color: crimson;color:white">
+            <h1>Aktueller Hinweis</h1>
+            <p>Infolge der kurzfristigen Aussetzung der Impfungen mit AZ wird dieser Impfstoff ab dem 15.3.21, 16:30h als "nicht zugelassen" 
+                im Dashboard geführt. 
+                <strong>
+                    <a style="color:white" href="https://www.pei.de/DE/newsroom/hp-meldungen/hp-meldungen-node.html">Mehr Informationen (PEI)</a>
+                </strong>
+                </p>
+        </mat-card>
+        </div>
+    <div fxFlex=100>
         <mat-card *ngIf="this.stand_impfungen_data_aktuell_current">
             <mat-card-title><h1>Stand der Impfkampagne
                 <span *ngIf="this.current_bl!='Gesamt'"> in {{this.current_bl}}</span>
