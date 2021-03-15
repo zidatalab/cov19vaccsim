@@ -35,6 +35,9 @@ export class StartComponent implements OnInit {
   bl_liste: Array<string>;
   stand_impfungen_hersteller: any;
   kapazitaetsstand:string;
+  hersteller_zugelassen:any;
+  hersteller_nicht_zugelassen:any;
+  hersteller_add_nicht_zugelassen:any;
   stand_impfungen_data_aktuell: any;
   geo_lieferungen_bisher:any;
   stand_impfungen_data_aktuell_current: any;
@@ -84,6 +87,7 @@ export class StartComponent implements OnInit {
     impflinge: 67864036,
     addweekstoabstand: 0,
     impfstoffart: "zugelassen",
+    addhersteller: [],
     ruecklage: false,
     anteil_impfbereit:1.0,
     verteilungszenario: this.verteilungszenarien[1]
@@ -141,6 +145,9 @@ export class StartComponent implements OnInit {
         this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/tabledata/impfsim_start.json')
           .subscribe(data => {
             this.stand_impfungen_hersteller = data;
+            let allhersteller = this.filterArray(this.stand_impfungen_hersteller,"geo","Gesamt");            
+            this.hersteller_zugelassen=this.getValues(this.filterArray(allhersteller,"zugelassen",1),"hersteller");
+            this.hersteller_nicht_zugelassen=this.filterArray(allhersteller,"zugelassen",0);
             this.stand_bmg_lieferungen = new Date(data[0]['Stand_BMG']);
             
             this.http.get('https://raw.githubusercontent.com/zidatalab/covid19dashboard/master/data/tabledata/impfsim_lieferungen.json')
@@ -209,6 +216,15 @@ export class StartComponent implements OnInit {
       this.filterArray(this.filterArray(this.dosen_projektion_all_hersteller, "Bundesland", this.current_bl), "Verteilungsszenario", this.params.verteilungszenario),"kw",2021);
     if (this.params.impfstoffart == 'zugelassen') {
       this.dosen_projektion_all_hersteller_filtered = this.filterArray(this.dosen_projektion_all_hersteller_filtered, 'zugelassen', 1);
+      if (this.params.addhersteller.length>0){
+        for (const addthehersteller of this.params.addhersteller) {
+          let toadd = this.filterArray(this.filterArray(this.dosen_projektion_all_hersteller, "Bundesland", this.current_bl), 'hersteller', addthehersteller);
+          this.dosen_projektion_all_hersteller_filtered = this.dosen_projektion_all_hersteller_filtered.concat(toadd);
+        }
+        let data = this.dosen_projektion_all_hersteller_filtered;
+        data.sort((a, b) => a.hersteller.localeCompare(b.hersteller) || b.kw - a.kw);
+        this.dosen_projektion_all_hersteller_filtered = data;        
+      }
     }
     this.herstellerliste = this.getValues(this.sortArray(this.filterArray(this.dosen_projektion_all_hersteller_filtered, "kw", this.dosen_projektion_all_hersteller_filtered[0]["kw"]), 'prioritaet'), "hersteller");
     
@@ -607,6 +623,16 @@ export class StartComponent implements OnInit {
 
 
 
+  }
+
+  addremovehst(hersteller,status){
+    let check = this.params.addhersteller.includes('hersteller');
+    if (check==false && status==true){
+      this.params.addhersteller.push(hersteller);
+    }
+    if (status==false){
+      this.params.addhersteller= this.params.addhersteller.filter(item => item!==hersteller);      
+    }    
   }
 
   sumArray(array) {

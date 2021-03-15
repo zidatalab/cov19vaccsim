@@ -20,10 +20,10 @@
         <mat-card style="background-color: crimson;color:white">
             <h1>Aktueller Hinweis</h1>
             <p>Infolge der kurzfristigen Aussetzung der Impfungen mit AZ wird dieser Impfstoff ab dem 15.3.21, 16:30h als "nicht zugelassen" 
-                im Dashboard geführt. 
-                <strong>
-                    <a style="color:white" href="https://www.pei.de/DE/newsroom/hp-meldungen/hp-meldungen-node.html">Mehr Informationen (PEI)</a>
-                </strong>
+                im Dashboard geführt. <strong>
+                    <a style="color:white" href="https://www.pei.de/DE/newsroom/hp-meldungen/hp-meldungen-node.html">Weiterführende Informationen (PEI)</a>
+                </strong></p>
+                <p><em>Die detaillierten Simulationseinstellungen wurden um eine Funktion zum Hinzufügen einzelner, aktuell nicht zugelassener Impfstoffe ergänzt.</em>                
                 </p>
         </mat-card>
         </div>
@@ -304,6 +304,19 @@
                                         Impfstoffe</mat-radio-button>
                                 </mat-radio-group>
                             </div>
+                            <div *ngIf="this.params.impfstoffart=='zugelassen'">
+                                <p>...und zusätzlich:</p>
+                                <p
+                                    *ngFor="let hersteller of this.hersteller_nicht_zugelassen">
+                                    <mat-checkbox [(ngModel)]="hersteller.checked" 
+                                     (change)="this.addremovehst(hersteller.hersteller,hersteller.checked);this.update_kapazitaet();" >
+                                    {{hersteller.hersteller}}
+                                    </mat-checkbox>
+
+                            </p>
+                                
+                            </div>
+
                             <div>
                                 <span>Verteilung der Lieferungen:</span>
                                 <mat-radio-group class="my-radio-group" [(ngModel)]="this.params.verteilungszenario"
@@ -320,8 +333,8 @@
                                         (change)="this.update_kapazitaet();"></mat-slider>
                                     <strong>{{this.params.anteil_impfbereit*100 | number:'1.0-0'}} % </strong>impfbereit
                                 </p>
-                            </div>
-                            <div >
+                            </div> 
+                            <div>
                                 <span>Datenexport aktivieren </span><br>
                                 <mat-slide-toggle [(ngModel)]="this.datenexport">
                                 <span *ngIf="this.datenexport"> Ja</span>
