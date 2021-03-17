@@ -213,13 +213,15 @@ export class StartComponent implements OnInit {
   }
 
   filter_newdata() {
-    this.dosen_projektion_all_hersteller_filtered = this.getDateforValueinArray(
+    let alldata = this.getDateforValueinArray(
       this.filterArray(this.filterArray(this.dosen_projektion_all_hersteller, "Bundesland", this.current_bl), "Verteilungsszenario", this.params.verteilungszenario),"kw",2021);
+      this.dosen_projektion_all_hersteller_filtered = alldata;
+
     if (this.params.impfstoffart == 'zugelassen') {
       this.dosen_projektion_all_hersteller_filtered = this.filterArray(this.dosen_projektion_all_hersteller_filtered, 'zugelassen', 1);
       if (this.params.addhersteller.length>0){
         for (const addthehersteller of this.params.addhersteller) {
-          let toadd = this.filterArray(this.filterArray(this.dosen_projektion_all_hersteller, "Bundesland", this.current_bl), 'hersteller', addthehersteller);
+          let toadd = this.filterArray(alldata, 'hersteller', addthehersteller);
           this.dosen_projektion_all_hersteller_filtered = this.dosen_projektion_all_hersteller_filtered.concat(toadd);
         }
         let data = this.dosen_projektion_all_hersteller_filtered;
@@ -227,9 +229,8 @@ export class StartComponent implements OnInit {
         this.dosen_projektion_all_hersteller_filtered = data;        
       }
     }
-    console.log(this.filterArray(this.dosen_projektion_all_hersteller_filtered, "kw", this.dosen_projektion_all_hersteller_filtered[0]["kw"]));
     this.herstellerliste = this.removeduplicates(this.getValues(this.sortArray(this.filterArray(this.dosen_projektion_all_hersteller_filtered, "kw", this.dosen_projektion_all_hersteller_filtered[0]["kw"]), 'prioritaet'), "hersteller"));
-    console.log(this.herstellerliste);
+    
   }
 
   do_simulation_new(myinput, params) {
