@@ -1,5 +1,6 @@
 import { AnimationFactory } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
+import { unsupported } from '@angular/compiler/src/render3/view/util';
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CsvexportService } from 'src/app/services/csvexport.service';
@@ -226,8 +227,9 @@ export class StartComponent implements OnInit {
         this.dosen_projektion_all_hersteller_filtered = data;        
       }
     }
-    this.herstellerliste = this.getValues(this.sortArray(this.filterArray(this.dosen_projektion_all_hersteller_filtered, "kw", this.dosen_projektion_all_hersteller_filtered[0]["kw"]), 'prioritaet'), "hersteller");
-    
+    console.log(this.filterArray(this.dosen_projektion_all_hersteller_filtered, "kw", this.dosen_projektion_all_hersteller_filtered[0]["kw"]));
+    this.herstellerliste = this.removeduplicates(this.getValues(this.sortArray(this.filterArray(this.dosen_projektion_all_hersteller_filtered, "kw", this.dosen_projektion_all_hersteller_filtered[0]["kw"]), 'prioritaet'), "hersteller"));
+    console.log(this.herstellerliste);
   }
 
   do_simulation_new(myinput, params) {
@@ -658,6 +660,18 @@ getDateforValueinArray(array,value,year,datename="Datum"){
     result.push(topush);
   }
   return result;
+}
+
+removeduplicates(list){
+let uniqueNames = [];
+let lastel ;
+for (let el of list){
+if (el != lastel){
+  uniqueNames.push(el);
+  lastel = el;
+}
+}
+return uniqueNames;
 }
 
 exportascsv(name,data){
