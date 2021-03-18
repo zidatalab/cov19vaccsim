@@ -16,13 +16,14 @@
 </div>
 <div *ngIf="(this.token || !this.notstarted) && this.new_simresult" class="container" fxLayout="row wrap"
     fxLayoutGap="1rem" fxLayoutAllign="space-around">
-    <div fxFlex=100>
-        <mat-card style="background-color: rgb(108, 108, 108);color:white">
-            <h2>Aktueller Hinweis</h2>
-            <p>Infolge der kurzfristigen Aussetzung der Impfungen mit AZ wird dieser Impfstoff ab dem 15.3.21, 16:30h als "nicht zugelassen" 
-                im Dashboard geführt. <strong>
-                    <a style="color:white" href="https://www.pei.de/DE/newsroom/hp-meldungen/hp-meldungen-node.html">Weiterführende Informationen (PEI)</a>
-                </strong></p>
+    <div fxFlex=100 *ngIf="this.news.length>0">
+        <mat-card class="primarybg" style="color:white;" *ngIf="this.news.length>0">
+            <h2>Aktuelle Hinweise</h2>
+            <ng-container *ngFor="let newsitem of this.news">
+                <ng-container *ngIf="newsitem.show">
+                <p><strong>{{newsitem.header}}</strong><br>{{newsitem.text}} <span *ngIf="newsitem.url"><a style="color:white" [href]="newsitem.url"><strong>Weitere Informationen</strong></a></span></p> 
+                </ng-container>
+            </ng-container>
                 
         </mat-card>
         </div>

@@ -49,6 +49,7 @@ export class StartComponent implements OnInit {
   herstellerliste: any;
   hst_lager : any;
   geo_impfstand:any;
+  news:any = [];
   land_changed: boolean;
   dosen_projektion_all: any;
   dosen_projektion_all_hersteller: any;
@@ -160,6 +161,10 @@ export class StartComponent implements OnInit {
           });
 
       });
+    this.http.get('https://www.zidatasciencelab.de/covid19dashboard/data/news/cov19vaccsim.json').subscribe(
+      data=> {this.news =data;}
+    )
+
 
   }
 
