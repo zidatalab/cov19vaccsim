@@ -77,7 +77,7 @@ export class StartComponent implements OnInit {
   verteilungszenarien = ["Gleichverteilung", "Linearer Anstieg der Produktion in Q2"];
   params = {
     n_impfzentren: 433,
-    n_impfzentren_pat: 742,
+    n_impfzentren_pat: 742.32926426921808 ,
     impfzentren_tage: 7,
     n_varzt: 50000,
     n_varzt_pat: 20,
