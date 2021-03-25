@@ -230,7 +230,7 @@
                                 <br>Patienten pro Tag:<span fxHide.lt-md="true"><br></span>
                                 <mat-slider [(ngModel)]="this.params.n_impfzentren_pat" min="100" max="1500" step="10"
                                     (change)="this.update_kapazitaet();"></mat-slider>
-                                <strong>{{this.params.n_impfzentren_pat}}</strong>
+                                <strong>{{this.params.n_impfzentren_pat | number: '1.0-0'}}</strong>
                                 <br>Arbeitstage pro Woche:<span fxHide.lt-md="true"><br></span>
                                 <mat-slider [(ngModel)]="this.params.impfzentren_tage" min="0" max="7" step="1"
                                     (change)="this.update_kapazitaet();"></mat-slider>

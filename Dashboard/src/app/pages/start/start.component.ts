@@ -128,7 +128,6 @@ export class StartComponent implements OnInit {
           this.bl_liste = this.getValues(this.ewz_bl, "Bundesland");
           this.sort_regions();
           this.impfkapazitaet_bund = this.getValues(this.filterArray(this.ewz_bl, "Bundesland", "Gesamt"), "Impfkapazitaet")[0];
-          console.log("Kapazität",this.impfkapazitaet_bund);
           this.getexternaldata();
         });
   }
