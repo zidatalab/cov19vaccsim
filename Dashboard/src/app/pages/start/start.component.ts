@@ -81,7 +81,7 @@ export class StartComponent implements OnInit {
     impfzentren_tage: 7,
     n_varzt: 50000,
     n_varzt_pat: 30,
-    varzt_tage: 5,
+    varzt_tage: 3,
     kapazitaet_pro_tag: 0,
     kapazitaet_pro_woche: 0,
     warten_dosis_2: 5,
