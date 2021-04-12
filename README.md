@@ -14,7 +14,8 @@ First launch only:
 
 Build for github-pages
 
-`ng build --prod --base-href "https://www.zidatasciencelab.de/cov19vaccsim/"`
+`ng build --prod --base-href "/cov19vaccsim/"`
+`cp ../docs/index.html ../docs/404.html`
 
 The angular.json assumes that doc is the desired output dir.
 
