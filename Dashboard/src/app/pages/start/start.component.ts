@@ -201,7 +201,8 @@ export class StartComponent implements OnInit {
 
   change_simple() {
     if (this.simple_aerzte_impfen) {
-      this.params.varzt_tage = 5;
+      this.params.varzt_tage = 3;
+      this.params.n_varzt_pat= 30;
     }
     else {
       this.params.varzt_tage = 0;
