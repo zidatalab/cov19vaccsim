@@ -446,7 +446,7 @@
                         </p>
                     </div>
                 </div>
-                <div fxFlex=100>
+                <div fxFlex=45>
                     <h2>Gelieferte und verimpfte Dosen</h2>
                     <div>
                         <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 45, t: 0 }"
@@ -461,21 +461,37 @@
 
                 </div>
                 <div fxFlex=45 fxFlex.lt-md=100>
-                    <h2>Warteschlange Zweitimpfung</h2>
+                    <h2>Erstimpfungen nach Herstellern</h2>
                     <div>
                         <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 45, t: 0 }"
-                            xvalue="date" [outcomes]="['Warten: BNT/Pfizer','Warten: AZ', 'Warten: Moderna', 'Warten: J&J', 'Warten: Curevac', 'Warten: Sanofi/GSK']"
-                            plottype="area">
+                            xvalue="date" [outcomes]="['Erst: BNT/Pfizer','Erst: AZ', 'Erst: Moderna', 'Erst: J&J', 'Erst: Curevac', 'Erst: Sanofi/GSK']"
+                            plottype="stackedarea">
                         </app-plot>
                     </div>
                     <div class="padding lightgreycolor">
                         <p class="mat-caption">
-                            Legende:<br>Projektion auf Basis der aktuellen Verträge mit den Herstellern.
+                            Legende:<br>Projektion auf Basis der zugesagten Lieferungen und der aktuellen Verträge mit den Herstellern.
                         </p>
                     </div>
 
                 </div>
-                <div fxHide.lt-md=true fxFlex></div>
+                <div fxFlex=45 fxFlex.lt-md=100>
+                    <h2>Warteschlange Zweitimpfung</h2>
+                    <div>
+                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 45, t: 0 }"
+                            xvalue="date" [outcomes]="['Warten: BNT/Pfizer','Warten: AZ', 'Warten: Moderna', 'Warten: Curevac', 'Warten: Sanofi/GSK']"
+                            plottype="stackedarea">
+                        </app-plot>
+                    </div>
+                    <div class="padding lightgreycolor">
+                        <p class="mat-caption">
+                            Legende:<br>Projektion auf Basis der zugesagten Lieferungen und der aktuellen Verträge mit den Herstellern.
+                        </p>
+                    </div>
+
+                </div>
+                
+              
                 <div fxFlex=45 fxFlex.lt-md=100>
                     <h2>Unverimpfte Dosen</h2>
                     <div>
@@ -485,7 +501,7 @@
                     </div>
                     <div class="padding lightgreycolor">
                         <p class="mat-caption">
-                            Legende:<br>Projektion auf Basis der aktuellen Verträge mit den Herstellern.
+                            Legende:<br>Projektion auf Basis der zugesagten Lieferungen und der aktuellen Verträge mit den Herstellern.
                         </p>
                     </div>
 
@@ -501,7 +517,7 @@
                     </div>
                     <div class="padding lightgreycolor">
                         <p class="mat-caption">
-                            Legende:<br>Projektion auf Basis der aktuellen Verträge mit den Herstellern.
+                            Legende:<br>Projektion auf Basis der zugesagten Lieferungen und der aktuellen Verträge mit den Herstellern.
                         </p>
                     </div>
 
@@ -517,7 +533,7 @@
                     </div>
                     <div class="padding lightgreycolor">
                         <p class="mat-caption">
-                            Legende:<br>Projektion auf Basis der aktuellen Verträge mit den Herstellern.
+                            Legende:<br>Projektion auf Basis der zugesagten Lieferungen und der aktuellen Verträge mit den Herstellern.
                         </p>
                     </div>
 

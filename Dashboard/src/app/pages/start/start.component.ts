@@ -434,6 +434,7 @@ export class StartComponent implements OnInit {
       let input_erst  = this.filterArray(result_erstimpfungen, 'kw', thewoche);
       let input_zweit = this.filterArray(result_zweitimpfungen, 'kw', thewoche);
       let kwall2hersteller = this.getValues(input_zweit,"hersteller");
+      let kwall1hersteller = this.getValues(input_zweit,"hersteller");
 
       if ((input_erst.length+input_zweit.length) > 0) {
         let topush = {};
@@ -452,6 +453,9 @@ export class StartComponent implements OnInit {
           this.sumArray(this.getValues(input_zweit, 'impfungen'));       
         topush['Verimpfte Erst-Dosen'] = 
           this.sumArray(this.getValues(input_erst, 'impfungen_erst_kum'));
+        for (let thehst of kwall1hersteller) {
+            topush['Erst: '+thehst] = this.filterArray(input_erst,'hersteller',thehst)[0]['impfungen'];
+          }
         topush['Auslastung'] = 100 * (topush['Verimpfte Dosen'] / kapazitaet);
         topush['Unverimpfte Dosen'] = this.sumArray(this.getValues(input_erst, 'dosenspeicher'));
         topush['patienten_durchgeimpft'] = 
@@ -476,11 +480,15 @@ export class StartComponent implements OnInit {
           for (let thehst of kwall2hersteller) {
             topush['Warten: '+thehst] = 0;
           }
+        
         }
 
         if (topush['Anteil Erst-Dosis'] > 100) {
           topush['Anteil Erst-Dosis'] = 100;
           topush['Verimpfte Erst-Dosen'] = topush['population'];
+          for (let thehst of kwall1hersteller) {
+            topush['Erst: '+thehst] = 0;
+          }
         }
 
         finalresult.push(topush)
