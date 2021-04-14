@@ -78,9 +78,7 @@ export class StartComponent implements OnInit {
   // Sim Params
   verteilungszenarien = ["Gleichverteilung", "Linearer Anstieg der Produktion in Q2"];
   params = {
-    n_impfzentren: 433,
-    n_impfzentren_pat: 742.32926426921808 ,
-    impfzentren_tage: 7,
+    n_impfzentren_pat: 321429 ,
     n_varzt: 50000,
     n_varzt_pat: 30,
     varzt_tage: 3,
@@ -130,6 +128,7 @@ export class StartComponent implements OnInit {
           this.bl_liste = this.getValues(this.ewz_bl, "Bundesland");
           this.sort_regions();
           this.impfkapazitaet_bund = this.getValues(this.filterArray(this.ewz_bl, "Bundesland", "Gesamt"), "Impfkapazitaet")[0];
+          this.params.n_impfzentren_pat=this.impfkapazitaet_bund;
           this.getexternaldata();
         });
   }
@@ -187,14 +186,13 @@ export class StartComponent implements OnInit {
     this.bev_anteil_land = this.getValues(this.filterArray(this.ewz_bl, "Bundesland", this.current_bl), "Anteil_20plus")[0];
     this.impfkapazitaet_land = this.getValues(this.filterArray(this.ewz_bl, "Bundesland", this.current_bl), "Impfkapazitaet")[0];
     if (this.land_changed) {
-      this.params.n_impfzentren = 433 * this.impfkapazitaet_land / this.impfkapazitaet_bund;
+      this.params.n_impfzentren_pat = this.impfkapazitaet_land ;
       this.params.n_varzt = 50000 * this.bev_anteil_land / 100;
       this.land_changed = false;
     }
     let params = this.params;
     this.params.kapazitaet_pro_tag =
-      (params.impfzentren_tage * params.n_impfzentren * params.n_impfzentren_pat +
-        params.varzt_tage * params.n_varzt * params.n_varzt_pat) * 1 / 7;
+    params.n_impfzentren_pat + (( params.varzt_tage * params.n_varzt * params.n_varzt_pat) * 1 / 7);
     this.params.kapazitaet_pro_woche = this.params.kapazitaet_pro_tag * 7;
     this.new_simresult = this.do_simulation_new(this.dosen_projektion_all_hersteller_filtered, this.params);
     this.risktimes= this.update_risktimes(this.new_simresult,'Anteil Durchimpfung');

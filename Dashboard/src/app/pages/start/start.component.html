@@ -223,18 +223,11 @@
                                     <mat-icon class="accentcolor bigicon" [inline]="true">corporate_fare</mat-icon>
                                 </span>
                             </h3>
-                            <p>Anzahl:<span fxHide.lt-md="true"><br></span>
-                                <mat-slider [(ngModel)]="this.params.n_impfzentren" min="0" [max]="500" [step]="1"
-                                    (change)="this.update_kapazitaet();"></mat-slider>
-                                <strong>{{this.params.n_impfzentren | number: '1.0-0'}}</strong>
-                                <br>Patienten pro Tag:<span fxHide.lt-md="true"><br></span>
-                                <mat-slider [(ngModel)]="this.params.n_impfzentren_pat" min="100" max="321429" step="10"
+                            <p> <br>Impfungen pro Tag:<br>
+                                <mat-slider [(ngModel)]="this.params.n_impfzentren_pat" min="100" max="550000" step="10"
                                     (change)="this.update_kapazitaet();"></mat-slider>
                                 <strong>{{this.params.n_impfzentren_pat | number: '1.0-0'}}</strong>
-                                <br>Arbeitstage pro Woche:<span fxHide.lt-md="true"><br></span>
-                                <mat-slider [(ngModel)]="this.params.impfzentren_tage" min="0" max="7" step="1"
-                                    (change)="this.update_kapazitaet();"></mat-slider>
-                                <strong>{{this.params.impfzentren_tage}}</strong>
+                     
                             </p>
                         </div>
                         <div fxFlex=50 fxFlex.lt-md=100>
