@@ -37,8 +37,10 @@ export class StartComponent implements OnInit {
   stand_impfungen_hersteller: any;
   kapazitaetsstand:string;
   hersteller_zugelassen:any;
+  hersteller_zugelassen_details:any;
   hersteller_nicht_zugelassen:any;
   hersteller_add_nicht_zugelassen:any;
+  
   stand_impfungen_data_aktuell: any;
   geo_lieferungen_bisher:any;
   stand_impfungen_data_aktuell_current: any;
@@ -149,6 +151,8 @@ export class StartComponent implements OnInit {
             this.stand_impfungen_hersteller = data;
             let allhersteller = this.filterArray(this.stand_impfungen_hersteller,"geo","Gesamt");            
             this.hersteller_zugelassen=this.getValues(this.filterArray(allhersteller,"zugelassen",1),"hersteller");
+            this.params.addhersteller= this.getValues(this.filterArray(allhersteller,"zugelassen",1),"hersteller");
+            this.hersteller_zugelassen_details=this.filterArray(allhersteller,"zugelassen",1);
             this.hersteller_nicht_zugelassen=this.filterArray(allhersteller,"zugelassen",0);
             this.stand_bmg_lieferungen = new Date(data[0]['Stand_BMG']);
             
@@ -224,7 +228,7 @@ export class StartComponent implements OnInit {
       this.dosen_projektion_all_hersteller_filtered = alldata;
 
     if (this.params.impfstoffart == 'zugelassen') {
-      this.dosen_projektion_all_hersteller_filtered = this.filterArray(this.dosen_projektion_all_hersteller_filtered, 'zugelassen', 1);
+      this.dosen_projektion_all_hersteller_filtered = [];
       if (this.params.addhersteller.length>0){
         for (const addthehersteller of this.params.addhersteller) {
           let toadd = this.filterArray(alldata, 'hersteller', addthehersteller);
