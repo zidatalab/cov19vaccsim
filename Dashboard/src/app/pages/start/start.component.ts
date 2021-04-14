@@ -433,6 +433,7 @@ export class StartComponent implements OnInit {
     for (const thewoche of time) {
       let input_erst  = this.filterArray(result_erstimpfungen, 'kw', thewoche);
       let input_zweit = this.filterArray(result_zweitimpfungen, 'kw', thewoche);
+      let kwall2hersteller = this.getValues(input_zweit,"hersteller");
 
       if ((input_erst.length+input_zweit.length) > 0) {
         let topush = {};
@@ -458,6 +459,9 @@ export class StartComponent implements OnInit {
           this.sumArray(this.getValues(input_zweit, 'patienten_geimpft'));  
         topush['Wartschlange Zweitimpfung'] = 
           this.sumArray(this.getValues(input_zweit, 'verbleibend_in_warteschlange_zweit_kw'));
+        for (let thehst of kwall2hersteller) {
+          topush['Warten: '+thehst] = this.filterArray(input_zweit,'hersteller',thehst)[0]['verbleibend_in_warteschlange_zweit_kw'];
+        }
 
         // Korrektur Durchimpfung abgeschlossen
         topush['Anteil Durchimpfung'] = 100 * (topush['patienten_durchgeimpft'] / topush['population']);
@@ -469,6 +473,9 @@ export class StartComponent implements OnInit {
           topush['Unverimpfte Dosen'] = 0;
           topush['Verimpfte Dosen'] = 0;
           topush['Wartschlange Zweitimpfung'] = 0;
+          for (let thehst of kwall2hersteller) {
+            topush['Warten: '+thehst] = 0;
+          }
         }
 
         if (topush['Anteil Erst-Dosis'] > 100) {
@@ -480,6 +487,7 @@ export class StartComponent implements OnInit {
       }
     }
     return finalresult;
+    
   }
 
 

@@ -464,7 +464,7 @@
                     <h2>Warteschlange Zweitimpfung</h2>
                     <div>
                         <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 45, t: 0 }"
-                            xvalue="date" [colorscheme]="['navy']" [outcomes]="['Wartschlange Zweitimpfung']"
+                            xvalue="date" [outcomes]="['Warten: BNT/Pfizer','Warten: AZ', 'Warten: Moderna', 'Warten: J&J', 'Warten: Curevac', 'Warten: Sanofi/GSK']"
                             plottype="area">
                         </app-plot>
                     </div>
