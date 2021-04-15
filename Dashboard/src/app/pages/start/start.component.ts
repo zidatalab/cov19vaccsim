@@ -671,9 +671,9 @@ export class StartComponent implements OnInit {
     var dow = simple.getDay();
     var ISOweekStart = simple;
     if (dow <= 4)
-      ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
+      ISOweekStart.setDate(simple.getDate() + 7 - simple.getDay() + 1);
     else
-      ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
+      ISOweekStart.setDate(simple.getDate() + 8 + 7 - simple.getDay());
     return ISOweekStart.toISOString().substring(0, 10);
   }
 
