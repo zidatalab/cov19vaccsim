@@ -437,12 +437,12 @@
 
                     <div fxFlex=100>
                         <p class="mat-caption lightgreycolor">
-                            Die Risikostufen wurden laut STIKO-Empfehlung gebildet. Die dargestellten
+                            Die Risikostufen wurden laut STIKO-Empfehlung gebildet (<strong><a style="color:grey;" href="https://www.rki.de/DE/Content/Infekt/EpidBull/Archiv/2021/Ausgaben/02_21.pdf">RKI 2021, S.55</a></strong>). Die dargestellten
                             Bevölkerungsanteile basieren auf Schätzungen der STIKO und wurden auf die Bevölkerung im
                             Alter ab 18 Jahre angewendet. Die Risikogruppe 1 nach STIKO entspricht § 2 (Höchste
                             Priorität) der Impfverordnung; Risikogruppen 2 und 3 nach STIKO entsprechen § 3 (hohe
                             Priorität) der Impfverordnung; Risikogruppen 4 und 5 nach STIKO entsprechen § 4 (erhöhte
-                            Priorität) der Impfverordnung des Bundesministeriums für Gesundheit.
+                            Priorität) der Impfverordnung des Bundesministeriums für Gesundheit. <span *ngIf="this.current_bl!='Gesamt'"><em>Für die Länder wird mangels Daten vereinfacht angenommen, dass die Anteile der Risikogruppen den Anteilen im Bund entsprechen.</em></span>
                         </p>
                     </div>
                 </div>
