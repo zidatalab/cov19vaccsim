@@ -79,9 +79,9 @@ export class StartComponent implements OnInit {
   verteilungszenarien = ["Gleichverteilung", "Linearer Anstieg der Produktion in Q2"];
   params = {
     n_impfzentren_pat: 321429 ,
-    n_varzt: 50000,
-    n_varzt_pat: 30,
-    varzt_tage: 3,
+    n_varzt: 63000,
+    n_varzt_pat: 50,
+    varzt_tage: 4,
     kapazitaet_pro_tag: 0,
     kapazitaet_pro_woche: 0,
     warten_dosis_2: 5,
@@ -203,8 +203,8 @@ export class StartComponent implements OnInit {
 
   change_simple() {
     if (this.simple_aerzte_impfen) {
-      this.params.varzt_tage = 3;
-      this.params.n_varzt_pat= 30;
+      this.params.varzt_tage = 4;
+      this.params.n_varzt_pat= 50;
     }
     else {
       this.params.varzt_tage = 0;
