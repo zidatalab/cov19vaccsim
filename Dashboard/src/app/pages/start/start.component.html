@@ -401,10 +401,10 @@
                                     später </span>
                                 <span fxHide.lt-md="true"><br></span>
                                 <span *ngIf="group.Stufe!=6">Risikostufe {{group.Stufe}}<span fxHide.lt-md="true"><br>
-                                    {{group['Anteil']*100 | number:'1.0-0'}}%</span>
+                                    ({{group['Anteil']*100 | number:'1.0-0'}}% geimpft)</span>
                                 </span>
                                 <span *ngIf="group.Stufe==6">Risikostufe {{group.Stufe}}<span fxHide.lt-md="true"><br>
-                                    übrige Bevölkerung</span>
+                                    Bevölkerung 18+ geimpft</span>
                                 </span>
 
                             </p>
@@ -425,10 +425,10 @@
                                     später </span>
                                 <span fxHide.lt-md="true"><br></span>
                                 <span *ngIf="group.Stufe!=6">Risikostufe {{group.Stufe}}<span fxHide.lt-md="true"><br>
-                                    {{group['Anteil']*100 | number:'1.0-0'}}%</span>
+                                    ({{group['Anteil']*100 | number:'1.0-0'}}% geimpft)</span>
                                 </span>
                                 <span *ngIf="group.Stufe==6">Risikostufe {{group.Stufe}}<span fxHide.lt-md="true"><br>
-                                    übrige Bevölkerung</span>
+                                    Bevölkerung 18+ geimpft</span>
                                 </span>
 
                             </p>
@@ -508,7 +508,7 @@
                 </div>
 
                 <div *ngIf="this.showdurchimpfung" fxFlex=45 fxFlex.lt-md=100>
-                    <h2>Abgeschlossene Immunisierungen</h2>
+                    <h2>Abgeschlossene Immunisierungen <span *ngIf="this.params.anteil_impfbereit<1.0"> der Impfwilligen </span>ab 18 Jahren</h2>
                     <div>
                         <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 45, t: 0 }"
                             xvalue="date" [colorscheme]="['green']" [outcomes]="['patienten_durchgeimpft']"
@@ -525,7 +525,7 @@
                 <div fxFlex fxHide.lt-md=true></div>
 
                 <div *ngIf="this.showdurchimpfung" fxFlex=45 fxFlex.lt-md=100>
-                    <h2>Modellierte Impfquote<span *ngIf="this.params.anteil_impfbereit<1.0"> der Impfwilligen</span> in %</h2>
+                    <h2>Modellierte Impfquote <span *ngIf="this.params.anteil_impfbereit<1.0"> der Impfwilligen </span>ab 18 Jahren in %</h2>
                     <div>
                         <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
                             xvalue="date" [colorscheme]="['#1976d2','green']"
