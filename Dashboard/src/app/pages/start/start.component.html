@@ -132,8 +132,10 @@
     </div>
     <div fxFlex fxFlex.lt-md=100>
         <mat-card>
-            <mat-card-title>Kapazität</mat-card-title>
-            <mat-card-subtitle>Datenbasis: Gemeldete Impfkapazität lt. GMK (Stand 18.02.21), Lieferungen lt. BMG (Stand {{this.stand_bmg_lieferungen | date:'shortDate'}})</mat-card-subtitle>
+            <mat-card-title>
+                <h1>Simulationseinstellungen zur Impfkapazität</h1>
+            </mat-card-title>
+            <mat-card-subtitle>Voreinstellungen auf Basis der Zahl der impfenden Praxen laut KBV-Impfmonitoring und der Kapazität von Impfzentren lt. BMG</mat-card-subtitle>
             <mat-card-content>
                 <div *ngIf="this.stand_impfungen_data_aktuell_current" fxLayout="column">
                     <div fxFlex=100 fxLayout="column wrap" fxLayoutGap="1rem">
@@ -143,7 +145,7 @@
                                     <p>
                                         <span class="accentcolor bignum">{{this.params.kapazitaet_pro_woche |
                                             number:'1.0-0'}}</span><br>
-                                        Dosen pro Woche
+                                        Dosen pro Woche möglich
                                     </p>
                                 </div>
                             </div>
@@ -163,7 +165,7 @@
                                     <p>
                                         <span class="accentcolor bignum">{{this.params.kapazitaet_pro_tag |
                                             number:'1.0-0'}}</span><br>
-                                        Dosen pro Tag
+                                        Dosen pro Tag möglich
                                     </p>
                                 </div>
                             </div>
