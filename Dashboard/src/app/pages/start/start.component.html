@@ -397,10 +397,12 @@
 
                         <div *ngFor="let group of this.risktimes_firstdose" fxFlex.lt-md=100>
                             <p class="mat-caption">
-                                <span *ngIf="group.Datum!='nie'" class="primarycolor bignum" style="font-size: 2rem;">
+                                <span *ngIf="group.Datum!='nie' && group.Datum!='fertig'" class="primarycolor bignum" style="font-size: 2rem;">
                                     {{group.Datum | date : 'dd.M.'}} </span>
                                 <span *ngIf="group.Datum=='nie'" class="primarycolor bignum" style="font-size: 2rem;">
                                     später </span>
+                                <span *ngIf="group.Datum=='fertig'" class="primarycolor bignum" style="font-size: 2rem;">
+                                        fertig </span>
                                 <span fxHide.lt-md="true"><br></span>
                                 <span *ngIf="group.Stufe!=6">Risikostufe {{group.Stufe}}<span fxHide.lt-md="true"><br>
                                     ({{group['Anteil']*100 | number:'1.0-0'}}% geimpft)</span>
@@ -509,7 +511,7 @@
 
                 </div>
 
-                <div *ngIf="this.showdurchimpfung" fxFlex=45 fxFlex.lt-md=100>
+                <div  fxFlex=45 fxFlex.lt-md=100>
                     <h2>Abgeschlossene Immunisierungen <span *ngIf="this.params.anteil_impfbereit<1.0"> der Impfwilligen </span>ab 18 Jahren</h2>
                     <div>
                         <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 45, t: 0 }"
@@ -526,7 +528,7 @@
                 </div>
                 <div fxFlex fxHide.lt-md=true></div>
 
-                <div *ngIf="this.showdurchimpfung" fxFlex=45 fxFlex.lt-md=100>
+                <div  fxFlex=45 fxFlex.lt-md=100>
                     <h2>Modellierte Impfquote <span *ngIf="this.params.anteil_impfbereit<1.0"> der Impfwilligen </span>ab 18 Jahren in %</h2>
                     <div>
                         <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
