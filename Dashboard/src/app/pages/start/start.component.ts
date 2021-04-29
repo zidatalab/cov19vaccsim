@@ -21,7 +21,7 @@ export class StartComponent implements OnInit {
     private csv: CsvexportService) { }
 
   // Plan B
-  showdurchimpfung = false;
+  showdurchimpfung = true;
   datenexport=false;
   mode = "simple";
   simple_aerzte_impfen = false;
@@ -504,36 +504,48 @@ export class StartComponent implements OnInit {
     let riskinfo = {};
     let riskgroup = this.n_risikogruppen;
     let riskgroup_i = 0;
-    let risktimes = [];
+    let localrisktimes = [];
     
 
     // Check who is done
     for (const thewoche of time) {
       let anteil_durchimpfung = this.filterArray(simresult, 'kw', thewoche)[0][indicator]/100;
-      let Stufe = riskgroup[riskgroup_i]['Stufe']
-      let Anteil = riskgroup[riskgroup_i]['anteil']
       let kapazitaet = this.filterArray(simresult, 'kw', thewoche)[0]['kapazitaet'];
+      let checkall = true;
+      while (checkall){
+        let Stufe = riskgroup[riskgroup_i]['Stufe']
+        let Anteil = riskgroup[riskgroup_i]['anteil']
       if (riskgroup.length > (riskgroup_i + 1)) {
         if (anteil_durchimpfung >= riskgroup[riskgroup_i].anteil) {
           riskinfo = {'Stufe': Stufe};
           riskinfo["Datum"] = this.getDateOfISOWeek(thewoche, 2021);
+          if (thewoche==time[0]){
+            riskinfo["Datum"] = "fertig";
+          }
           riskinfo["_Quote"] = anteil_durchimpfung;
           riskinfo["_kapazitaet"] = kapazitaet;
           riskinfo['Anteil'] = Anteil;
-          risktimes.push(riskinfo);
+          localrisktimes.push(riskinfo);
           riskgroup_i = riskgroup_i + 1;
-        };
+        }
+        else {
+          checkall=false;
+        }
+      }
+      else {
+        checkall=false;
+      }
       }
     }
 
     while ((riskgroup_i + 1) <= 6) {
       riskinfo = riskgroup[riskgroup_i];
       riskinfo["Datum"] = "nie";
-      risktimes.push(riskinfo);
+      localrisktimes.push(riskinfo);
       riskgroup_i = riskgroup_i + 1;
     }
 
-    return risktimes;
+    return localrisktimes;
   }
 
 

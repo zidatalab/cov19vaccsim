@@ -402,7 +402,7 @@
                                 <span *ngIf="group.Datum=='nie'" class="primarycolor bignum" style="font-size: 2rem;">
                                     später </span>
                                 <span *ngIf="group.Datum=='fertig'" class="primarycolor bignum" style="font-size: 2rem;">
-                                        fertig </span>
+                                    ✓</span>
                                 <span fxHide.lt-md="true"><br></span>
                                 <span *ngIf="group.Stufe!=6">Risikostufe {{group.Stufe}}<span fxHide.lt-md="true"><br>
                                     ({{group['Anteil']*100 | number:'1.0-0'}}% geimpft)</span>
@@ -423,10 +423,12 @@
 
                         <div *ngFor="let group of this.risktimes" fxFlex.lt-md=100>
                             <p class="mat-caption">
-                                <span *ngIf="group.Datum!='nie'" class="accentcolor bignum" style="font-size: 2rem;">
+                                <span *ngIf="group.Datum!='nie' && group.Datum!='fertig'" class="accentcolor bignum" style="font-size: 2rem;">
                                     {{group.Datum | date : 'dd.M.'}} </span>
                                 <span *ngIf="group.Datum=='nie'" class="accentcolor bignum" style="font-size: 2rem;">
                                     später </span>
+                                    <span *ngIf="group.Datum=='fertig'" class="accentcolor bignum" style="font-size: 2rem;">
+                                        ✓ </span>
                                 <span fxHide.lt-md="true"><br></span>
                                 <span *ngIf="group.Stufe!=6">Risikostufe {{group.Stufe}}<span fxHide.lt-md="true"><br>
                                     ({{group['Anteil']*100 | number:'1.0-0'}}% geimpft)</span>
