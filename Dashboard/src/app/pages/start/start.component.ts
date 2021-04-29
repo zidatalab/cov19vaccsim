@@ -255,6 +255,7 @@ export class StartComponent implements OnInit {
     let result_erstimpfungen = [];
     let result_zweitimpfungen = [];
     let finalresult = [];
+    let pop_rest_erst  = myinput[0]['ueber18']*anteil_impfbereit;
 
     // Schleife Zeit
     for (const thewoche of time) {
@@ -314,9 +315,10 @@ export class StartComponent implements OnInit {
           topush['anwendungen'] = theinput['anwendungen'];
           topush['kapazitaet__vorher'] = kapazitaet_verbleibend;
           topush['dosen_verfuegbar'] = dosen_verfuegbar - ruecklage;
-          topush['impfungen'] = Math.min(topush['dosen_verfuegbar'] , kapazitaet_verbleibend);
+          topush['impfungen'] = Math.min(topush['dosen_verfuegbar'] , kapazitaet_verbleibend,pop_rest_erst);
           
           topush['impfungen_erst_kum'] = topush['impfungen'] + impfstand_hersteller['dosen_verabreicht_erst'];
+          pop_rest_erst = pop_rest_erst - (topush['impfungen'] + impfstand_hersteller['dosen_verabreicht_erst']);
           kapazitaet_verbleibend = kapazitaet_verbleibend - topush['impfungen'];
           topush['kapazitaet_verbleibend'] = kapazitaet_verbleibend;
           topush['patienten_geimpft'] = 0;
@@ -413,8 +415,9 @@ export class StartComponent implements OnInit {
           topush['kw'] = thewoche;
           topush['kapazitaet__vorher'] = kapazitaet_verbleibend;
           topush['dosen_verfuegbar'] = dosen_verfuegbar  - ruecklage;
-          topush['impfungen'] = Math.min(topush['dosen_verfuegbar'], topush['kapazitaet__vorher']);
+          topush['impfungen'] = Math.min(topush['dosen_verfuegbar'], topush['kapazitaet__vorher'],pop_rest_erst);
           topush['impfungen_erst_kum'] = topush['impfungen'] + lastweek_erst['impfungen_erst_kum'];
+          pop_rest_erst = pop_rest_erst - topush['impfungen'] ;
           kapazitaet_verbleibend = topush['kapazitaet__vorher'] - topush['impfungen'];
           topush['kapazitaet_verbleibend'] = kapazitaet_verbleibend;
           topush['patienten_geimpft'] = 0;
@@ -470,7 +473,7 @@ export class StartComponent implements OnInit {
         // Korrektur Durchimpfung abgeschlossen
         topush['Anteil Durchimpfung'] = 100 * (topush['patienten_durchgeimpft'] / topush['population']);
         topush['Anteil Erst-Dosis'] = 100 * (topush['Verimpfte Erst-Dosen'] / topush['population']);
-        if (topush['Anteil Durchimpfung'] > 100) {
+        /* if (topush['Anteil Durchimpfung'] > 100) {
           topush['Anteil Durchimpfung'] = 100;
           topush['patienten_durchgeimpft'] = topush['population'];
           topush['Auslastung'] = 0;
@@ -489,7 +492,7 @@ export class StartComponent implements OnInit {
           for (let thehst of kwall1hersteller) {
             topush['Erst: '+thehst] = 0;
           }
-        }
+        } */
 
         finalresult.push(topush)
       }
