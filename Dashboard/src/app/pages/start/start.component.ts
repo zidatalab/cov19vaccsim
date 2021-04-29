@@ -21,7 +21,7 @@ export class StartComponent implements OnInit {
     private csv: CsvexportService) { }
 
   // Plan B
-  showdurchimpfung = true;
+  showdurchimpfung = false;
   datenexport=false;
   mode = "simple";
   simple_aerzte_impfen = false;
