@@ -307,6 +307,10 @@ export class StartComponent implements OnInit {
           let info_zweitimpfungen_aktuelle_woche = 0;
           let dosen_verfuegbar = theinput['dosen_kw'] * liefermenge + hersteller_restdosen / 4;
           let topush = {};
+          let impfpop_empfohlen = 0;
+          for (let inpop of theinput["altersgruppe"]){
+            impfpop_empfohlen = impfpop_empfohlen+poprest[inpop];
+          }
           if (theinput["anwendungen"] == 2) {
             info_zweitimpfungen_aktuelle_woche = this.filterArray(this.filterArray(result_zweitimpfungen, "hersteller", thehersteller), "kw", thewoche)[0];
             dosen_verfuegbar = info_zweitimpfungen_aktuelle_woche['dosenspeicher'];
@@ -323,9 +327,22 @@ export class StartComponent implements OnInit {
           topush['anwendungen'] = theinput['anwendungen'];
           topush['kapazitaet__vorher'] = kapazitaet_verbleibend;
           topush['dosen_verfuegbar'] = dosen_verfuegbar - ruecklage;
-          topush['impfungen'] = Math.min(topush['dosen_verfuegbar'], kapazitaet_verbleibend, pop_rest_erst);
+          
+          topush['impfungen'] = Math.min(topush['dosen_verfuegbar'], kapazitaet_verbleibend, impfpop_empfohlen);
           topush['impfungen_erst_kum'] = topush['impfungen'] + impfstand_hersteller['dosen_verabreicht_erst'];
           pop_rest_erst = pop_rest_erst - (topush['impfungen'] + impfstand_hersteller['dosen_verabreicht_erst']);
+          let restvomimpfen_startwoche = (topush['impfungen'] + impfstand_hersteller['dosen_verabreicht_erst']);
+          for (let inpop of theinput["altersgruppe"]){
+            if (poprest[inpop]>=restvomimpfen_startwoche){
+              let oldpoprest =poprest[inpop];
+              poprest[inpop]=poprest[inpop]-restvomimpfen_startwoche;
+              restvomimpfen_startwoche=oldpoprest-poprest[inpop];
+            }
+            else {
+              restvomimpfen_startwoche=restvomimpfen_startwoche-poprest[inpop];
+              poprest[inpop]=0;
+            };
+          }
 
           kapazitaet_verbleibend = kapazitaet_verbleibend - topush['impfungen'];
           topush['kapazitaet_verbleibend'] = kapazitaet_verbleibend;
@@ -401,6 +418,10 @@ export class StartComponent implements OnInit {
           let dosen_verfuegbar = theinput['dosen_kw'] * liefermenge + lastweek_erst['dosenspeicher'];
           let ruecklage = 0;
           let topush = {};
+          let impfpop_empfohlen = 0;
+          for (let inpop of theinput["altersgruppe"]){
+            impfpop_empfohlen = impfpop_empfohlen+poprest[inpop];
+          }
 
           // Wenn 2 Anwendungen keine Restdosen da verfügbare Dosen = Dosenspeicher aus Zweitimpfungen
           if (theinput["anwendungen"] == 2) {
@@ -423,9 +444,21 @@ export class StartComponent implements OnInit {
           topush['kw'] = thewoche;
           topush['kapazitaet__vorher'] = kapazitaet_verbleibend;
           topush['dosen_verfuegbar'] = dosen_verfuegbar - ruecklage;
-          topush['impfungen'] = Math.min(topush['dosen_verfuegbar'], topush['kapazitaet__vorher'], pop_rest_erst);
+          topush['impfungen'] = Math.min(topush['dosen_verfuegbar'], topush['kapazitaet__vorher'], impfpop_empfohlen);
           topush['impfungen_erst_kum'] = topush['impfungen'] + lastweek_erst['impfungen_erst_kum'];
           pop_rest_erst = pop_rest_erst - topush['impfungen'];
+          let restvomimpfen_folgewoche = topush['impfungen'];
+          for (let inpop of theinput["altersgruppe"]){
+            if (poprest[inpop]>=restvomimpfen_folgewoche){
+              let oldpoprest =poprest[inpop];
+              poprest[inpop]=poprest[inpop]-restvomimpfen_folgewoche;
+              restvomimpfen_folgewoche=oldpoprest-poprest[inpop];
+            }
+            else {
+              restvomimpfen_folgewoche=restvomimpfen_folgewoche-poprest[inpop];
+              poprest[inpop]=0;
+            };
+          };
           kapazitaet_verbleibend = topush['kapazitaet__vorher'] - topush['impfungen'];
           topush['kapazitaet_verbleibend'] = kapazitaet_verbleibend;
           topush['patienten_geimpft'] = 0;
