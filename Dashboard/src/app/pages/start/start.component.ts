@@ -308,8 +308,22 @@ export class StartComponent implements OnInit {
           let dosen_verfuegbar = theinput['dosen_kw'] * liefermenge + hersteller_restdosen / 4;
           let topush = {};
           let impfpop_empfohlen = 0;
+          
+          let verbleibend_impfstand_erst = impfstand_hersteller['dosen_verabreicht_erst'] ;
+
+
+
           for (let inpop of theinput["altersgruppe"]){
-            impfpop_empfohlen = impfpop_empfohlen+poprest[inpop];
+            if (poprest[inpop]>=verbleibend_impfstand_erst){
+              let oldpoprest =poprest[inpop];
+              poprest[inpop] = poprest[inpop] - verbleibend_impfstand_erst;
+              verbleibend_impfstand_erst = verbleibend_impfstand_erst - (oldpoprest -poprest[inpop]);
+            }
+            else {
+              let oldpoprest =poprest[inpop];
+              poprest[inpop] = 0;
+              verbleibend_impfstand_erst = verbleibend_impfstand_erst - (oldpoprest -poprest[inpop]);
+            };           
           }
           if (theinput["anwendungen"] == 2) {
             info_zweitimpfungen_aktuelle_woche = this.filterArray(this.filterArray(result_zweitimpfungen, "hersteller", thehersteller), "kw", thewoche)[0];
@@ -331,16 +345,17 @@ export class StartComponent implements OnInit {
           topush['impfungen'] = Math.min(topush['dosen_verfuegbar'], kapazitaet_verbleibend, impfpop_empfohlen);
           topush['impfungen_erst_kum'] = topush['impfungen'] + impfstand_hersteller['dosen_verabreicht_erst'];
           pop_rest_erst = pop_rest_erst - (topush['impfungen'] + impfstand_hersteller['dosen_verabreicht_erst']);
-          let restvomimpfen_startwoche = (topush['impfungen'] + impfstand_hersteller['dosen_verabreicht_erst']);
+          let restvomimpfen_startwoche = (topush['impfungen'] );
           for (let inpop of theinput["altersgruppe"]){
             if (poprest[inpop]>=restvomimpfen_startwoche){
               let oldpoprest =poprest[inpop];
               poprest[inpop]=poprest[inpop]-restvomimpfen_startwoche;
-              restvomimpfen_startwoche=oldpoprest-poprest[inpop];
+              restvomimpfen_startwoche=restvomimpfen_startwoche-(oldpoprest-poprest[inpop]);
             }
             else {
-              restvomimpfen_startwoche=restvomimpfen_startwoche-poprest[inpop];
+              let oldpoprest =poprest[inpop];
               poprest[inpop]=0;
+              restvomimpfen_startwoche=restvomimpfen_startwoche-(oldpoprest-poprest[inpop]);         
             };
           }
 
