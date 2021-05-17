@@ -195,7 +195,6 @@ export class StartComponent implements OnInit {
       params.n_impfzentren_pat + ((params.varzt_tage * params.n_varzt * params.n_varzt_pat) * 1 / 7);
     this.params.kapazitaet_pro_woche = this.params.kapazitaet_pro_tag * 7;
     this.new_simresult = this.do_simulation_new(this.dosen_projektion_all_hersteller_filtered, this.params);
-    console.log(this.new_simresult);
     this.risktimes = this.update_risktimes(this.new_simresult, 'Anteil Durchimpfung');
     this.risktimes_firstdose = this.update_risktimes(this.new_simresult, 'Anteil Erst-Dosis');
     this.simple_aerzte_impfen = this.params.varzt_tage > 0;
@@ -243,7 +242,6 @@ export class StartComponent implements OnInit {
   }
 
   do_simulation_new(myinput, params) {
-    console.log(myinput[0], params, this.geo_impfstand);
     let kapazitaet = params.kapazitaet_pro_woche;
     let liefermenge = params.liefermenge;
     let theruecklage = params.ruecklage;
@@ -257,7 +255,7 @@ export class StartComponent implements OnInit {
     let result_erstimpfungen = [];
     let result_zweitimpfungen = [];
     let finalresult = [];
-    let pop_rest_erst = myinput[0]['ueber18'] * anteil_impfbereit;
+    let pop_rest_erst = myinput[0]['population'] * anteil_impfbereit;
     let poprest = {
       'pop_unter_12': myinput[0]['pop_unter_12'] * anteil_impfbereit,
       'pop_12_bis_18': myinput[0]['pop_12_bis_18'] * anteil_impfbereit,
@@ -282,7 +280,7 @@ export class StartComponent implements OnInit {
             let topush = {};
             topush['hersteller'] = thehersteller;
             topush['kw'] = thewoche;
-            topush['population'] = theinput['ueber18'] * anteil_impfbereit;
+            topush['population'] = theinput['population'] * anteil_impfbereit;
             topush['anwendungen'] = 2;
             topush['kapazitaet__vorher'] = kapazitaet_verbleibend;
             topush['dosen_geliefert'] = theinput['dosen_kw'] * liefermenge;
@@ -337,7 +335,7 @@ export class StartComponent implements OnInit {
 
           topush['hersteller'] = thehersteller;
           topush['kw'] = thewoche;
-          topush['population'] = theinput['ueber18'] * anteil_impfbereit;
+          topush['population'] = theinput['population'] * anteil_impfbereit;
           topush['anwendungen'] = theinput['anwendungen'];
           topush['kapazitaet__vorher'] = kapazitaet_verbleibend;
           topush['dosen_verfuegbar'] = dosen_verfuegbar - ruecklage;
@@ -406,7 +404,7 @@ export class StartComponent implements OnInit {
             topush['hersteller'] = thehersteller;
             topush['kw'] = thewoche;
             topush['anwendungen'] = 2;
-            topush['population'] = theinput['ueber18'] * anteil_impfbereit;
+            topush['population'] = theinput['population'] * anteil_impfbereit;
             topush['kapazitaet__vorher'] = kapazitaet_verbleibend;
             topush['dosenlieferung_kw'] = theinput["dosen_kw"] * liefermenge;
             topush['dosen_verfuegbar'] = dosen_verfuegbar;

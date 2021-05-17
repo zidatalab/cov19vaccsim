@@ -383,6 +383,7 @@
                 <span *ngIf="this.current_bl!='Gesamt'"> für {{this.current_bl}}</span>
                 <span *ngIf="this.current_bl=='Gesamt'"> für Deutschland</span></h1> 
             </mat-card-title>
+            <mat-card-subtitle>Die Simulation bezieht sich auf die gesamte <span *ngIf="this.params.anteil_impfbereit<1.0"> impfwillige </span> Bevölkerung Deutschlands</mat-card-subtitle>
             <div fxLayout="row wrap" fxLayoutGap="2rem" fxLayoutAllign="space-between">
                 <div *ngIf="this.showdurchimpfung" fxFlex=100 fxFlex.lt-md=100 fxLayout="row wrap" fxLayoutGap="1rem"
                     fxLayoutAllign="space-around">
@@ -408,7 +409,7 @@
                                     ({{group['Anteil']*100 | number:'1.0-0'}}% geimpft)</span>
                                 </span>
                                 <span *ngIf="group.Stufe==6">Risikostufe {{group.Stufe}}<span fxHide.lt-md="true"><br>
-                                    Bevölkerung 18+ geimpft</span>
+                                    gesamte Bevölkerung geimpft</span>
                                 </span>
 
                             </p>
@@ -434,7 +435,7 @@
                                     ({{group['Anteil']*100 | number:'1.0-0'}}% geimpft)</span>
                                 </span>
                                 <span *ngIf="group.Stufe==6">Risikostufe {{group.Stufe}}<span fxHide.lt-md="true"><br>
-                                    Bevölkerung 18+ geimpft</span>
+                                    gesamte Bevölkerung geimpft</span>
                                 </span>
 
                             </p>
@@ -444,8 +445,7 @@
                     <div fxFlex=100>
                         <p class="mat-caption lightgreycolor">
                             Die Risikostufen wurden laut STIKO-Empfehlung gebildet (<strong><a style="color:grey;" href="https://www.rki.de/DE/Content/Infekt/EpidBull/Archiv/2021/Ausgaben/02_21.pdf">RKI 2021, S.55</a></strong>). Die dargestellten
-                            Bevölkerungsanteile basieren auf Schätzungen der STIKO und wurden auf die Bevölkerung im
-                            Alter ab 18 Jahre angewendet. Die Risikogruppe 1 nach STIKO entspricht § 2 (Höchste
+                            Bevölkerungsanteile basieren auf Schätzungen der STIKO und wurden auf die <strong>gesamte Bevölkerung</strong> angewendet. Die Risikogruppe 1 nach STIKO entspricht § 2 (Höchste
                             Priorität) der Impfverordnung; Risikogruppen 2 und 3 nach STIKO entsprechen § 3 (hohe
                             Priorität) der Impfverordnung; Risikogruppen 4 und 5 nach STIKO entsprechen § 4 (erhöhte
                             Priorität) der Impfverordnung des Bundesministeriums für Gesundheit. <span *ngIf="this.current_bl!='Gesamt'"><em>Für die Länder wird mangels Daten vereinfacht angenommen, dass die Anteile der Risikogruppen den Anteilen im Bund entsprechen.</em></span>
@@ -514,7 +514,7 @@
                 </div>
 
                 <div  fxFlex=45 fxFlex.lt-md=100>
-                    <h2>Abgeschlossene Immunisierungen <span *ngIf="this.params.anteil_impfbereit<1.0"> der Impfwilligen </span>ab 18 Jahren</h2>
+                    <h2>Abgeschlossene Immunisierungen <span *ngIf="this.params.anteil_impfbereit<1.0"> der Impfwilligen </span></h2>
                     <div>
                         <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 45, t: 0 }"
                             xvalue="date" [colorscheme]="['green']" [outcomes]="['patienten_durchgeimpft']"
@@ -531,7 +531,7 @@
                 <div fxFlex fxHide.lt-md=true></div>
 
                 <div  fxFlex=45 fxFlex.lt-md=100>
-                    <h2>Modellierte Impfquote <span *ngIf="this.params.anteil_impfbereit<1.0"> der Impfwilligen </span>ab 18 Jahren in %</h2>
+                    <h2>Modellierte Impfquote <span *ngIf="this.params.anteil_impfbereit<1.0"> der Impfwilligen </span> in %</h2>
                     <div>
                         <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
                             xvalue="date" [colorscheme]="['#1976d2','green']"
