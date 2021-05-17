@@ -467,11 +467,12 @@ export class StartComponent implements OnInit {
             if (poprest[inpop]>=restvomimpfen_folgewoche){
               let oldpoprest =poprest[inpop];
               poprest[inpop]=poprest[inpop]-restvomimpfen_folgewoche;
-              restvomimpfen_folgewoche=oldpoprest-poprest[inpop];
+              restvomimpfen_folgewoche=restvomimpfen_folgewoche -(oldpoprest-poprest[inpop]);
             }
             else {
-              restvomimpfen_folgewoche=restvomimpfen_folgewoche-poprest[inpop];
+              let oldpoprest =poprest[inpop];
               poprest[inpop]=0;
+              restvomimpfen_folgewoche=restvomimpfen_folgewoche -(oldpoprest-poprest[inpop]);
             };
           };
           kapazitaet_verbleibend = topush['kapazitaet__vorher'] - topush['impfungen'];
