@@ -18,6 +18,8 @@ export class PlotComponent implements OnInit {
   @Input() linewidth:number; 
   @Input() showlegend:boolean; 
   @Input() colorscheme=[];
+  @Input() annotations=[];
+  @Input() hovertemplate="";
 
   constructor() { }
   plotlayout: any;
@@ -27,7 +29,7 @@ export class PlotComponent implements OnInit {
 
 
   ngOnInit(): void {
-    if (!this.linewidth){this.linewidth=5};
+    if (!this.linewidth){this.linewidth=2};
     if (!this.colorscheme){this.colorscheme=["#004c8c", "#0277bd", "#58a5f0", "#b71c1c", "#7f0000"];}
     this.make_plot();
   }
@@ -53,10 +55,11 @@ export class PlotComponent implements OnInit {
     this.plotlytype="bar";
     this.plotlayout = {
       xaxis: { fixedrange: false, type: 'category', automargin: false },
-      yaxis: { fixedrange: true, title: '', automargin: true ,rangemode: 'tozero'},
+      yaxis: { fixedrange: true, showgrid: false, title: '', automargin: true ,rangemode: 'tozero'},
       autosize: false, padding: 0,
       legend: { x: 1,        xanchor: 'right',        y: .8    , bgcolor: 'ffffffa7'  },
-      margin: { l: 0, r: 100, b: 100, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
+      margin: { l: 0, r: 100, b: 100, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent",
+      annotations: this.annotations
     };
     }
 
@@ -64,19 +67,27 @@ export class PlotComponent implements OnInit {
       this.plotlytype="bar";
       this.plotlayout = {
         barmode:"stack",
-        xaxis: { fixedrange: false, type: 'category', automargin: false },
-        yaxis: { fixedrange: true, title: '', automargin: true ,rangemode: 'tozero'},
+        xaxis: { fixedrange: false, showgrid: false, type: 'category', automargin: false },
+        yaxis: { fixedrange: true,  title: '', automargin: true ,rangemode: 'tozero'},
         autosize: false, padding: 0,
         legend: { x: 1,        xanchor: 'right',        y: .8    , bgcolor: 'ffffffa7'  },
-        margin: { l: 0, r: 100, b: 100, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
+        margin: { l: 0, r: 100, b: 100, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent",
+        annotations: this.annotations
       };
       }
 
     if (this.plottype=="tsline" || this.plottype=="lines" || this.plottype=="area" || this.plottype=="stackedarea"){
     this.plotlytype="lines";
     this.plotlayout = {
-      xaxis: { fixedrange: false, automargin: false },
-      yaxis: { fixedrange: true, title: '', automargin: true , rangemode: 'tozero'},
+      xaxis: { fixedrange: false, showgrid: false, automargin: false },
+      yaxis: { fixedrange: true, title: '', automargin: true , rangemode: 'tozero',
+      gridcolor: "lightgrey",
+      gridpattern: "dot",
+      gridwidth: 1,
+      zerolinecolor: "black",
+      zerolinewidth: 2,
+      annotations: this.annotations
+    },
       autosize: false, padding: 0,
       legend: { x: 1,        xanchor: 'right',        y: .8    , bgcolor: 'ffffffa7'  },
       margin: { l: 0, r: 20, b: 20, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
@@ -86,11 +97,12 @@ export class PlotComponent implements OnInit {
   if (this.plottype=="hbar"){
     this.plotlytype="hbar";
     this.plotlayout = {
+      xaxis: { fixedrange: true,  showgrid: false, title: '', automargin: true },
       yaxis: { fixedrange: false, type: 'category', automargin: false ,rangemode: 'tozero'},
-      xaxis: { fixedrange: true, title: '', automargin: true },
       autosize: false, padding: 0,
       legend: { x: 1,        xanchor: 'right',        y: .8   , bgcolor: 'ffffffa7'   },
-      margin: { l: 200, r: 0, b: 20, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
+      margin: { l: 200, r: 0, b: 20, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent",
+      annotations: this.annotations
       
     };
   }
@@ -144,6 +156,9 @@ export class PlotComponent implements OnInit {
     }
     if (this.plottype=="stackedarea"){
       trace['stackgroup']="one";
+    }
+    if (this.hovertemplate!=""){
+      trace['hovertemplate'] = this.hovertemplate;
     }
     return trace;
   }
