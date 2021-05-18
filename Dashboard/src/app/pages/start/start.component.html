@@ -207,6 +207,7 @@
                                     </p>
                                 </div>
                             </div>
+                            
 
                         </div>
                     </div>
@@ -353,6 +354,13 @@
                                     <strong>{{this.params.anteil_impfbereit*100 | number:'1.0-0'}} % </strong>impfbereit
                                 </p>
                             </div> 
+                            <div>
+                                <span>Datenexport aktivieren </span><br>
+                                <mat-slide-toggle [(ngModel)]="this.datenexport">
+                                <span *ngIf="this.datenexport"> Ja</span>
+                                <span *ngIf="!this.datenexport"> Nein</span>
+                            </mat-slide-toggle>
+                            </div>
                             <div>
                                 <span>Datenexport aktivieren </span><br>
                                 <mat-slide-toggle [(ngModel)]="this.datenexport">
@@ -531,7 +539,7 @@
                 <div fxFlex fxHide.lt-md=true></div>
 
                 <div  fxFlex=45 fxFlex.lt-md=100>
-                    <h2>Modellierte Impfquote <span *ngIf="this.params.anteil_impfbereit<1.0"> der Impfwilligen </span> alle Altersgruppen in %</h2>
+                    <h2>Modellierte Impfquote <span *ngIf="this.params.anteil_impfbereit<1.0"> der Impfwilligen </span> aller Altersgruppen in %</h2>
                     <div>
                         <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 40, b: 30, t: 0 }" xtickformat="%d.%m.<br>%Y"
                             xvalue="date" [colorscheme]="['#1976d2','green']"
