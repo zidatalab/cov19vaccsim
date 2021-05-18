@@ -10,6 +10,7 @@ export class PlotComponent implements OnInit {
   @Input() xvalue: string;
   @Input() colorby: string;
   @Input() outcomes: any;
+  @Input() outcomelabels: any;
   @Input() plottype: String; // ["bar","hbar","tsline"]; 
   @Input() customdata: any;
   @Input() customconfig: any;
