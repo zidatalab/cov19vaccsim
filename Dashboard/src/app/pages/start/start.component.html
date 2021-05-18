@@ -355,11 +355,11 @@
                                 </p>
                             </div> 
                             <div style="margin-top: 2em;margin-bottom:2em;">
-                                <span>STIKO Altersempfehlung ignorieren</span><br>
+                                <span>STIKO Altersempfehlung</span><br>
                                 <mat-slide-toggle [(ngModel)]="this.ignorealter"
                                 (change)="this.update_kapazitaet();">
-                                <span *ngIf="this.ignorealter"> Ja</span>
-                                <span *ngIf="!this.ignorealter"> Nein</span>
+                                <span *ngIf="this.ignorealter"> nicht berücksichtigen</span>
+                                <span *ngIf="!this.ignorealter"> berüchsichtigen</span>
                             </mat-slide-toggle>
                             </div>
                         
