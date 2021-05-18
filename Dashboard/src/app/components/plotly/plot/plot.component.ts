@@ -23,6 +23,12 @@ export class PlotComponent implements OnInit {
   @Input() plottitle = "";
   @Input() plotsubtitle = "";
   @Input() plotcaption = "";
+  @Input() n_yticks = 8;
+  @Input() xtickformat = "";
+  
+  fontfamily = "Nunito, sans-serif";
+  fontsize = ".85rem";
+  fontcolor= "black";
 
   constructor() { }
   plotlayout: any;
@@ -58,7 +64,7 @@ export class PlotComponent implements OnInit {
       this.plotlytype = "bar";
       this.plotlayout = {
         xaxis: { fixedrange: false, type: 'category', automargin: false },
-        yaxis: { fixedrange: true, showgrid: false, title: '', automargin: true, rangemode: 'tozero' },
+        yaxis: { fixedrange: true, showgrid: false, title: '', automargin: true, rangemode: 'tozero',ticksuffix:" " , nticks:this.n_yticks},
         autosize: false, padding: 0,
         legend: { x: 1, xanchor: 'right', y: .8, bgcolor: 'ffffffa7' },
         margin: { l: 0, r: 100, b: 100, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent",
@@ -70,8 +76,8 @@ export class PlotComponent implements OnInit {
       this.plotlytype = "bar";
       this.plotlayout = {
         barmode: "stack",
-        xaxis: { fixedrange: false, showgrid: false, type: 'category', automargin: false },
-        yaxis: { fixedrange: true, title: '', automargin: true, rangemode: 'tozero' },
+        xaxis: { fixedrange: false, showgrid: false, type: 'category', automargin: false},
+        yaxis: { fixedrange: true, title: '', automargin: true, rangemode: 'tozero',ticksuffix:" " , nticks:this.n_yticks},
         autosize: false, padding: 0,
         legend: { x: 1, xanchor: 'right', y: .8, bgcolor: 'ffffffa7' },
         margin: { l: 0, r: 100, b: 100, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent",
@@ -90,7 +96,9 @@ export class PlotComponent implements OnInit {
           gridwidth: 1,
           zerolinecolor: "black",
           zerolinewidth: 2,
-          annotations: this.annotations
+          annotations: this.annotations,
+          ticksuffix:" ",
+          nticks:this.n_yticks
         },
         autosize: false, padding: 0,
         legend: { x: 1, xanchor: 'right', y: .8, bgcolor: 'ffffffa7' },
@@ -101,8 +109,8 @@ export class PlotComponent implements OnInit {
     if (this.plottype == "hbar") {
       this.plotlytype = "hbar";
       this.plotlayout = {
-        xaxis: { fixedrange: true, showgrid: false, title: '', automargin: true },
-        yaxis: { fixedrange: false, type: 'category', automargin: true, rangemode: 'tozero' },
+        xaxis: { fixedrange: true, showgrid: false, title: '', automargin: true, nticks:this.n_yticks },
+        yaxis: { fixedrange: false, type: 'category', automargin: true, rangemode: 'tozero' ,ticksuffix:" "},
         autosize: false, padding: 0,
         legend: { x: 1, xanchor: 'right', y: .8, bgcolor: 'ffffffa7' },
         margin: { l: 200, r: 0, b: 20, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent",
@@ -117,13 +125,23 @@ export class PlotComponent implements OnInit {
       this.plotlayout['showlegend'] = true;
     }
 
+    if (this.xtickformat!=''){
+      this.plotlayout['xaxis']['tickformat']=this.xtickformat;
+    }
+
+    this.plotlayout['font']= {
+      family: this.fontfamily,
+      size: this.fontsize,
+      color: this.fontcolor
+    };
+
     let plotdata = this.data;
     let outcomes = this.outcomes;
     if (this.colorby) {
       outcomes = this.getuniqueValues(plotdata, this.colorby);
       plotdata = this.make_colorbyvalues();
     }
-
+  
    this.plotdata = this.make_plotdata(plotdata, this.xvalue, outcomes, this.plotlytype);    
   }
 
