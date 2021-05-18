@@ -5,7 +5,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CsvexportService } from 'src/app/services/csvexport.service';
 
-
 @Component({
   selector: 'app-start',
   templateUrl: './start.component.html',
@@ -14,6 +13,7 @@ import { CsvexportService } from 'src/app/services/csvexport.service';
 export class StartComponent implements OnInit {
 
 
+ 
 
   constructor(
     private http: HttpClient,
@@ -58,6 +58,7 @@ export class StartComponent implements OnInit {
   dosen_projektion_all_hersteller_filtered: any;
   current_bl = "Gesamt";
   sim_result: any;
+  ignorealter: boolean;
   new_simresult: any;
   all_bl_simresults: any;
   notstarted = true;
@@ -66,15 +67,17 @@ export class StartComponent implements OnInit {
   risktimes = [];
   risktimes_firstdose = [];
   n_risikogruppen = [
-    { Stufe: 1, n: 8.6, anteil: 0.12672396908 },
-    { Stufe: 2, n: 7.0, anteil: 0.22987138578 },
-    { Stufe: 3, n: 5.7, anteil: 0.31386285366 },
-    { Stufe: 4, n: 6.9, anteil: 0.41553673583 },
-    { Stufe: 5, n: 8.4, anteil: 0.53931363587 },
-    { Stufe: 6, n: 31.26, anteil: 0.835 },
+    { Stufe: 1, n: 8.6, anteil:   (8.6)/83.166711 },
+    { Stufe: 2, n: 7.0, anteil:   (8.6+7)/83.166711 },
+    { Stufe: 3, n: 5.7, anteil:   (8.6+7+5.7)/83.166711 },
+    { Stufe: 4, n: 6.9, anteil:   (8.6+7+5.7+6.9)/83.166711 },
+    { Stufe: 5, n: 8.4, anteil:   (8.6+7+5.7+6.9+8.4)/83.166711 },
+    { Stufe: 6, n: 31.26, anteil: (8.6+7+5.7+6.9+8.4+31.26)/83.166711},
     { Stufe: "", anteil: 1000000 },
     { Stufe: "", anteil: 1000000 }
   ];
+  impfaltersgruppen = ['pop_ueber_60','pop_18_bis_60']; // ohne 'pop_unter_12',  'pop_12_bis_18',
+
   // Sim Params
   verteilungszenarien = ["Gleichverteilung", "Linearer Anstieg der Produktion in Q2"];
   params = {
@@ -242,6 +245,7 @@ export class StartComponent implements OnInit {
   }
 
   do_simulation_new(myinput, params) {
+    console.log(myinput.slice(0,4))
     let kapazitaet = params.kapazitaet_pro_woche;
     let liefermenge = params.liefermenge;
     let theruecklage = params.ruecklage;
@@ -262,6 +266,7 @@ export class StartComponent implements OnInit {
       'pop_18_bis_60': myinput[0]['pop_18_bis_60'] * anteil_impfbereit,
       'pop_ueber_60': myinput[0]['pop_ueber_60'] * anteil_impfbereit
     };
+
 
     // Schleife Zeit
     for (const thewoche of time) {
@@ -306,22 +311,51 @@ export class StartComponent implements OnInit {
           let dosen_verfuegbar = theinput['dosen_kw'] * liefermenge + hersteller_restdosen / 4;
           let topush = {};
           let impfpop_empfohlen = 0;
-          
-          let verbleibend_impfstand_erst = impfstand_hersteller['dosen_verabreicht_erst'] ;
+
+          let verbleibend_impfstand_erst = impfstand_hersteller['dosen_verabreicht_erst'];
+          let empfaltersgruppen = theinput["altersgruppe"];
+          let impfaltersgruppen = this.impfaltersgruppen;
+          let newalter = [];
+
+          // Anpassung Altersgruppen
+          // Add Gruppen of impfaltersgruppen to Array in recom. Order
+          for (let thegruppe of this.impfaltersgruppen) {
+            if (empfaltersgruppen.indexOf(thegruppe) >= 0) {
+              newalter = newalter.concat(thegruppe);
+
+            }
+          }
+          // Add Gruppen not in impfaltersgruppen if in emp
+          for (let thegruppe of empfaltersgruppen) {
+            if (newalter.indexOf(thegruppe) == -1) {
+              newalter = newalter.concat(thegruppe);
+            }
+          }
+
+          // If ignore altersgruppen add missing
+          if (this.ignorealter){
+            for (let thegruppe of this.impfaltersgruppen) {
+              if (newalter.indexOf(thegruppe)==-1) {
+                newalter = newalter.concat(thegruppe);
+              }
+            }
+            }
 
 
+          // Rewrite
+          impfaltersgruppen = newalter;
 
-          for (let inpop of theinput["altersgruppe"]){
-            if (poprest[inpop]>=verbleibend_impfstand_erst){
-              let oldpoprest =poprest[inpop];
+          for (let inpop of impfaltersgruppen) {
+            if (poprest[inpop] >= verbleibend_impfstand_erst) {
+              let oldpoprest = poprest[inpop];
               poprest[inpop] = poprest[inpop] - verbleibend_impfstand_erst;
-              verbleibend_impfstand_erst = verbleibend_impfstand_erst - (oldpoprest -poprest[inpop]);
+              verbleibend_impfstand_erst = verbleibend_impfstand_erst - (oldpoprest - poprest[inpop]);
             }
             else {
-              let oldpoprest =poprest[inpop];
+              let oldpoprest = poprest[inpop];
               poprest[inpop] = 0;
-              verbleibend_impfstand_erst = verbleibend_impfstand_erst - (oldpoprest -poprest[inpop]);
-            };           
+              verbleibend_impfstand_erst = verbleibend_impfstand_erst - (oldpoprest - poprest[inpop]);
+            };
           }
           if (theinput["anwendungen"] == 2) {
             info_zweitimpfungen_aktuelle_woche = this.filterArray(this.filterArray(result_zweitimpfungen, "hersteller", thehersteller), "kw", thewoche)[0];
@@ -339,21 +373,23 @@ export class StartComponent implements OnInit {
           topush['anwendungen'] = theinput['anwendungen'];
           topush['kapazitaet__vorher'] = kapazitaet_verbleibend;
           topush['dosen_verfuegbar'] = dosen_verfuegbar - ruecklage;
-          
+
           topush['impfungen'] = Math.min(topush['dosen_verfuegbar'], kapazitaet_verbleibend, impfpop_empfohlen);
           topush['impfungen_erst_kum'] = topush['impfungen'] + impfstand_hersteller['dosen_verabreicht_erst'];
           pop_rest_erst = pop_rest_erst - (topush['impfungen'] + impfstand_hersteller['dosen_verabreicht_erst']);
-          let restvomimpfen_startwoche = (topush['impfungen'] );
-          for (let inpop of theinput["altersgruppe"]){
-            if (poprest[inpop]>=restvomimpfen_startwoche){
-              let oldpoprest =poprest[inpop];
-              poprest[inpop]=poprest[inpop]-restvomimpfen_startwoche;
-              restvomimpfen_startwoche=restvomimpfen_startwoche-(oldpoprest-poprest[inpop]);
+          let restvomimpfen_startwoche = (topush['impfungen']);
+
+
+          for (let inpop of impfaltersgruppen) {
+            if (poprest[inpop] >= restvomimpfen_startwoche) {
+              let oldpoprest = poprest[inpop];
+              poprest[inpop] = poprest[inpop] - restvomimpfen_startwoche;
+              restvomimpfen_startwoche = restvomimpfen_startwoche - (oldpoprest - poprest[inpop]);
             }
             else {
-              let oldpoprest =poprest[inpop];
-              poprest[inpop]=0;
-              restvomimpfen_startwoche=restvomimpfen_startwoche-(oldpoprest-poprest[inpop]);         
+              let oldpoprest = poprest[inpop];
+              poprest[inpop] = 0;
+              restvomimpfen_startwoche = restvomimpfen_startwoche - (oldpoprest - poprest[inpop]);
             };
           }
 
@@ -432,8 +468,39 @@ export class StartComponent implements OnInit {
           let ruecklage = 0;
           let topush = {};
           let impfpop_empfohlen = 0;
-          for (let inpop of theinput["altersgruppe"]){
-            impfpop_empfohlen = impfpop_empfohlen+poprest[inpop];
+          let empfaltersgruppen = theinput["altersgruppe"];
+          let impfaltersgruppen = this.impfaltersgruppen;
+          let newalter = [];
+
+          // Anpassung Altersgruppen
+          // Add Gruppen of impfaltersgruppen to Array in recom. Order
+          for (let thegruppe of this.impfaltersgruppen) {
+            if (empfaltersgruppen.indexOf(thegruppe) >= 0) {
+              newalter = newalter.concat(thegruppe);
+
+            }
+          }
+          // Add Gruppen not in impfaltersgruppen if in emp
+          for (let thegruppe of empfaltersgruppen) {
+            if (newalter.indexOf(thegruppe) == -1) {
+              newalter = newalter.concat(thegruppe);
+            }
+          }
+
+          // If ignore altersgruppen add missing
+          if (this.ignorealter){
+            for (let thegruppe of this.impfaltersgruppen) {
+              if (newalter.indexOf(thegruppe)==-1) {
+                newalter = newalter.concat(thegruppe);
+              }
+            }
+            }
+
+          // Rewrite
+          impfaltersgruppen = newalter;
+
+          for (let inpop of impfaltersgruppen) {
+            impfpop_empfohlen = impfpop_empfohlen + poprest[inpop];
           }
 
           // Wenn 2 Anwendungen keine Restdosen da verfügbare Dosen = Dosenspeicher aus Zweitimpfungen
@@ -461,16 +528,16 @@ export class StartComponent implements OnInit {
           topush['impfungen_erst_kum'] = topush['impfungen'] + lastweek_erst['impfungen_erst_kum'];
           pop_rest_erst = pop_rest_erst - topush['impfungen'];
           let restvomimpfen_folgewoche = topush['impfungen'];
-          for (let inpop of theinput["altersgruppe"]){
-            if (poprest[inpop]>=restvomimpfen_folgewoche){
-              let oldpoprest =poprest[inpop];
-              poprest[inpop]=poprest[inpop]-restvomimpfen_folgewoche;
-              restvomimpfen_folgewoche=restvomimpfen_folgewoche -(oldpoprest-poprest[inpop]);
+          for (let inpop of impfaltersgruppen) {
+            if (poprest[inpop] >= restvomimpfen_folgewoche) {
+              let oldpoprest = poprest[inpop];
+              poprest[inpop] = poprest[inpop] - restvomimpfen_folgewoche;
+              restvomimpfen_folgewoche = restvomimpfen_folgewoche - (oldpoprest - poprest[inpop]);
             }
             else {
-              let oldpoprest =poprest[inpop];
-              poprest[inpop]=0;
-              restvomimpfen_folgewoche=restvomimpfen_folgewoche -(oldpoprest-poprest[inpop]);
+              let oldpoprest = poprest[inpop];
+              poprest[inpop] = 0;
+              restvomimpfen_folgewoche = restvomimpfen_folgewoche - (oldpoprest - poprest[inpop]);
             };
           };
           kapazitaet_verbleibend = topush['kapazitaet__vorher'] - topush['impfungen'];
@@ -785,6 +852,8 @@ export class StartComponent implements OnInit {
     this.sortArray(result, 'Dosen auf Lager')
     return result;
   }
+
+
 
 
 

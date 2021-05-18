@@ -354,13 +354,15 @@
                                     <strong>{{this.params.anteil_impfbereit*100 | number:'1.0-0'}} % </strong>impfbereit
                                 </p>
                             </div> 
-                            <div>
-                                <span>Datenexport aktivieren </span><br>
-                                <mat-slide-toggle [(ngModel)]="this.datenexport">
-                                <span *ngIf="this.datenexport"> Ja</span>
-                                <span *ngIf="!this.datenexport"> Nein</span>
+                            <div style="margin-top: 2em;margin-bottom:2em;">
+                                <span>STIKO Altersempfehlung ignorieren</span><br>
+                                <mat-slide-toggle [(ngModel)]="this.ignorealter"
+                                (change)="this.update_kapazitaet();">
+                                <span *ngIf="this.ignorealter"> Ja</span>
+                                <span *ngIf="!this.ignorealter"> Nein</span>
                             </mat-slide-toggle>
                             </div>
+                        
                             <div>
                                 <span>Datenexport aktivieren </span><br>
                                 <mat-slide-toggle [(ngModel)]="this.datenexport">
