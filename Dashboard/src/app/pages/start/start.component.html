@@ -531,7 +531,7 @@
                 <div fxFlex fxHide.lt-md=true></div>
 
                 <div  fxFlex=45 fxFlex.lt-md=100>
-                    <h2>Modellierte Impfquote <span *ngIf="this.params.anteil_impfbereit<1.0"> der Impfwilligen </span> in %</h2>
+                    <h2>Modellierte Impfquote <span *ngIf="this.params.anteil_impfbereit<1.0"> der Impfwilligen </span> alle Altersgruppen in %</h2>
                     <div>
                         <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
                             xvalue="date" [colorscheme]="['#1976d2','green']"
