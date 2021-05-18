@@ -71,7 +71,7 @@ export class StartComponent implements OnInit {
     { Stufe: 3, n: 5.7, anteil: 0.31386285366 },
     { Stufe: 4, n: 6.9, anteil: 0.41553673583 },
     { Stufe: 5, n: 8.4, anteil: 0.53931363587 },
-    { Stufe: 6, n: 31.26, anteil: 0.99 },
+    { Stufe: 6, n: 31.26, anteil: 0.835 },
     { Stufe: "", anteil: 1000000 },
     { Stufe: "", anteil: 1000000 }
   ];
