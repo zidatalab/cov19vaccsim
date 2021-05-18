@@ -1,5 +1,7 @@
+<p *ngIf="this.plottitle!=''" class="titlecontainer"><span class="plottitle">{{this.plottitle}}</span><br>
+<span class="plotsubtitle">{{this.plotsubtitle}}</span></p>
 <plotly-plot 
 [data]="this.plotdata" 
 [layout]="this.plotlayout" [config]="this.mainconfig"
 ></plotly-plot>  
-
+<p *ngIf="this.plotcaption!=''" class="plotcaption">{{this.plotcaption}}</p>
