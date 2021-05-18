@@ -107,7 +107,7 @@
                         <div *ngIf="this.showdurchimpfung" fxFlex=35 fxFlex.lt-md=100>
                             <h2>Lagerbestand am {{this.impfstand_rki | date:'shortDate'}}</h2>
                             <div>
-                                <app-plot [(data)]="this.hst_lager" [custommargins]="{ l: 70, r: 0, b: 0, t: 0 }"
+                                <app-plot [(data)]="this.hst_lager" [custommargins]="{ l: 70, r: 40, b: 50, t: 0 }"
                                     xvalue="Hersteller" [colorscheme]="['green']"
                                     [outcomes]="['Dosen auf Lager']" plottype="hbar"></app-plot>
                             </div> 
@@ -119,7 +119,7 @@
                             <h2>Erwartete Lieferungen</h2>
                             <div>
                                 <app-plot [(data)]="this.dosen_projektion_all_hersteller_filtered" 
-                                    xvalue="Datum" colorby="hersteller" [custommargins]="{ l: 0, r: 0, b: 45, t: 0 }"
+                                    xvalue="Datum" colorby="hersteller" [custommargins]="{ l: 0, r: 40, b: 45, t: 0 }"
                                     [outcomes]="['dosen_kw']" plottype="stackedarea"></app-plot>
                             </div>      
                         </div>
@@ -455,7 +455,7 @@
                 <div fxFlex=45>
                     <h2>Gelieferte und verimpfte Dosen</h2>
                     <div>
-                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 45, t: 0 }"
+                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 40, b: 45, t: 0 }"
                             xvalue="date" [colorscheme]="['crimson','green']"
                             [outcomes]="['Gelieferte Dosen','Verimpfte Dosen']" plottype="area"></app-plot>
                     </div>
@@ -469,7 +469,7 @@
                 <div fxFlex=45 fxFlex.lt-md=100>
                     <h2>Erstimpfungen nach Herstellern</h2>
                     <div>
-                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 45, t: 0 }"
+                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 40, b: 45, t: 0 }"
                             xvalue="date" [outcomes]="['Erst: BNT/Pfizer','Erst: AZ', 'Erst: Moderna', 'Erst: J&J', 'Erst: Curevac', 'Erst: Sanofi/GSK']"
                             plottype="stackedarea">
                         </app-plot>
@@ -484,7 +484,7 @@
                 <div fxFlex=45 fxFlex.lt-md=100>
                     <h2>Warteschlange Zweitimpfung</h2>
                     <div>
-                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 45, t: 0 }"
+                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 40, b: 45, t: 0 }"
                             xvalue="date" [outcomes]="['Warten: BNT/Pfizer','Warten: AZ', 'Warten: Moderna', 'Warten: Curevac', 'Warten: Sanofi/GSK']"
                             plottype="stackedarea">
                         </app-plot>
@@ -501,7 +501,7 @@
                 <div fxFlex=45 fxFlex.lt-md=100>
                     <h2>Unverimpfte Dosen</h2>
                     <div>
-                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 45, t: 0 }"
+                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 40, b: 45, t: 0 }"
                             xvalue="date" [colorscheme]="['orange']" [outcomes]="['Unverimpfte Dosen']" plottype="area">
                         </app-plot>
                     </div>
@@ -516,7 +516,7 @@
                 <div  fxFlex=45 fxFlex.lt-md=100>
                     <h2>Abgeschlossene Immunisierungen <span *ngIf="this.params.anteil_impfbereit<1.0"> der Impfwilligen </span></h2>
                     <div>
-                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 45, t: 0 }"
+                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 40, b: 25, t: 0 }"
                             xvalue="date" [colorscheme]="['green']" [outcomes]="['patienten_durchgeimpft']"
                             plottype="area">
                         </app-plot>
@@ -533,7 +533,7 @@
                 <div  fxFlex=45 fxFlex.lt-md=100>
                     <h2>Modellierte Impfquote <span *ngIf="this.params.anteil_impfbereit<1.0"> der Impfwilligen </span> alle Altersgruppen in %</h2>
                     <div>
-                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 0, b: 25, t: 0 }"
+                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 40, b: 25, t: 0 }"
                             xvalue="date" [colorscheme]="['#1976d2','green']"
                             [outcomes]="['Anteil Erst-Dosis','Anteil Durchimpfung']" plottype="area"></app-plot>
                     </div>
