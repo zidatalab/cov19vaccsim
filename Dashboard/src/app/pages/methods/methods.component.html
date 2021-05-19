@@ -2,10 +2,10 @@
     <div class="methodswrapper">
         <h1>Methodischer Hintergrund zum Simulationsrechner des Zi zur Covid-19-Impfkampagne</h1>
         <p><em>Dr. Lars Eric Kroll, Dr. Edgar Steiger, Thomas Czihal</em></p>
-        <p>Stand: 23.2.2021, 11:00 Uhr</p>
+        <p>Erste Version: 23.2.2021, Letztes Update: 19.5.2021</p>
         <h2>Hintergrund</h2>
         <p>
-            Ziel der vorliegenden Modellrechnungen ist die Entwicklung eines quantitativen Gerüsts für den zukünftigen
+            Ziel der vorliegenden Modellrechnungen ist die Entwicklung eines quantitativen Gerüsts für den weiteren
             Verlauf der nationalen Impfkampagne. Grundlage sind die im Rahmen des Impfgipfels bereitgestellten
             Informationen zu möglichen Liefermengen und zur bundesweiten Kapazität der Impfzentren.
             Der Verlauf der Impfkampagne wird anhand eines iterativen Algorithmus simuliert. Dabei müssen einerseits die
@@ -24,12 +24,15 @@
             <li><strong>Wie sollte die Impfkapazität zwischen Impfzentren und Arztpraxen verteilt werden?</strong></li>
             <li><strong> Welcher bevölkerungsbezogene Impfschutz lässt sich mit unterschiedlichen Impfstoffmengen,
                     Impfkapazitäten und Impfstrategien erreichen?</strong></li>
+            <li><strong> Wie wirken sich Zulassungen oder Ausfälle einzelner Impfstoffe aus?</strong></li>
+            <li><strong> Wie wirken sich herstellerspezifische Altersempfehlungen der STIKO aus?</strong></li>
         </ul>
         <p>
             Mit dem Simulationsrechner zur Covid-19-Impfkampagne des Zi soll ein Beitrag geleistet werden, um diese
             Fragen auf der Bundes-und Landesebene vorrausschauend beantworten und planungsrelevante Schlussfolgerungen
-            ziehen zu können. Verantwortliche aber auch die Betroffenen Menschen in der Bevölkerung können so sehen, 
-            wie die Impfkampagne in Deutschland bzw. in Ihrem Bundesland voranschreiten kann. Auswirkungen von politischen 
+            ziehen zu können. Verantwortliche aber auch die Betroffenen Menschen in der Bevölkerung können so sehen,
+            wie die Impfkampagne in Deutschland bzw. in Ihrem Bundesland voranschreiten kann. Auswirkungen von
+            politischen
             Entscheidungen zu Kapazitäten oder zur Ausgestaltung der Impfungen werden so direkt sichtbar.
         </p>
         <h2>Detaillierte Informationen zur Simulation</h2>
@@ -59,21 +62,35 @@
             </li>
         </ul>
         <p>
-            Unser Algorithmus ist im nachfolgenden Schaubild 1 dargestellt. Die Simulation wird wochenweise
-            durchgeführt.
-            In jeder Woche werden die verfügbare Impfkapazität und die verfügbaren Impfdosen, im Einklang mit den o.g.
-            Prämissen, für alle Hersteller geordnet nach Priorität zuerst auf die Zweitimpfungen und anschließend auf
+            Unser <strong>Algorithmus</strong> ist im nachfolgenden Schaubild 1 dargestellt. Die Simulation wird
+            wochenweise
+            durchgeführt. In jeder Woche werden die verfügbare Impfkapazität und die verfügbaren Impfdosen, im Einklang
+            mit den o.g. Prämissen, für alle Hersteller geordnet nach Priorität zuerst auf die Zweitimpfungen und
+            anschließend auf
             die Erstimpfungen verteilt. Im Einklang mit den aktuellen Empfehlungen des BMG werden dabei Impfdosen für
             spätere Zweitimpfungen zurückbehalten. Diese Rückstellungen können im Tool aber auch deaktiviert werden.
         </p>
         <p>
             <strong>Schaubild 1: Abflaufdiagramm des Algorithmus</strong><br>
             <span class="mat-caption">Quelle: Zentralinstitut für die kassenärztliche Versorgung (Zi), 2021</span><br>
-            <img src="https://www.zidatasciencelab.de/cov19vaccsim/assets/img/Algorithmus_Impfmodell.001.png" alt=""
+            <img style="max-width: 450px;" src="https://www.zidatasciencelab.de/cov19vaccsim/assets/img/Algorithmus_Impfmodell.001.png" alt=""
                 class="methods_img">
         </p>
         <p>
-            Der Datenfluss im Verlauf des Algorithmus ist im nachfolgenden Schaubild 2 dargestellt. Aus dem Diagramm
+            Um die herstellerspezifischen Altersempfehlungen der STIKO berücksichtigen zu können wird für jeden
+            Hersteller
+            berücksichtigt, für welche von vier Altersgruppen der Bevölkerung (0-11,12-17,18-59,60+ Jahre) der Impfstoff
+            zugelassen ist. Erstimpfungen werden dann nur aus dem ungeimpften Teil der Bevölkerung des jew. Alters
+            durchgeführt.</p>
+
+        <p>Bei der Umsetzung der herstellerspezifischen Altersempfehlungen gibt es die Herausforderung, dass für
+            bisherige Impfungen nicht bekannt ist, welcher Anteil auf welche Altersgruppe entfallen ist. Darum
+            wurde vereinfacht angenommen, dass bisherige Impfungen nur in den von der STIKO empfohlenen Altersgruppen
+            durchgeführt wurden. Sind mehrere Altersgruppen empfohlen, wird zuerst bei älteren und dann bei jüngeren
+            Altersgruppen geimpft.</p>
+        <p>
+            Der <strong>Datenfluss</strong> im Verlauf des Algorithmus ist im nachfolgenden Schaubild 2 dargestellt. Aus
+            dem Diagramm
             wird ersichtlich, warum eine iterative Simulation des Problems nötig ist. So bestimmt etwa die Zahl der
             Erstimpfungen in einer Woche die Anzahl der in einer Folgewoche notwendigen Zweitimpfungen. Ebenfalls können
             durch mangelnde Impfkapazitäten oder Rückstellungen Impfdosen aus den Vorwochen für Folgewochen zur
@@ -82,18 +99,25 @@
         </p>
         <p><strong>Schaubild 2: Datenfluss</strong><br>
             <span class="mat-caption">Quelle: Zentralinstitut für die kassenärztliche Versorgung (Zi), 2021</span><br>
-            <img src="https://www.zidatasciencelab.de/cov19vaccsim/assets/img/Algorithmus_Impfmodell.002.png" alt=""
-                class="methods_img">
+            <a href="https://www.zidatasciencelab.de/cov19vaccsim/assets/img/Algorithmus_Impfmodell.002.png"><img
+                    src="https://www.zidatasciencelab.de/cov19vaccsim/assets/img/Algorithmus_Impfmodell.002.png" alt=""
+                    class="methods_img"></a>
         </p>
         <h2>Fazit</h2>
         <p>
             Im Ergebnis der Simulation zeigt sich insgesamt, dass in Deutschland bereits jetzt Lieferungen für
-            ausreichend viele Impfdosen zur vollständigen Immunisierung der Bevölkerung zugesagt sind. Diese Dosen
-            treffen bis zum Ende des 3. Quartals in hinreichender Anzahl ein und sorgen dafür,
-            dass bei ausreichenden Kapazitäten bis Anfang September theoretisch eine vollständige Immunisierung der
-            Bevölkerung möglich ist.
-            Bei Zulassung des nur einmal zu verabreichenden Impfstoffs von J&amp;J würde sich dieses Ziel sogar noch im
-            August erreichen lassen.
+            ausreichend viele Impfdosen der zugelassenen Impfstoffe zur vollständigen Immunisierung der Bevölkerung bis
+            zum Herbst zugesagt sind.
+            Mit den derzeit geltenden Impfempfehlungen der STIKO ist bei ausreichenden Kapazitäten bis Mitte Oktober
+            theoretisch eine vollständige
+            Immunisierung der erwachsenen Bevölkerung möglich. Hier wäre zu beachten, dass zu Beginn des dritten
+            Quartals Rückstellungen für Zweitimpfungen mit Biontech gebildet werden müssten, um längere Wartezeiten auf
+            eine Zweitimpfung zu vermeiden. Dies folgt daraus, dass die Impfstoffe von AZ/J&J (Vektorimpfstoffe) zu
+            diesem Zeitpunkt nicht mehr verabreicht würden nach STIKO-Empfehlung, da die Impflinge der Altersgruppe der
+            Über-60-Jährigen bereits erschöpft wäre. Bei Verimpfung der Vektorimpfstoffe auch an Unter-60-Jährige
+            könnten diese Rückstellungen vermieden werden und das Durchimpfungsziel bereits Mitte September erreicht
+            werden.
+
         </p>
         <p class="mat-caption">Dieser Text wird fortlaufend aktualisiert.</p>
 
