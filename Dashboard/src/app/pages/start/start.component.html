@@ -468,7 +468,7 @@
                     <h2>Gelieferte und verimpfte Dosen</h2>
                     <div>
                         <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 40, b: 45, t: 0 }"
-                            xvalue="date" [colorscheme]="['crimson','green']" xtickformat="%d.%m.<br>%Y"
+                            xvalue="date" [colorscheme]="['#2196f3','#4caf50']" xtickformat="%d.%m.<br>%Y"
                             [outcomes]="['Gelieferte Dosen','Verimpfte Dosen']" plottype="area"></app-plot>
                     </div>
                     <div class="padding lightgreycolor">
@@ -514,7 +514,7 @@
                     <h2>Unverimpfte Dosen</h2>
                     <div>
                         <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 40, b: 45, t: 0 }" xtickformat="%d.%m.<br>%Y"
-                            xvalue="date" [colorscheme]="['orange']" [outcomes]="['Unverimpfte Dosen']" plottype="area">
+                            xvalue="date" [colorscheme]="['#8c8e3b']" [outcomes]="['Unverimpfte Dosen']" plottype="area">
                         </app-plot>
                     </div>
                     <div class="padding lightgreycolor">
@@ -529,7 +529,7 @@
                     <h2>Abgeschlossene Immunisierungen <span *ngIf="this.params.anteil_impfbereit<1.0"> der Impfwilligen </span></h2>
                     <div>
                         <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 40, b: 30, t: 0 }" xtickformat="%d.%m.<br>%Y"
-                            xvalue="date" [colorscheme]="['green']" [outcomes]="['patienten_durchgeimpft']"
+                            xvalue="date" [colorscheme]="['#196bad']" [outcomes]="['patienten_durchgeimpft']"
                             plottype="area">
                         </app-plot>
                     </div>
@@ -546,7 +546,7 @@
                     <h2>Modellierte Impfquote <span *ngIf="this.params.anteil_impfbereit<1.0"> der Impfwilligen </span> aller Altersgruppen in %</h2>
                     <div>
                         <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 40, b: 30, t: 0 }" xtickformat="%d.%m.<br>%Y"
-                            xvalue="date" [colorscheme]="['#1976d2','green']"
+                            xvalue="date" [colorscheme]="['#196bad','#357947']"
                             [outcomes]="['Anteil Erst-Dosis','Anteil Durchimpfung']" plottype="area"></app-plot>
                     </div>
                     <div class="padding lightgreycolor">
