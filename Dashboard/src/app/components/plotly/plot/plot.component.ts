@@ -18,6 +18,7 @@ export class PlotComponent implements OnInit {
   @Input() custommargins: any;
   @Input() linewidth: number;
   @Input() showlegend: boolean;
+  @Input() basecolor = "";
   @Input() colorscheme = [];
   @Input() annotations = [];
   @Input() hovertemplate = "";
@@ -40,9 +41,12 @@ export class PlotComponent implements OnInit {
 
   ngOnInit(): void {
     if (!this.linewidth) { this.linewidth = 2 };
-    if (!this.colorscheme) { this.colorscheme = ["#004c8c", "#0277bd", "#58a5f0", "#b71c1c", "#7f0000"]; }
+    if (this.basecolor=="") { this.basecolor="#004c8c";};
+    if (this.colorscheme.length==0) { this.colorscheme = ["#2196f3", "#196bad", "#113c5f", "#357947","#4caf50","#81b784","#bdbf4f","#adaf4c", "#8c8e3b"]; }
     this.make_plot();
   }
+
+  
 
   ngOnChanges(changes: any) {
     this.make_plot();
@@ -65,7 +69,8 @@ export class PlotComponent implements OnInit {
       this.plotlytype = "bar";
       this.plotlayout = {
         xaxis: { fixedrange: false, type: 'category', automargin: false },
-        yaxis: { fixedrange: true, showgrid: false, title: '', automargin: true, rangemode: 'tozero',ticksuffix:" " , nticks:this.n_yticks},
+        yaxis: { fixedrange: true, showgrid: false, title: '', 
+        automargin: true, rangemode: 'tozero',ticksuffix:" " , nticks:this.n_yticks},
         autosize: false, padding: 0,
         legend: { x: 1, xanchor: 'right', y: .8, bgcolor: 'ffffffa7' },
         margin: { l: 0, r: 100, b: 100, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent",
