@@ -118,8 +118,10 @@
                         <div *ngIf="this.showdurchimpfung" fxFlex=55 fxFlex.lt-md=100>
                             <h2>Erwartete Lieferungen</h2>
                             <div>
-                                <app-plot [(data)]="this.dosen_projektion_all_hersteller_filtered"  xtickformat="%d.%m.<br>%Y"
-                                    xvalue="Datum" colorby="hersteller" [custommargins]="{ l: 0, r: 40, b: 45, t: 0 }"
+                                <app-plot [(data)]="this.dosen_projektion_all_hersteller_filtered" 
+                                 xtickformat="%d.%m.<br>%Y"
+                                    xvalue="Datum" colorby="hersteller" 
+                                    [custommargins]="{ l: 0, r: 40, b: 45, t: 0 }"
                                     [outcomes]="['dosen_kw']" plottype="stackedarea"></app-plot>
                             </div>      
                         </div>
@@ -359,7 +361,7 @@
                                 <mat-slide-toggle [(ngModel)]="this.ignorealter"
                                 (change)="this.update_kapazitaet();">
                                 <span *ngIf="this.ignorealter"> nicht berücksichtigen</span>
-                                <span *ngIf="!this.ignorealter"> berüchsichtigen</span>
+                                <span *ngIf="!this.ignorealter"> berücksichtigen</span>
                             </mat-slide-toggle>
                             </div>
                         
