@@ -180,6 +180,7 @@ export class StartComponent implements OnInit {
     this.geo_impfstand = this.filterArray(this.stand_impfungen_hersteller, "geo", this.current_bl);
     this.filter_newdata();
     this.update_params();
+    console.log(this.stand_impfungen_data_aktuell_current);
     this.hst_lager = this.make_hersteller_overview(this.geo_impfstand);
   }
 
@@ -245,7 +246,6 @@ export class StartComponent implements OnInit {
   }
 
   do_simulation_new(myinput, params) {
-    console.log(myinput.slice(0,4))
     let kapazitaet = params.kapazitaet_pro_woche;
     let liefermenge = params.liefermenge;
     let theruecklage = params.ruecklage;

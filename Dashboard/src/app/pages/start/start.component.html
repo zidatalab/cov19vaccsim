@@ -21,23 +21,36 @@
             <h2>Aktuelle Hinweise</h2>
             <ng-container *ngFor="let newsitem of this.news">
                 <ng-container *ngIf="newsitem.show">
-                <p><strong>{{newsitem.header}}</strong><br>{{newsitem.text}} <span *ngIf="newsitem.url"><a style="color:white" [href]="newsitem.url"><strong>Weitere Informationen</strong></a></span></p> 
+                    <p><strong>{{newsitem.header}}</strong><br>{{newsitem.text}} <span *ngIf="newsitem.url"><a
+                                style="color:white" [href]="newsitem.url"><strong>Weitere
+                                    Informationen</strong></a></span></p>
                 </ng-container>
             </ng-container>
-                
+
         </mat-card>
-        </div>
+    </div>
     <div fxFlex=100>
         <mat-card *ngIf="this.stand_impfungen_data_aktuell_current">
-            <mat-card-title><h1>Stand der Impfkampagne
-                <span *ngIf="this.current_bl!='Gesamt'"> in {{this.current_bl}}</span>
-                <span *ngIf="this.current_bl=='Gesamt'"> in Deutschland</span></h1>
+            <mat-card-title>
+                <h1>Simulation der Impfkampagne
+                    <span *ngIf="this.current_bl!='Gesamt'"> in {{this.current_bl}}</span>
+                    <span *ngIf="this.current_bl=='Gesamt'"> in Deutschland</span>
+                </h1>
             </mat-card-title>
-            <mat-card-subtitle>Datenbasis: Impfungen lt. RKI (Stand {{this.impfstand_rki | date:'shortDate'}}), Lieferungen lt. BMG (Stand {{this.stand_bmg_lieferungen | date:'shortDate'}}), Kapazität lt. GMK (Stand {{this.kapazitaetsstand | date:'shortDate'}})</mat-card-subtitle>
+            <mat-card-subtitle>Datenbasis: Impfungen lt. RKI (Stand {{this.impfstand_rki | date:'shortDate'}}),
+                Lieferungen lt. BMG (Stand {{this.stand_bmg_lieferungen | date:'shortDate'}}), Kapazität lt. GMK (Stand
+                {{this.kapazitaetsstand | date:'shortDate'}})</mat-card-subtitle>
 
             <mat-card-content class="mat-padding">
                 <div fxLayout="row wrap" fxLayoutGap="2rem" fxLayoutAllign="space-around">
                     <div fxFlex=100>
+                        <p class="infobox">Dieses Angebot dient zur Projektion des weiteren Verlaufs der Impfkampagne. 
+                            <strong>Informationen zum aktuellen Stand der Impfkampagne</strong> entnehmen Sie bitte dem <a
+                                href="https://www.zidatasciencelab.de/covidimpfindex/"><strong>Zi-Impfindex</strong></a>. Allgemeine
+                           Informationen zur Pandemie erhalten Sie bei
+                            den <a href="https://www.zidatasciencelab.de/covid19dashboard/Start"><strong>Zi-Frühindikatoren zu
+                                COVID-19</strong></a>.
+                        </p>
 
                         <mat-form-field color="accent" appearance="outline">
                             <mat-label>Bundesland</mat-label>
@@ -51,7 +64,7 @@
                         </mat-form-field>
 
                     </div>
-                    <div fxFlex fxFlex.lt-sm=100 class="mat-padding">
+                    <!-- <div fxFlex fxFlex.lt-sm=100 class="mat-padding">
                         <p>
                             <span *ngIf="this.geo_lieferungen_bisher>=1e6"
                                 class="accentcolor bignum">{{this.geo_lieferungen_bisher/1e6
@@ -76,7 +89,7 @@
                             <br>
                             <span>bisher verimpft<br></span>
                         </p>
-                    </div>
+                    </div> -->
                     <div fxFlex fxFlex.lt-sm=100 class="mat-padding">
                         <p>
                             <span class="accentcolor bignum">
@@ -103,8 +116,8 @@
                             Durchimpfung
                         </p>
                     </div>
-                    <div fxFlex=100  fxLayout="row wrap" fxLayoutGap="2rem">
-                        <div *ngIf="this.showdurchimpfung" fxFlex=35 fxFlex.lt-md=100>
+                    <div fxFlex=100 fxLayout="row wrap" fxLayoutGap="2rem">
+                        <!--  <div *ngIf="this.showdurchimpfung" fxFlex=35 fxFlex.lt-md=100>
                             <h2>Lagerbestand am {{this.impfstand_rki | date:'shortDate'}}</h2>
                             <div>
                                 <app-plot [(data)]="this.hst_lager" [custommargins]="{ l: 70, r: 40, b: 50, t: 0 }"
@@ -114,16 +127,15 @@
                         </div>
                         <div fxHide.lt-md=true fxFlex>
 
-                        </div>
-                        <div *ngIf="this.showdurchimpfung" fxFlex=55 fxFlex.lt-md=100>
+                        </div> -->
+                        <div *ngIf="this.showdurchimpfung" fxFlex=100>
                             <h2>Erwartete Lieferungen</h2>
                             <div>
-                                <app-plot [(data)]="this.dosen_projektion_all_hersteller_filtered" 
-                                 xtickformat="%d.%m.<br>%Y"
-                                    xvalue="Datum" colorby="hersteller" 
-                                    [custommargins]="{ l: 0, r: 40, b: 45, t: 0 }"
-                                    [outcomes]="['dosen_kw']" plottype="stackedarea"></app-plot>
-                            </div>      
+                                <app-plot [(data)]="this.dosen_projektion_all_hersteller_filtered"
+                                    xtickformat="%d.%m.<br>%Y" xvalue="Datum" colorby="hersteller"
+                                    [custommargins]="{ l: 0, r: 40, b: 45, t: 0 }" [outcomes]="['dosen_kw']"
+                                    plottype="stackedarea"></app-plot>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -137,7 +149,8 @@
             <mat-card-title>
                 <h1>Simulationseinstellungen zur Impfkapazität</h1>
             </mat-card-title>
-            <mat-card-subtitle>Voreinstellungen auf Basis der Zahl der impfenden Praxen laut KBV-Impfmonitoring und der Kapazität von Impfzentren lt. BMG</mat-card-subtitle>
+            <mat-card-subtitle>Voreinstellungen auf Basis der Zahl der impfenden Praxen laut KBV-Impfmonitoring und der
+                Kapazität von Impfzentren lt. BMG</mat-card-subtitle>
             <mat-card-content>
                 <div *ngIf="this.stand_impfungen_data_aktuell_current" fxLayout="column">
                     <div fxFlex=100 fxLayout="column wrap" fxLayoutGap="1rem">
@@ -151,7 +164,7 @@
                                     </p>
                                 </div>
                             </div>
-                            <div fxFlex=30 fxFlex.lt-md=100 >
+                            <div fxFlex=30 fxFlex.lt-md=100>
                                 <div class="mat-padding">
                                     <p>
                                         <span class="accentcolor bignum">
@@ -162,7 +175,7 @@
                                     </p>
                                 </div>
                             </div>
-                            <div fxFlex=30 fxFlex.lt-md=100 >
+                            <div fxFlex=30 fxFlex.lt-md=100>
                                 <div class="mat-padding">
                                     <p>
                                         <span class="accentcolor bignum">{{this.params.kapazitaet_pro_tag |
@@ -209,7 +222,7 @@
                                     </p>
                                 </div>
                             </div>
-                            
+
 
                         </div>
                     </div>
@@ -232,7 +245,7 @@
                                 <mat-slider [(ngModel)]="this.params.n_impfzentren_pat" min="100" max="550000" step="10"
                                     (change)="this.update_kapazitaet();"></mat-slider>
                                 <strong>{{this.params.n_impfzentren_pat | number: '1.0-0'}}</strong>
-                     
+
                             </p>
                         </div>
                         <div fxFlex=50 fxFlex.lt-md=100>
@@ -260,120 +273,121 @@
                         <!-- Einstellungen zu Impfstoffen -->
                         <div fxFlex=100 fxFlex.lt-md=100 fxLayout="row wrap" fxLayoutGap=".1rem"
                             fxLayoutAllign="space-around">
-                     
-                                <h3><strong>Impfstoffe</strong><br>
-                                    <span fxHide.lt-md="true">
-                                        <mat-icon class="accentcolor bigicon" [inline]="true">healing</mat-icon>
-                                    </span>
-                                </h3>
-                            </div>
+
+                            <h3><strong>Impfstoffe</strong><br>
+                                <span fxHide.lt-md="true">
+                                    <mat-icon class="accentcolor bigicon" [inline]="true">healing</mat-icon>
+                                </span>
+                            </h3>
+                        </div>
                         <div fxFlex=100 fxFlex.lt-md=100 fxLayout="row wrap" fxLayoutGap="1rem"
                             fxLayoutAllign="space-between">
-                        <div fxFlex=35 fxFlex.lt-md=100 >
-                            <h3><strong>Lieferkette</strong></h3>
-                            <div>
-                                <p>Liefermenge:<span fxHide.lt-md="true"><br></span>
-                                    <mat-slider [(ngModel)]="this.params.liefermenge" min=".8" max="1.2" step="0.01"
-                                        (change)="this.update_kapazitaet();"></mat-slider>
-                                    <strong>{{this.params.liefermenge*100 | number:'1.0-0'}} %</strong>
-                                </p>
-                            </div>
-                            <div>
-                                <span>Verteilung der Lieferungen:</span>
-                                <mat-radio-group class="my-radio-group" [(ngModel)]="this.params.verteilungszenario"
-                                    (change)="this.update_kapazitaet();">
-                                    <ng-container *ngFor="let szenario of this.verteilungszenarien">
-                                        <mat-radio-button class="my-radio-button" [value]="szenario">{{szenario}}
-                                        </mat-radio-button>
-                                    </ng-container>
-                                </mat-radio-group>
-                            </div>
-                            <h3><strong>Impforganisation</strong></h3>
-                            <div>
-                                <p>Rückstellungen für Zweitimpfungen<span fxHide.lt-md="true"><br></span>
-                                    <mat-slide-toggle [(ngModel)]="this.params.ruecklage"
+                            <div fxFlex=35 fxFlex.lt-md=100>
+                                <h3><strong>Lieferkette</strong></h3>
+                                <div>
+                                    <p>Liefermenge:<span fxHide.lt-md="true"><br></span>
+                                        <mat-slider [(ngModel)]="this.params.liefermenge" min=".8" max="1.2" step="0.01"
+                                            (change)="this.update_kapazitaet();"></mat-slider>
+                                        <strong>{{this.params.liefermenge*100 | number:'1.0-0'}} %</strong>
+                                    </p>
+                                </div>
+                                <div>
+                                    <span>Verteilung der Lieferungen:</span>
+                                    <mat-radio-group class="my-radio-group" [(ngModel)]="this.params.verteilungszenario"
                                         (change)="this.update_kapazitaet();">
-                                        <span *ngIf="this.params.ruecklage">Ja</span>
-                                        <span *ngIf="!this.params.ruecklage">Nein</span>
-                                    </mat-slide-toggle>
-                                </p>
+                                        <ng-container *ngFor="let szenario of this.verteilungszenarien">
+                                            <mat-radio-button class="my-radio-button" [value]="szenario">{{szenario}}
+                                            </mat-radio-button>
+                                        </ng-container>
+                                    </mat-radio-group>
+                                </div>
+                                <h3><strong>Impforganisation</strong></h3>
+                                <div>
+                                    <p>Rückstellungen für Zweitimpfungen<span fxHide.lt-md="true"><br></span>
+                                        <mat-slide-toggle [(ngModel)]="this.params.ruecklage"
+                                            (change)="this.update_kapazitaet();">
+                                            <span *ngIf="this.params.ruecklage">Ja</span>
+                                            <span *ngIf="!this.params.ruecklage">Nein</span>
+                                        </mat-slide-toggle>
+                                    </p>
+                                </div>
+                                <div>
+                                    <p>Abstand Erst- zu Zweitimpfung:<span fxHide.lt-md="true"><br></span>
+                                        <mat-slider [(ngModel)]="this.params.addweekstoabstand" min="0" max="12"
+                                            step="1" (change)="this.update_kapazitaet();"></mat-slider>
+                                        <span *ngIf="this.params.addweekstoabstand==0"> laut STIKO</span>
+                                        <span *ngIf="this.params.addweekstoabstand>0"><strong>{{this.params.addweekstoabstand}}
+                                                Wochen länger</strong></span>
+                                    </p>
+                                </div>
                             </div>
-                            <div>
-                                <p>Abstand Erst- zu Zweitimpfung:<span fxHide.lt-md="true"><br></span>
-                                    <mat-slider [(ngModel)]="this.params.addweekstoabstand" min="0" max="12" step="1"
-                                        (change)="this.update_kapazitaet();"></mat-slider>
-                                    <span *ngIf="this.params.addweekstoabstand==0"> laut STIKO</span>
-                                    <span *ngIf="this.params.addweekstoabstand>0"><strong>{{this.params.addweekstoabstand}}
-                                            Wochen länger</strong></span>
-                                </p>
-                            </div>
-                        </div>    
-                        <div fxFlex=30 fxFlex.lt-md=100 >
-                            <h3><strong>Zulassung</strong></h3>
-                            <div>
-                                <span>Art der Impfstoffe:</span>
-                                <mat-radio-group class="my-radio-group" [(ngModel)]="this.params.impfstoffart"
-                                    (change)="this.update_kapazitaet();">
-                                    <mat-radio-button class="my-radio-button" [value]="'alle'">Alle bestellten
-                                    </mat-radio-button>
-                                    <mat-radio-button class="my-radio-button" [value]="'zugelassen'">Nur zugelassene
-                                        Impfstoffe</mat-radio-button>
-                                </mat-radio-group>
-                                <p>Ausfall simulieren:</p>
-                                <p
-                                    *ngFor="let hersteller of this.hersteller_zugelassen_details">
-                                    <ng-container *ngIf="!hersteller.checked">
-                                    <mat-checkbox [(ngModel)]="hersteller.checked" (change)="this.addremovehst(hersteller.hersteller,false);this.update_kapazitaet();" >
-                                    {{hersteller.hersteller}}                                    
-                                    </mat-checkbox>
-                                    </ng-container>
-                                    <ng-container *ngIf="hersteller.checked">
-                                        <mat-checkbox [(ngModel)]="hersteller.checked" (change)="this.addremovehst(hersteller.hersteller,true);this.update_kapazitaet();" >
-                                        {{hersteller.hersteller}}                                    
-                                        </mat-checkbox>
+                            <div fxFlex=30 fxFlex.lt-md=100>
+                                <h3><strong>Zulassung</strong></h3>
+                                <div>
+                                    <span>Art der Impfstoffe:</span>
+                                    <mat-radio-group class="my-radio-group" [(ngModel)]="this.params.impfstoffart"
+                                        (change)="this.update_kapazitaet();">
+                                        <mat-radio-button class="my-radio-button" [value]="'alle'">Alle bestellten
+                                        </mat-radio-button>
+                                        <mat-radio-button class="my-radio-button" [value]="'zugelassen'">Nur zugelassene
+                                            Impfstoffe</mat-radio-button>
+                                    </mat-radio-group>
+                                    <p>Ausfall simulieren:</p>
+                                    <p *ngFor="let hersteller of this.hersteller_zugelassen_details">
+                                        <ng-container *ngIf="!hersteller.checked">
+                                            <mat-checkbox [(ngModel)]="hersteller.checked"
+                                                (change)="this.addremovehst(hersteller.hersteller,false);this.update_kapazitaet();">
+                                                {{hersteller.hersteller}}
+                                            </mat-checkbox>
+                                        </ng-container>
+                                        <ng-container *ngIf="hersteller.checked">
+                                            <mat-checkbox [(ngModel)]="hersteller.checked"
+                                                (change)="this.addremovehst(hersteller.hersteller,true);this.update_kapazitaet();">
+                                                {{hersteller.hersteller}}
+                                            </mat-checkbox>
                                         </ng-container>
 
-                                </p>
+                                    </p>
+                                </div>
+                                <div *ngIf="this.params.impfstoffart=='zugelassen'">
+                                    <p>Zulassungseffekt simulieren:</p>
+                                    <p *ngFor="let hersteller of this.hersteller_nicht_zugelassen">
+                                        <mat-checkbox [(ngModel)]="hersteller.checked"
+                                            (change)="this.addremovehst(hersteller.hersteller,hersteller.checked);this.update_kapazitaet();">
+                                            {{hersteller.hersteller}}
+                                        </mat-checkbox>
+                                    </p>
+
+                                </div>
                             </div>
-                            <div *ngIf="this.params.impfstoffart=='zugelassen'">
-                                <p>Zulassungseffekt simulieren:</p>
-                                <p
-                                    *ngFor="let hersteller of this.hersteller_nicht_zugelassen">
-                                    <mat-checkbox [(ngModel)]="hersteller.checked" 
-                                     (change)="this.addremovehst(hersteller.hersteller,hersteller.checked);this.update_kapazitaet();" >
-                                    {{hersteller.hersteller}}
-                                    </mat-checkbox>
-                                </p>
-                                
+                            <div fxFlex=30 fxFlex.lt-md=100>
+                                <h3><strong>Sonstiges</strong></h3>
+                                <div>
+                                    <p>Impfbereitschaft:<span fxHide.lt-md="true"><br></span>
+                                        <mat-slider [(ngModel)]="this.params.anteil_impfbereit" min=".5" max="1.0"
+                                            step="0.05" (change)="this.update_kapazitaet();"></mat-slider>
+                                        <strong>{{this.params.anteil_impfbereit*100 | number:'1.0-0'}} %
+                                        </strong>impfbereit
+                                    </p>
+                                </div>
+                                <div style="margin-top: 2em;margin-bottom:2em;">
+                                    <span>STIKO Altersempfehlung</span><br>
+                                    <mat-slide-toggle [(ngModel)]="this.ignorealter"
+                                        (change)="this.update_kapazitaet();">
+                                        <span *ngIf="this.ignorealter"> nicht berücksichtigen</span>
+                                        <span *ngIf="!this.ignorealter"> berücksichtigen</span>
+                                    </mat-slide-toggle>
+                                </div>
+
+                                <div>
+                                    <span>Datenexport aktivieren </span><br>
+                                    <mat-slide-toggle [(ngModel)]="this.datenexport">
+                                        <span *ngIf="this.datenexport"> Ja</span>
+                                        <span *ngIf="!this.datenexport"> Nein</span>
+                                    </mat-slide-toggle>
+                                </div>
                             </div>
                         </div>
-                        <div fxFlex=30 fxFlex.lt-md=100 >
-                            <h3><strong>Sonstiges</strong></h3>                    
-                            <div>
-                                <p>Impfbereitschaft:<span fxHide.lt-md="true"><br></span>
-                                    <mat-slider [(ngModel)]="this.params.anteil_impfbereit" min=".5" max="1.0" step="0.05"
-                                        (change)="this.update_kapazitaet();"></mat-slider>
-                                    <strong>{{this.params.anteil_impfbereit*100 | number:'1.0-0'}} % </strong>impfbereit
-                                </p>
-                            </div> 
-                            <div style="margin-top: 2em;margin-bottom:2em;">
-                                <span>STIKO Altersempfehlung</span><br>
-                                <mat-slide-toggle [(ngModel)]="this.ignorealter"
-                                (change)="this.update_kapazitaet();">
-                                <span *ngIf="this.ignorealter"> nicht berücksichtigen</span>
-                                <span *ngIf="!this.ignorealter"> berücksichtigen</span>
-                            </mat-slide-toggle>
-                            </div>
-                        
-                            <div>
-                                <span>Datenexport aktivieren </span><br>
-                                <mat-slide-toggle [(ngModel)]="this.datenexport">
-                                <span *ngIf="this.datenexport"> Ja</span>
-                                <span *ngIf="!this.datenexport"> Nein</span>
-                            </mat-slide-toggle>
-                            </div>
-                        </div>
-                    </div>
                     </div>
                 </div>
             </mat-card-content>
@@ -391,17 +405,22 @@
 
     <div fxFlex=100 *ngIf="this.risktimes">
         <mat-card>
-            <mat-card-title><h1>Detaillierte Simulation
-                <span *ngIf="this.current_bl!='Gesamt'"> für {{this.current_bl}}</span>
-                <span *ngIf="this.current_bl=='Gesamt'"> für Deutschland</span></h1> 
+            <mat-card-title>
+                <h1>Detaillierte Simulation
+                    <span *ngIf="this.current_bl!='Gesamt'"> für {{this.current_bl}}</span>
+                    <span *ngIf="this.current_bl=='Gesamt'"> für Deutschland</span>
+                </h1>
             </mat-card-title>
-            <mat-card-subtitle>Die Simulation bezieht sich auf die gesamte <span *ngIf="this.params.anteil_impfbereit<1.0"> impfwillige </span> Bevölkerung Deutschlands</mat-card-subtitle>
+            <mat-card-subtitle>Die Simulation bezieht sich auf die gesamte <span
+                    *ngIf="this.params.anteil_impfbereit<1.0"> impfwillige </span> Bevölkerung Deutschlands
+            </mat-card-subtitle>
             <div fxLayout="row wrap" fxLayoutGap="2rem" fxLayoutAllign="space-between">
                 <div *ngIf="this.showdurchimpfung" fxFlex=100 fxFlex.lt-md=100 fxLayout="row wrap" fxLayoutGap="1rem"
                     fxLayoutAllign="space-around">
                     <div>
                         <p class="primarycolor">
-                            <strong>Erstimpfungen<span *ngIf="this.params.anteil_impfbereit<1.0"> der Impfwilligen</span> bis ..</strong>
+                            <strong>Erstimpfungen<span *ngIf="this.params.anteil_impfbereit<1.0"> der
+                                    Impfwilligen</span> bis ..</strong>
                         </p>
                     </div>
                     <div fxLayout="row wrap" fxLayoutGap="1rem" fxFlex=100>
@@ -410,18 +429,20 @@
 
                         <div *ngFor="let group of this.risktimes_firstdose" fxFlex.lt-md=100>
                             <p class="mat-caption">
-                                <span *ngIf="group.Datum!='nie' && group.Datum!='fertig'" class="primarycolor bignum" style="font-size: 2rem;">
+                                <span *ngIf="group.Datum!='nie' && group.Datum!='fertig'" class="primarycolor bignum"
+                                    style="font-size: 2rem;">
                                     {{group.Datum | date : 'dd.M.'}} </span>
                                 <span *ngIf="group.Datum=='nie'" class="primarycolor bignum" style="font-size: 2rem;">
                                     später </span>
-                                <span *ngIf="group.Datum=='fertig'" class="primarycolor bignum" style="font-size: 2rem;">
+                                <span *ngIf="group.Datum=='fertig'" class="primarycolor bignum"
+                                    style="font-size: 2rem;">
                                     ✓</span>
                                 <span fxHide.lt-md="true"><br></span>
                                 <span *ngIf="group.Stufe!=6">Risikostufe {{group.Stufe}}<span fxHide.lt-md="true"><br>
-                                    ({{group['Anteil']*100 | number:'1.0-0'}}% geimpft)</span>
+                                        ({{group['Anteil']*100 | number:'1.0-0'}}% geimpft)</span>
                                 </span>
                                 <span *ngIf="group.Stufe==6">Risikostufe {{group.Stufe}}<span fxHide.lt-md="true"><br>
-                                    Bevölkerung 18+ Jahre</span>
+                                        Bevölkerung 18+ Jahre</span>
                                 </span>
 
                             </p>
@@ -429,25 +450,27 @@
                     </div>
                     <div>
                         <p class="accentcolor">
-                            <strong>Durchimpfung<span *ngIf="this.params.anteil_impfbereit<1.0"> der Impfwilligen</span> bis ..</strong>
+                            <strong>Durchimpfung<span *ngIf="this.params.anteil_impfbereit<1.0"> der Impfwilligen</span>
+                                bis ..</strong>
                         </p>
                     </div>
                     <div fxLayout="row wrap" fxLayoutGap="1rem" fxFlex=100>
 
                         <div *ngFor="let group of this.risktimes" fxFlex.lt-md=100>
                             <p class="mat-caption">
-                                <span *ngIf="group.Datum!='nie' && group.Datum!='fertig'" class="accentcolor bignum" style="font-size: 2rem;">
+                                <span *ngIf="group.Datum!='nie' && group.Datum!='fertig'" class="accentcolor bignum"
+                                    style="font-size: 2rem;">
                                     {{group.Datum | date : 'dd.M.'}} </span>
                                 <span *ngIf="group.Datum=='nie'" class="accentcolor bignum" style="font-size: 2rem;">
                                     später </span>
-                                    <span *ngIf="group.Datum=='fertig'" class="accentcolor bignum" style="font-size: 2rem;">
-                                        ✓ </span>
+                                <span *ngIf="group.Datum=='fertig'" class="accentcolor bignum" style="font-size: 2rem;">
+                                    ✓ </span>
                                 <span fxHide.lt-md="true"><br></span>
                                 <span *ngIf="group.Stufe!=6">Risikostufe {{group.Stufe}}<span fxHide.lt-md="true"><br>
-                                    ({{group['Anteil']*100 | number:'1.0-0'}}% geimpft)</span>
+                                        ({{group['Anteil']*100 | number:'1.0-0'}}% geimpft)</span>
                                 </span>
                                 <span *ngIf="group.Stufe==6">Risikostufe {{group.Stufe}}<span fxHide.lt-md="true"><br>
-                                    Bevölkerung 18+ Jahre</span>
+                                        Bevölkerung 18+ Jahre</span>
                                 </span>
 
                             </p>
@@ -456,11 +479,17 @@
 
                     <div fxFlex=100>
                         <p class="mat-caption lightgreycolor">
-                            Die Risikostufen wurden laut STIKO-Empfehlung gebildet (<strong><a style="color:grey;" href="https://www.rki.de/DE/Content/Infekt/EpidBull/Archiv/2021/Ausgaben/02_21.pdf">RKI 2021, S.55</a></strong>). Die dargestellten
-                            Bevölkerungsanteile basieren auf Schätzungen der STIKO und wurden auf die <strong>gesamte Bevölkerung</strong> angewendet. Die Risikogruppe 1 nach STIKO entspricht § 2 (Höchste
+                            Die Risikostufen wurden laut STIKO-Empfehlung gebildet (<strong><a style="color:grey;"
+                                    href="https://www.rki.de/DE/Content/Infekt/EpidBull/Archiv/2021/Ausgaben/02_21.pdf">RKI
+                                    2021, S.55</a></strong>). Die dargestellten
+                            Bevölkerungsanteile basieren auf Schätzungen der STIKO und wurden auf die <strong>gesamte
+                                Bevölkerung</strong> angewendet. Die Risikogruppe 1 nach STIKO entspricht § 2 (Höchste
                             Priorität) der Impfverordnung; Risikogruppen 2 und 3 nach STIKO entsprechen § 3 (hohe
                             Priorität) der Impfverordnung; Risikogruppen 4 und 5 nach STIKO entsprechen § 4 (erhöhte
-                            Priorität) der Impfverordnung des Bundesministeriums für Gesundheit. <span *ngIf="this.current_bl!='Gesamt'"><em>Für die Länder wird mangels Daten vereinfacht angenommen, dass die Anteile der Risikogruppen den Anteilen im Bund entsprechen.</em></span>
+                            Priorität) der Impfverordnung des Bundesministeriums für Gesundheit. <span
+                                *ngIf="this.current_bl!='Gesamt'"><em>Für die Länder wird mangels Daten vereinfacht
+                                    angenommen, dass die Anteile der Risikogruppen den Anteilen im Bund
+                                    entsprechen.</em></span>
                         </p>
                     </div>
                 </div>
@@ -473,7 +502,9 @@
                     </div>
                     <div class="padding lightgreycolor">
                         <p class="mat-caption">
-                            Legende:<br>Projektion auf Basis der aktuellen Verträge mit den Herstellern. Eventuelle Lagerbestände werden zu Beginn mitberücksichtigt, sodass die Anzahl der Impfungen die der neuen Lieferungen übersteigen kann.
+                            Legende:<br>Projektion auf Basis der aktuellen Verträge mit den Herstellern. Eventuelle
+                            Lagerbestände werden zu Beginn mitberücksichtigt, sodass die Anzahl der Impfungen die der
+                            neuen Lieferungen übersteigen kann.
                         </p>
                     </div>
 
@@ -481,14 +512,16 @@
                 <div fxFlex=45 fxFlex.lt-md=100>
                     <h2>Erstimpfungen nach Herstellern</h2>
                     <div>
-                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 40, b: 45, t: 0 }" xtickformat="%d.%m.<br>%Y"
-                            xvalue="date" [outcomes]="['Erst: BNT/Pfizer','Erst: AZ', 'Erst: Moderna', 'Erst: J&J', 'Erst: Curevac', 'Erst: Sanofi/GSK']"
+                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 40, b: 45, t: 0 }"
+                            xtickformat="%d.%m.<br>%Y" xvalue="date"
+                            [outcomes]="['Erst: BNT/Pfizer','Erst: AZ', 'Erst: Moderna', 'Erst: J&J', 'Erst: Curevac', 'Erst: Sanofi/GSK']"
                             plottype="stackedarea">
                         </app-plot>
                     </div>
                     <div class="padding lightgreycolor">
                         <p class="mat-caption">
-                            Legende:<br>Projektion auf Basis der zugesagten Lieferungen und der aktuellen Verträge mit den Herstellern.
+                            Legende:<br>Projektion auf Basis der zugesagten Lieferungen und der aktuellen Verträge mit
+                            den Herstellern.
                         </p>
                     </div>
 
@@ -496,68 +529,76 @@
                 <div fxFlex=45 fxFlex.lt-md=100>
                     <h2>Warteschlange Zweitimpfung</h2>
                     <div>
-                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 40, b: 45, t: 0 }" xtickformat="%d.%m.<br>%Y"
-                            xvalue="date" [outcomes]="['Warten: BNT/Pfizer','Warten: AZ', 'Warten: Moderna', 'Warten: Curevac', 'Warten: Sanofi/GSK']"
+                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 40, b: 45, t: 0 }"
+                            xtickformat="%d.%m.<br>%Y" xvalue="date"
+                            [outcomes]="['Warten: BNT/Pfizer','Warten: AZ', 'Warten: Moderna', 'Warten: Curevac', 'Warten: Sanofi/GSK']"
                             plottype="stackedarea">
                         </app-plot>
                     </div>
                     <div class="padding lightgreycolor">
                         <p class="mat-caption">
-                            Legende:<br>Projektion auf Basis der zugesagten Lieferungen und der aktuellen Verträge mit den Herstellern.
+                            Legende:<br>Projektion auf Basis der zugesagten Lieferungen und der aktuellen Verträge mit
+                            den Herstellern.
                         </p>
                     </div>
 
                 </div>
-                
-              
+
+
                 <div fxFlex=45 fxFlex.lt-md=100>
                     <h2>Unverimpfte Dosen</h2>
                     <div>
-                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 40, b: 45, t: 0 }" xtickformat="%d.%m.<br>%Y"
-                            xvalue="date" [colorscheme]="['#8c8e3b']" [outcomes]="['Unverimpfte Dosen']" plottype="area">
+                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 40, b: 45, t: 0 }"
+                            xtickformat="%d.%m.<br>%Y" xvalue="date" [colorscheme]="['#8c8e3b']"
+                            [outcomes]="['Unverimpfte Dosen']" plottype="area">
                         </app-plot>
                     </div>
                     <div class="padding lightgreycolor">
                         <p class="mat-caption">
-                            Legende:<br>Projektion auf Basis der zugesagten Lieferungen und der aktuellen Verträge mit den Herstellern.
+                            Legende:<br>Projektion auf Basis der zugesagten Lieferungen und der aktuellen Verträge mit
+                            den Herstellern.
                         </p>
                     </div>
 
                 </div>
 
-                <div  fxFlex=45 fxFlex.lt-md=100>
-                    <h2>Abgeschlossene Immunisierungen <span *ngIf="this.params.anteil_impfbereit<1.0"> der Impfwilligen </span></h2>
+                <div fxFlex=45 fxFlex.lt-md=100>
+                    <h2>Abgeschlossene Immunisierungen <span *ngIf="this.params.anteil_impfbereit<1.0"> der Impfwilligen
+                        </span></h2>
                     <div>
-                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 40, b: 30, t: 0 }" xtickformat="%d.%m.<br>%Y"
-                            xvalue="date" [colorscheme]="['#196bad']" [outcomes]="['patienten_durchgeimpft']"
-                            plottype="area">
+                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 40, b: 30, t: 0 }"
+                            xtickformat="%d.%m.<br>%Y" xvalue="date" [colorscheme]="['#196bad']"
+                            [outcomes]="['patienten_durchgeimpft']" plottype="area">
                         </app-plot>
                     </div>
                     <div class="padding lightgreycolor">
                         <p class="mat-caption">
-                            Legende:<br>Projektion auf Basis der zugesagten Lieferungen und der aktuellen Verträge mit den Herstellern.
+                            Legende:<br>Projektion auf Basis der zugesagten Lieferungen und der aktuellen Verträge mit
+                            den Herstellern.
                         </p>
                     </div>
 
                 </div>
                 <div fxFlex fxHide.lt-md=true></div>
 
-                <div  fxFlex=45 fxFlex.lt-md=100>
-                    <h2>Modellierte Impfquote <span *ngIf="this.params.anteil_impfbereit<1.0"> der Impfwilligen </span> aller Altersgruppen in %</h2>
+                <div fxFlex=45 fxFlex.lt-md=100>
+                    <h2>Modellierte Impfquote <span *ngIf="this.params.anteil_impfbereit<1.0"> der Impfwilligen </span>
+                        aller Altersgruppen in %</h2>
                     <div>
-                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 40, b: 30, t: 0 }" xtickformat="%d.%m.<br>%Y"
-                            xvalue="date" [colorscheme]="['#196bad','#357947']"
+                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 40, b: 30, t: 0 }"
+                            xtickformat="%d.%m.<br>%Y" xvalue="date" [colorscheme]="['#196bad','#357947']"
                             [outcomes]="['Anteil Erst-Dosis','Anteil Durchimpfung']" plottype="area"></app-plot>
                     </div>
                     <div class="padding lightgreycolor">
                         <p class="mat-caption">
-                            Legende:<br>Projektion auf Basis der zugesagten Lieferungen und der aktuellen Verträge mit den Herstellern.
+                            Legende:<br>Projektion auf Basis der zugesagten Lieferungen und der aktuellen Verträge mit
+                            den Herstellern.
                         </p>
                     </div>
 
                 </div>
-                
-               
+
+
 
             </div>
 
@@ -569,24 +610,28 @@
             <mat-card-title>Datenexport</mat-card-title>
             <mat-card-content>
                 <div fxLayout="column" fxLayoutGap="1rem">
-                    <p>Über die nachfolgenden Buttons können Sie die Ergebnisse der Simulationsrechnungen ohne Gewähr als CSV-Datei exportieren. Wir
+                    <p>Über die nachfolgenden Buttons können Sie die Ergebnisse der Simulationsrechnungen ohne Gewähr
+                        als CSV-Datei exportieren. Wir
                         behalten uns Änderungen an den Feldnamen vor. Die kommerzielle Nutzung der Informationen ist
                         unter der Lizenz <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0</a>
-                        unter Quellenangabe gestattet. Wir bitten aber um Informationen zur Nutzung der Daten an <strong>presse(at)zi.de</strong>.</p>
+                        unter Quellenangabe gestattet. Wir bitten aber um Informationen zur Nutzung der Daten an
+                        <strong>presse(at)zi.de</strong>.</p>
 
                     <div fxFlex=100 fxLayout="row wrap" fxLayoutGap="1rem" fxLayoutAlign="space-between">
                         <div>
-                            <a mat-raised-button (click)="this.exportascsv('Parameter.csv',this.params);" class="blackbtn">Parameter</a>
+                            <a mat-raised-button (click)="this.exportascsv('Parameter.csv',this.params);"
+                                class="blackbtn">Parameter</a>
                         </div>
                         <div>
-                            <a mat-raised-button (click)="this.exportascsv('Durchimpfung.csv',this.risktimes);"class="blackbtn">Risikogruppen</a>
+                            <a mat-raised-button (click)="this.exportascsv('Durchimpfung.csv',this.risktimes);"
+                                class="blackbtn">Risikogruppen</a>
                         </div>
                         <div>
-                            <a mat-raised-button (click)="this.exportascsv('Zeitreihe.csv',this.new_simresult);" class="blackbtn">Zeitreihe</a>
+                            <a mat-raised-button (click)="this.exportascsv('Zeitreihe.csv',this.new_simresult);"
+                                class="blackbtn">Zeitreihe</a>
                         </div>
                         <div>
-                            <a mat-raised-button 
-                            (click)="this.exportascsv('Liefermengen.csv',
+                            <a mat-raised-button (click)="this.exportascsv('Liefermengen.csv',
                             this.filterkeys(this.dosen_projektion_all_hersteller_filtered,
                             ['Verteilungsszenario','kw','Bundesland','hersteller','dosen_kw'])
                             );" class="blackbtn">Liefermengen</a>
