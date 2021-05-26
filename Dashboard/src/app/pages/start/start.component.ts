@@ -59,6 +59,7 @@ export class StartComponent implements OnInit {
   current_bl = "Gesamt";
   sim_result: any;
   ignorealter: boolean;
+  bntjgdliche:boolean=false;
   new_simresult: any;
   all_bl_simresults: any;
   notstarted = true;
@@ -104,6 +105,8 @@ export class StartComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.ignorealter=false;
+    this.bntjgdliche=false;
     window.scrollTo(0, 0);
     if (Number(this.startdate) - Number(this.startportal) < 0) {
       this.check_portal_online();
@@ -114,13 +117,16 @@ export class StartComponent implements OnInit {
 
     this.update_days_since_start();
     this.token = this.route.snapshot.queryParams['token'] === this.valid_token;
-
-
+    
     if (this.token || !this.notstarted) {
       this.loaddata();
-      // Import some public data    
+
 
     }
+
+
+
+
   }
 
   loaddata() {
@@ -180,7 +186,6 @@ export class StartComponent implements OnInit {
     this.geo_impfstand = this.filterArray(this.stand_impfungen_hersteller, "geo", this.current_bl);
     this.filter_newdata();
     this.update_params();
-    console.log(this.stand_impfungen_data_aktuell_current);
     this.hst_lager = this.make_hersteller_overview(this.geo_impfstand);
   }
 
@@ -242,6 +247,7 @@ export class StartComponent implements OnInit {
       }
     }
     this.herstellerliste = this.removeduplicates(this.getValues(this.sortArray(this.filterArray(this.dosen_projektion_all_hersteller_filtered, "kw", this.dosen_projektion_all_hersteller_filtered[0]["kw"]), 'prioritaet'), "hersteller"));
+    console.log(this.herstellerliste);
 
   }
 
@@ -266,7 +272,7 @@ export class StartComponent implements OnInit {
       'pop_18_bis_60': myinput[0]['pop_18_bis_60'] * anteil_impfbereit,
       'pop_ueber_60': myinput[0]['pop_ueber_60'] * anteil_impfbereit
     };
-
+    const vacckids = this.bntjgdliche;
 
     // Schleife Zeit
     for (const thewoche of time) {
@@ -311,9 +317,16 @@ export class StartComponent implements OnInit {
           let dosen_verfuegbar = theinput['dosen_kw'] * liefermenge + hersteller_restdosen / 4;
           let topush = {};
           let impfpop_empfohlen = 0;
-
           let verbleibend_impfstand_erst = impfstand_hersteller['dosen_verabreicht_erst'];
-          let empfaltersgruppen = theinput["altersgruppe"];
+          const empfaltersgruppen = theinput["altersgruppe"];
+          
+          // Sim Zulassung 12+  pop_12_bis_18
+          if (vacckids && (thehersteller=="BNT/Pfizer")){
+            if (!empfaltersgruppen.includes("pop_12_bis_18")){
+              empfaltersgruppen.push("pop_12_bis_18");             
+            }
+          }
+
           let impfaltersgruppen = this.impfaltersgruppen;
           let newalter = [];
 
@@ -357,6 +370,8 @@ export class StartComponent implements OnInit {
               verbleibend_impfstand_erst = verbleibend_impfstand_erst - (oldpoprest - poprest[inpop]);
             };
           }
+
+
           if (theinput["anwendungen"] == 2) {
             info_zweitimpfungen_aktuelle_woche = this.filterArray(this.filterArray(result_zweitimpfungen, "hersteller", thehersteller), "kw", thewoche)[0];
             dosen_verfuegbar = info_zweitimpfungen_aktuelle_woche['dosenspeicher'];
@@ -365,6 +380,10 @@ export class StartComponent implements OnInit {
           let ruecklage = Math.round(dosen_verfuegbar * theinput['ruecklage']);
           if (!theruecklage) {
             ruecklage = 0;
+          }
+
+          for (let inpop of impfaltersgruppen) {
+            impfpop_empfohlen = impfpop_empfohlen + poprest[inpop];
           }
 
           topush['hersteller'] = thehersteller;
@@ -468,9 +487,16 @@ export class StartComponent implements OnInit {
           let ruecklage = 0;
           let topush = {};
           let impfpop_empfohlen = 0;
-          let empfaltersgruppen = theinput["altersgruppe"];
-          let impfaltersgruppen = this.impfaltersgruppen;
-          let newalter = [];
+          const empfaltersgruppen = theinput["altersgruppe"];
+          let impfaltersgruppen = [];
+          let newalter = [];          
+
+          // Sim Zulassung 12+  pop_12_bis_18
+              if (vacckids && (thehersteller=="BNT/Pfizer")){
+                if (!empfaltersgruppen.includes("pop_12_bis_18")){
+                  empfaltersgruppen.push("pop_12_bis_18");                  
+                }
+              }
 
           // Anpassung Altersgruppen
           // Add Gruppen of impfaltersgruppen to Array in recom. Order
@@ -500,7 +526,7 @@ export class StartComponent implements OnInit {
           impfaltersgruppen = newalter;
 
           for (let inpop of impfaltersgruppen) {
-            impfpop_empfohlen = impfpop_empfohlen + poprest[inpop];
+            impfpop_empfohlen = impfpop_empfohlen + Math.round(poprest[inpop]);
           }
 
           // Wenn 2 Anwendungen keine Restdosen da verfügbare Dosen = Dosenspeicher aus Zweitimpfungen
@@ -537,7 +563,7 @@ export class StartComponent implements OnInit {
             else {
               let oldpoprest = poprest[inpop];
               poprest[inpop] = 0;
-              restvomimpfen_folgewoche = restvomimpfen_folgewoche - (oldpoprest - poprest[inpop]);
+              restvomimpfen_folgewoche = restvomimpfen_folgewoche - oldpoprest;
             };
           };
           kapazitaet_verbleibend = topush['kapazitaet__vorher'] - topush['impfungen'];
@@ -596,27 +622,6 @@ export class StartComponent implements OnInit {
         // Korrektur Durchimpfung abgeschlossen
         topush['Anteil Durchimpfung'] = 100 * (topush['patienten_durchgeimpft'] / topush['population']);
         topush['Anteil Erst-Dosis'] = 100 * (topush['Verimpfte Erst-Dosen'] / topush['population']);
-        /* if (topush['Anteil Durchimpfung'] > 100) {
-          topush['Anteil Durchimpfung'] = 100;
-          topush['patienten_durchgeimpft'] = topush['population'];
-          topush['Auslastung'] = 0;
-          topush['Unverimpfte Dosen'] = 0;
-          topush['Verimpfte Dosen'] = 0;
-          topush['Wartschlange Zweitimpfung'] = 0;
-          for (let thehst of kwall2hersteller) {
-            topush['Warten: '+thehst] = 0;
-          }
-        
-        }
-
-        if (topush['Anteil Erst-Dosis'] > 100) {
-          topush['Anteil Erst-Dosis'] = 100;
-          topush['Verimpfte Erst-Dosen'] = topush['population'];
-          for (let thehst of kwall1hersteller) {
-            topush['Erst: '+thehst] = 0;
-          }
-        } */
-
         finalresult.push(topush)
       }
     }

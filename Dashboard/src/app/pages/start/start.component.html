@@ -217,12 +217,20 @@
                                     <p>
                                         <mat-slide-toggle [(ngModel)]="this.simple_alle_zulassen"
                                             (change)="this.change_simple()" [disabled]="this.mode=='detail'">
-                                            Alle Impfstoffe werden zugelassen
+                                            Alle Impfstoffe<br>werden zugelassen
                                         </mat-slide-toggle>
                                     </p>
                                 </div>
                             </div>
-
+                            <div class="mat-padding">
+                                <p>
+                                <mat-slide-toggle [(ngModel)]="this.ignorealter"
+                                    (change)="this.update_kapazitaet();">
+                                    <span *ngIf="!this.ignorealter"> STIKO Altersempfehlung</span>
+                                    <span *ngIf="this.ignorealter">Altersempfehlung nicht<br> berücksichtigen</span>
+                                </mat-slide-toggle>
+                                </p>
+                            </div>
 
                         </div>
                     </div>
@@ -378,6 +386,14 @@
                                         <span *ngIf="!this.ignorealter"> berücksichtigen</span>
                                     </mat-slide-toggle>
                                 </div>
+<!--                                 <div style="margin-top: 2em;margin-bottom:2em;">
+                                    <span>BNT für Jugendliche zugelassen</span><br>
+                                    <mat-slide-toggle [(ngModel)]="this.bntjgdliche"
+                                        (change)="this.update_kapazitaet();">
+                                        <span *ngIf="this.bntjgdliche">  zugelassen</span>
+                                        <span *ngIf="!this.bntjgdliche"> nicht zugelassen</span>
+                                    </mat-slide-toggle>
+                                </div> -->
 
                                 <div>
                                     <span>Datenexport aktivieren </span><br>
@@ -631,11 +647,14 @@
                                 class="blackbtn">Zeitreihe</a>
                         </div>
                         <div>
+                            <a mat-raised-button (click)="this.exportascsv('Zeitreihe.csv',this.filterkeys(this.new_simresult,['date','population','Anteil Durchimpfung','Anteil Erst-Dosis']));" class="blackbtn">Zeitreihe kurz</a>
+                        </div>
+                        <div>
                             <a mat-raised-button (click)="this.exportascsv('Liefermengen.csv',
                             this.filterkeys(this.dosen_projektion_all_hersteller_filtered,
                             ['Verteilungsszenario','kw','Bundesland','hersteller','dosen_kw'])
                             );" class="blackbtn">Liefermengen</a>
-                        </div>
+                        </div>                        
                     </div>
                 </div>
             </mat-card-content>
