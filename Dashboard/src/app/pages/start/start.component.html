@@ -226,12 +226,11 @@
                                 <p>
                                 <mat-slide-toggle [(ngModel)]="this.ignorealter"
                                     (change)="this.update_kapazitaet();">
-                                    <span *ngIf="!this.ignorealter"> STIKO Altersempfehlung</span>
-                                    <span *ngIf="this.ignorealter">Altersempfehlung nicht<br> berücksichtigen</span>
+                                    <span *ngIf="!this.ignorealter">Impfen nach STIKO Altersempfehlung</span>
+                                    <span *ngIf="this.ignorealter">Impfen nach EMA Zulassung</span>
                                 </mat-slide-toggle>
                                 </p>
                             </div>
-
                         </div>
                     </div>
                     <div style="background-color:rgba(211, 211, 211, 0.084);padding:2rem;margin:1rem;border-radius:10px;"
@@ -386,15 +385,15 @@
                                         <span *ngIf="!this.ignorealter"> berücksichtigen</span>
                                     </mat-slide-toggle>
                                 </div>
-<!--                                 <div style="margin-top: 2em;margin-bottom:2em;">
-                                    <span>BNT für Jugendliche zugelassen</span><br>
-                                    <mat-slide-toggle [(ngModel)]="this.bntjgdliche"
-                                        (change)="this.update_kapazitaet();">
-                                        <span *ngIf="this.bntjgdliche">  zugelassen</span>
-                                        <span *ngIf="!this.bntjgdliche"> nicht zugelassen</span>
+                            
+                                <div style="margin-top: 2em;margin-bottom:2em;">
+                                    <span>BNT/Pfizer an Jugendliche verimpfen</span><br>
+                                    <mat-slide-toggle [(ngModel)]="this.params.bntjgdliche"
+                                        (change)="this.loaddata();">
+                                        <span *ngIf="this.params.bntjgdliche">  Ja</span>
+                                        <span *ngIf="!this.params.bntjgdliche"> Nein</span>
                                     </mat-slide-toggle>
-                                </div> -->
-
+                                </div> 
                                 <div>
                                     <span>Datenexport aktivieren </span><br>
                                     <mat-slide-toggle [(ngModel)]="this.datenexport">

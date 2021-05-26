@@ -59,7 +59,6 @@ export class StartComponent implements OnInit {
   current_bl = "Gesamt";
   sim_result: any;
   ignorealter: boolean;
-  bntjgdliche:boolean=false;
   new_simresult: any;
   all_bl_simresults: any;
   notstarted = true;
@@ -96,7 +95,8 @@ export class StartComponent implements OnInit {
     addhersteller: [],
     ruecklage: false,
     anteil_impfbereit: 1.0,
-    verteilungszenario: this.verteilungszenarien[1]
+    verteilungszenario: this.verteilungszenarien[1],
+    bntjgdliche:false
   };
   updateinput: any;
   timer: Date;
@@ -106,7 +106,6 @@ export class StartComponent implements OnInit {
 
   ngOnInit(): void {
     this.ignorealter=false;
-    this.bntjgdliche=false;
     window.scrollTo(0, 0);
     if (Number(this.startdate) - Number(this.startportal) < 0) {
       this.check_portal_online();
@@ -191,6 +190,9 @@ export class StartComponent implements OnInit {
 
 
   update_params() {
+    this.new_simresult = [];
+    this.risktimes = [];
+    this.risktimes_firstdose = [];
     this.params.impflinge = this.getValues(this.filterArray(this.ewz_bl, "Bundesland", this.current_bl), "EW_20plus")[0];
     this.bev_anteil_land = this.getValues(this.filterArray(this.ewz_bl, "Bundesland", this.current_bl), "Anteil_20plus")[0];
     this.impfkapazitaet_land = this.getValues(this.filterArray(this.ewz_bl, "Bundesland", this.current_bl), "Impfkapazitaet")[0];
@@ -246,19 +248,19 @@ export class StartComponent implements OnInit {
         this.dosen_projektion_all_hersteller_filtered = data;
       }
     }
-    this.herstellerliste = this.removeduplicates(this.getValues(this.sortArray(this.filterArray(this.dosen_projektion_all_hersteller_filtered, "kw", this.dosen_projektion_all_hersteller_filtered[0]["kw"]), 'prioritaet'), "hersteller"));
-    console.log(this.herstellerliste);
+    this.herstellerliste = this.removeduplicates(this.getValues(this.sortArray(this.filterArray(this.dosen_projektion_all_hersteller_filtered, "kw", this.dosen_projektion_all_hersteller_filtered[0]["kw"]), 'prioritaet'), "hersteller"));    
 
   }
+ 
 
-  do_simulation_new(myinput, params) {
+ do_simulation_new(myinput, params) {
     let kapazitaet = params.kapazitaet_pro_woche;
     let liefermenge = params.liefermenge;
     let theruecklage = params.ruecklage;
     let addtheweekstoabstand = params.addweekstoabstand;
     let anteil_impfbereit = params.anteil_impfbereit;
-    let input = myinput;
     let hersteller = this.herstellerliste;
+    let input = myinput;
     let time: Array<number> = this.getValues(this.sortArray(this.filterArray(input, "hersteller", hersteller[0]), 'kw'), "kw");
     let firstweek = time[0];
     let impfstand = this.geo_impfstand;
@@ -272,7 +274,7 @@ export class StartComponent implements OnInit {
       'pop_18_bis_60': myinput[0]['pop_18_bis_60'] * anteil_impfbereit,
       'pop_ueber_60': myinput[0]['pop_ueber_60'] * anteil_impfbereit
     };
-    const vacckids = this.bntjgdliche;
+    const vacckids = params.bntjgdliche;
 
     // Schleife Zeit
     for (const thewoche of time) {
@@ -308,7 +310,7 @@ export class StartComponent implements OnInit {
           }
         }
 
-        // Schleife Hersteller Erstimpfung
+        // Erstimpfungen Startwoche
         for (const thehersteller of hersteller) {
           let theinput = this.filterArray(this.filterArray(myinput, "hersteller", thehersteller), "kw", thewoche)[0];
           let impfstand_hersteller = this.filterArray(impfstand, "hersteller", thehersteller)[0];
@@ -334,14 +336,14 @@ export class StartComponent implements OnInit {
           // Add Gruppen of impfaltersgruppen to Array in recom. Order
           for (let thegruppe of this.impfaltersgruppen) {
             if (empfaltersgruppen.indexOf(thegruppe) >= 0) {
-              newalter = newalter.concat(thegruppe);
+              newalter.push(thegruppe);
 
             }
           }
           // Add Gruppen not in impfaltersgruppen if in emp
           for (let thegruppe of empfaltersgruppen) {
             if (newalter.indexOf(thegruppe) == -1) {
-              newalter = newalter.concat(thegruppe);
+              newalter.push(thegruppe);
             }
           }
 
@@ -349,7 +351,7 @@ export class StartComponent implements OnInit {
           if (this.ignorealter){
             for (let thegruppe of this.impfaltersgruppen) {
               if (newalter.indexOf(thegruppe)==-1) {
-                newalter = newalter.concat(thegruppe);
+                newalter.push(thegruppe);
               }
             }
             }
@@ -385,7 +387,7 @@ export class StartComponent implements OnInit {
           for (let inpop of impfaltersgruppen) {
             impfpop_empfohlen = impfpop_empfohlen + poprest[inpop];
           }
-
+          
           topush['hersteller'] = thehersteller;
           topush['kw'] = thewoche;
           topush['population'] = theinput['population'] * anteil_impfbereit;
@@ -487,7 +489,7 @@ export class StartComponent implements OnInit {
           let ruecklage = 0;
           let topush = {};
           let impfpop_empfohlen = 0;
-          const empfaltersgruppen = theinput["altersgruppe"];
+          let empfaltersgruppen = theinput["altersgruppe"];
           let impfaltersgruppen = [];
           let newalter = [];          
 
@@ -502,14 +504,14 @@ export class StartComponent implements OnInit {
           // Add Gruppen of impfaltersgruppen to Array in recom. Order
           for (let thegruppe of this.impfaltersgruppen) {
             if (empfaltersgruppen.indexOf(thegruppe) >= 0) {
-              newalter = newalter.concat(thegruppe);
+              newalter.push(thegruppe);
 
             }
           }
           // Add Gruppen not in impfaltersgruppen if in emp
           for (let thegruppe of empfaltersgruppen) {
             if (newalter.indexOf(thegruppe) == -1) {
-              newalter = newalter.concat(thegruppe);
+              newalter.push(thegruppe);
             }
           }
 
@@ -517,7 +519,7 @@ export class StartComponent implements OnInit {
           if (this.ignorealter){
             for (let thegruppe of this.impfaltersgruppen) {
               if (newalter.indexOf(thegruppe)==-1) {
-                newalter = newalter.concat(thegruppe);
+                newalter.push(thegruppe);
               }
             }
             }
@@ -679,40 +681,6 @@ export class StartComponent implements OnInit {
     return localrisktimes;
   }
 
-
-  all_region_sim() {
-    let result = [];
-    let regions = this.bl_liste;
-    // Full dataset
-    let fulldata = this.filterArray(this.dosen_projektion_all_hersteller, "Verteilungsszenario", this.params.verteilungszenario);
-    if (this.params.impfstoffart == 'zugelassen') {
-      fulldata = this.filterArray(fulldata, 'zugelassen', 1);
-    }
-
-    let inputparams = this.params;
-    let soll_impfkapazitaet = this.impfkapazitaet_land * 7;
-    let ist_impfkapazitaet = this.params.kapazitaet_pro_woche;
-    let vh_zu_soll = (ist_impfkapazitaet / soll_impfkapazitaet);
-
-    for (let bundesland of regions) {
-      let batch = this.filterArray(fulldata, "Bundesland", bundesland);
-      let impfkapazitaet_land = this.getValues(this.filterArray(this.ewz_bl, "Bundesland", bundesland), "Impfkapazitaet")[0];
-      let localparams = {};
-      localparams['kapazitaet_pro_woche'] = impfkapazitaet_land * vh_zu_soll;
-      localparams['liefermenge'] = inputparams.liefermenge;
-      localparams['ruecklage'] = inputparams.ruecklage;
-      localparams['addweekstoabstand'] = inputparams.addweekstoabstand;
-      let localresult = this.do_simulation_new(batch, localparams);
-      let localrisktimes = { 'Bundesland': bundesland, risktimes: this.update_risktimes(localresult, 'Anteil Durchimpfung') };
-      result.push(localrisktimes);
-    }
-
-    return result;
-  }
-
-  make_nice_regiontable() {
-    return;
-  }
 
   update_days_since_start() {
     let date1 = new Date("2020-12-26");
