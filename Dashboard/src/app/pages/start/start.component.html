@@ -428,7 +428,8 @@
                 </h1>
             </mat-card-title>
             <mat-card-subtitle>Die Simulation bezieht sich auf die gesamte <span
-                    *ngIf="this.params.anteil_impfbereit<1.0"> impfwillige </span> Bevölkerung Deutschlands
+                    *ngIf="this.params.anteil_impfbereit<1.0"> impfwillige </span> Bevölkerung Deutschlands. Es wird die rechnerische Durchimpfung am Ende der laufenden Woche auf Basis der Zahl geimpfter Menschen dargestellt. 
+                    Zur genauen Durchimpfung der Risikogruppen liegen keine genauen Informationen vor.
             </mat-card-subtitle>
             <div fxLayout="row wrap" fxLayoutGap="2rem" fxLayoutAllign="space-between">
                 <div *ngIf="this.showdurchimpfung" fxFlex=100 fxFlex.lt-md=100 fxLayout="row wrap" fxLayoutGap="1rem"
@@ -436,7 +437,7 @@
                     <div>
                         <p class="primarycolor">
                             <strong>Erstimpfungen<span *ngIf="this.params.anteil_impfbereit<1.0"> der
-                                    Impfwilligen</span> bis ..</strong>
+                                    Impfwilligen</span> rechnerisch bis ..</strong>
                         </p>
                     </div>
                     <div fxLayout="row wrap" fxLayoutGap="1rem" fxFlex=100>
@@ -467,7 +468,7 @@
                     <div>
                         <p class="accentcolor">
                             <strong>Durchimpfung<span *ngIf="this.params.anteil_impfbereit<1.0"> der Impfwilligen</span>
-                                bis ..</strong>
+                                rechnerisch bis ..</strong>
                         </p>
                     </div>
                     <div fxLayout="row wrap" fxLayoutGap="1rem" fxFlex=100>
