@@ -630,11 +630,11 @@ export class StartComponent implements OnInit {
         if (topush['Verimpfte Erst-Dosen'] >=67.86*1e6 && vacckids==false){
           topush['Verimpfte Erst-Dosen'] =67.86*1e6;
         }
-        if (topush['patienten_durchgeimpft']>=73994253 && vacckids==true){
-          topush['patienten_durchgeimpft']=73994253;
+        if (topush['patienten_durchgeimpft']>=73994326 && vacckids==true){
+          topush['patienten_durchgeimpft']=73994327;
         }
-        if (topush['Verimpfte Erst-Dosen'] >=73994253 && vacckids==true){
-          topush['Verimpfte Erst-Dosen'] =73994253;
+        if (topush['Verimpfte Erst-Dosen'] >=73994326 && vacckids==true){
+          topush['Verimpfte Erst-Dosen'] =73994327;
         }
         // Berechnung Impfquote
         topush['Anteil Durchimpfung'] = 100 * (topush['patienten_durchgeimpft'] / topush['population']);
