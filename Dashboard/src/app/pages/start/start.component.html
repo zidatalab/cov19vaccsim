@@ -44,12 +44,14 @@
             <mat-card-content class="mat-padding">
                 <div fxLayout="row wrap" fxLayoutGap="2rem" fxLayoutAllign="space-around">
                     <div fxFlex=100>
-                        <p class="infobox">Dieses Angebot dient zur Projektion des weiteren Verlaufs der Impfkampagne. 
-                            <strong>Informationen zum aktuellen Stand der Impfkampagne</strong> entnehmen Sie bitte dem <a
-                                href="https://www.zidatasciencelab.de/covidimpfindex/"><strong>Zi-Impfindex</strong></a>. Allgemeine
-                           Informationen zur Pandemie erhalten Sie bei
-                            den <a href="https://www.zidatasciencelab.de/covid19dashboard/Start"><strong>Zi-Frühindikatoren zu
-                                COVID-19</strong></a>.
+                        <p class="infobox">Dieses Angebot dient zur Projektion des weiteren Verlaufs der Impfkampagne.
+                            <strong>Informationen zum aktuellen Stand der Impfkampagne</strong> entnehmen Sie bitte dem
+                            <a href="https://www.zidatasciencelab.de/covidimpfindex/"><strong>Zi-Impfindex</strong></a>.
+                            Allgemeine
+                            Informationen zur Pandemie erhalten Sie bei
+                            den <a href="https://www.zidatasciencelab.de/covid19dashboard/Start"><strong>Zi-Frühindikatoren
+                                    zu
+                                    COVID-19</strong></a>.
                         </p>
 
                         <mat-form-field color="accent" appearance="outline">
@@ -224,11 +226,11 @@
                             </div>
                             <div class="mat-padding">
                                 <p>
-                                <mat-slide-toggle [(ngModel)]="this.ignorealter"
-                                    (change)="this.update_kapazitaet();">
-                                    <span *ngIf="!this.ignorealter">Impfen nach STIKO Altersempfehlung</span>
-                                    <span *ngIf="this.ignorealter">Impfen nach EMA Zulassung</span>
-                                </mat-slide-toggle>
+                                    <mat-slide-toggle [(ngModel)]="this.ignorealter"
+                                        (change)="this.update_kapazitaet();">
+                                        <span *ngIf="!this.ignorealter">Impfen nach STIKO Altersempfehlung</span>
+                                        <span *ngIf="this.ignorealter">Impfen nach EMA Zulassung</span>
+                                    </mat-slide-toggle>
                                 </p>
                             </div>
                         </div>
@@ -385,15 +387,14 @@
                                         <span *ngIf="!this.ignorealter"> berücksichtigen</span>
                                     </mat-slide-toggle>
                                 </div>
-                            
+
                                 <div style="margin-top: 2em;margin-bottom:2em;">
                                     <span>BNT/Pfizer an Jugendliche verimpfen</span><br>
-                                    <mat-slide-toggle [(ngModel)]="this.params.bntjgdliche"
-                                        (change)="this.loaddata();">
-                                        <span *ngIf="this.params.bntjgdliche">  Ja</span>
+                                    <mat-slide-toggle [(ngModel)]="this.params.bntjgdliche" (change)="this.loaddata();">
+                                        <span *ngIf="this.params.bntjgdliche"> Ja</span>
                                         <span *ngIf="!this.params.bntjgdliche"> Nein</span>
                                     </mat-slide-toggle>
-                                </div> 
+                                </div>
                                 <div>
                                     <span>Datenexport aktivieren </span><br>
                                     <mat-slide-toggle [(ngModel)]="this.datenexport">
@@ -427,8 +428,9 @@
                 </h1>
             </mat-card-title>
             <mat-card-subtitle>Die Simulation bezieht sich auf die gesamte <span
-                    *ngIf="this.params.anteil_impfbereit<1.0"> impfwillige </span> Bevölkerung Deutschlands. Es wird die rechnerische Durchimpfung am Ende der laufenden Woche auf Basis der Zahl geimpfter Menschen dargestellt. 
-                    Zur genauen Durchimpfung der Risikogruppen liegen keine genauen Informationen vor.
+                    *ngIf="this.params.anteil_impfbereit<1.0"> impfwillige </span> Bevölkerung Deutschlands. Es wird die
+                rechnerische Durchimpfung am Ende der laufenden Woche auf Basis der Zahl geimpfter Menschen dargestellt.
+                Zur genauen Durchimpfung der Risikogruppen liegen keine genauen Informationen vor.
             </mat-card-subtitle>
             <div fxLayout="row wrap" fxLayoutGap="2rem" fxLayoutAllign="space-between">
                 <div *ngIf="this.showdurchimpfung" fxFlex=100 fxFlex.lt-md=100 fxLayout="row wrap" fxLayoutGap="1rem"
@@ -454,12 +456,16 @@
                                     style="font-size: 2rem;">
                                     ✓</span>
                                 <span fxHide.lt-md="true"><br></span>
-                                <span *ngIf="group.Stufe!=6">Risikostufe {{group.Stufe}}<span fxHide.lt-md="true"><br>
+                                <span *ngIf="group.Stufe<6">Risikostufe {{group.Stufe}}<span fxHide.lt-md="true"><br>
                                         ({{group['Anteil']*100 | number:'1.0-0'}}% geimpft)</span>
                                 </span>
                                 <span *ngIf="group.Stufe==6">Risikostufe {{group.Stufe}}<span fxHide.lt-md="true"><br>
                                         Bevölkerung 18+ Jahre</span>
                                 </span>
+                                <span *ngIf="group.Stufe==7 && this.params.bntjgdliche==true">Kinder und
+                                    Jugendliche<span fxHide.lt-md="true"><br>
+                                        12 bis 17 Jahre</span> </span>
+
 
                             </p>
                         </div>
@@ -482,12 +488,15 @@
                                 <span *ngIf="group.Datum=='fertig'" class="accentcolor bignum" style="font-size: 2rem;">
                                     ✓ </span>
                                 <span fxHide.lt-md="true"><br></span>
-                                <span *ngIf="group.Stufe!=6">Risikostufe {{group.Stufe}}<span fxHide.lt-md="true"><br>
+                                <span *ngIf="group.Stufe<6">Risikostufe {{group.Stufe}}<span fxHide.lt-md="true"><br>
                                         ({{group['Anteil']*100 | number:'1.0-0'}}% geimpft)</span>
                                 </span>
                                 <span *ngIf="group.Stufe==6">Risikostufe {{group.Stufe}}<span fxHide.lt-md="true"><br>
-                                        Bevölkerung 18+ Jahre</span>
-                                </span>
+                                        Bevölkerung 18+ Jahre</span></span>
+                                        <span *ngIf="group.Stufe==7 && this.params.bntjgdliche==true">Kinder und Jugendliche<span fxHide.lt-md="true"><br>
+                                            12 bis 17 Jahre</span></span>
+
+
 
                             </p>
                         </div>
@@ -631,7 +640,8 @@
                         behalten uns Änderungen an den Feldnamen vor. Die kommerzielle Nutzung der Informationen ist
                         unter der Lizenz <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0</a>
                         unter Quellenangabe gestattet. Wir bitten aber um Informationen zur Nutzung der Daten an
-                        <strong>presse(at)zi.de</strong>.</p>
+                        <strong>presse(at)zi.de</strong>.
+                    </p>
 
                     <div fxFlex=100 fxLayout="row wrap" fxLayoutGap="1rem" fxLayoutAlign="space-between">
                         <div>
@@ -647,14 +657,16 @@
                                 class="blackbtn">Zeitreihe</a>
                         </div>
                         <div>
-                            <a mat-raised-button (click)="this.exportascsv('Zeitreihe.csv',this.filterkeys(this.new_simresult,['date','population','Anteil Durchimpfung','Anteil Erst-Dosis']));" class="blackbtn">Zeitreihe kurz</a>
+                            <a mat-raised-button
+                                (click)="this.exportascsv('Zeitreihe.csv',this.filterkeys(this.new_simresult,['date','population','Anteil Durchimpfung','Anteil Erst-Dosis']));"
+                                class="blackbtn">Zeitreihe kurz</a>
                         </div>
                         <div>
                             <a mat-raised-button (click)="this.exportascsv('Liefermengen.csv',
                             this.filterkeys(this.dosen_projektion_all_hersteller_filtered,
                             ['Verteilungsszenario','kw','Bundesland','hersteller','dosen_kw'])
                             );" class="blackbtn">Liefermengen</a>
-                        </div>                        
+                        </div>
                     </div>
                 </div>
             </mat-card-content>

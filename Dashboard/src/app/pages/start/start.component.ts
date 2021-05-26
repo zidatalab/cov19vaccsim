@@ -73,6 +73,7 @@ export class StartComponent implements OnInit {
     { Stufe: 4, n: 6.9, anteil:   (8.6+7+5.7+6.9)/83.166711 },
     { Stufe: 5, n: 8.4, anteil:   (8.6+7+5.7+6.9+8.4)/83.166711 },
     { Stufe: 6, n: 31.26, anteil: (8.6+7+5.7+6.9+8.4+31.26)/83.166711},
+    { Stufe: 7,  anteil: .88971},
     { Stufe: "", anteil: 1000000 },
     { Stufe: "", anteil: 1000000 }
   ];
@@ -622,6 +623,14 @@ export class StartComponent implements OnInit {
         }
 
         // Korrektur Durchimpfung abgeschlossen
+        // Nötig durch AZ Problem, ohne AZ unnötig.
+        if (topush['patienten_durchgeimpft']>=67.86*1e6 && vacckids==false){
+          topush['patienten_durchgeimpft']=67.86*1e6;
+        }
+        if (topush['Verimpfte Erst-Dosen'] >=67.86*1e6 && vacckids==false){
+          topush['Verimpfte Erst-Dosen'] =67.86*1e6;
+        }
+        // Berechnung Impfquote
         topush['Anteil Durchimpfung'] = 100 * (topush['patienten_durchgeimpft'] / topush['population']);
         topush['Anteil Erst-Dosis'] = 100 * (topush['Verimpfte Erst-Dosen'] / topush['population']);
         finalresult.push(topush)
