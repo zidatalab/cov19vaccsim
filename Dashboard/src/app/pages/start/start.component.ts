@@ -603,13 +603,16 @@ export class StartComponent implements OnInit {
           this.sumArray(this.getValues(input_zweit, 'dosen_verfuegbar')) +
           this.sumArray(this.getValues(input_erst, 'dosen_verfuegbar_initial'));
         topush['Verimpfte Dosen'] =
-          this.sumArray(this.getValues(input_erst, 'impfungen')) +
-          this.sumArray(this.getValues(input_zweit, 'impfungen'));
+          Math.round(this.sumArray(this.getValues(input_erst, 'impfungen')) +
+          this.sumArray(this.getValues(input_zweit, 'impfungen')));
+        topush['Zweit-Dosen'] =
+        Math.round(this.sumArray(this.getValues(input_zweit, 'impfungen_zweit')));
+        topush['Erst-Dosen'] =topush['Verimpfte Dosen']-topush['Zweit-Dosen'];
         topush['Verimpfte Erst-Dosen'] =
-          this.sumArray(this.getValues(input_erst, 'impfungen_erst_kum'));
+          Math.round(this.sumArray(this.getValues(input_erst, 'impfungen_erst_kum')));        
         for (let thehst of kwall1hersteller) {
           topush['Erst: ' + thehst] = this.filterArray(input_erst, 'hersteller', thehst)[0]['impfungen'];
-        }
+        }        
         topush['Auslastung'] = 100 * (topush['Verimpfte Dosen'] / kapazitaet);
         topush['Unverimpfte Dosen'] = this.sumArray(this.getValues(input_erst, 'dosenspeicher'));
         topush['patienten_durchgeimpft'] =
