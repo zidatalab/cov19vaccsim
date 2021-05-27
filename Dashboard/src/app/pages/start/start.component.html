@@ -447,6 +447,7 @@
 
                         <div *ngFor="let group of this.risktimes_firstdose" fxFlex.lt-md=100>
                             <p class="mat-caption">
+                                <ng-container *ngIf="(group.Stufe<7) || (group.Stufe==7 && this.params.bntjgdliche==true)">
                                 <span *ngIf="group.Datum!='nie' && group.Datum!='fertig'" class="primarycolor bignum"
                                     style="font-size: 2rem;">
                                     {{group.Datum | date : 'dd.M.'}} </span>
@@ -465,6 +466,7 @@
                                 <span *ngIf="group.Stufe==7 && this.params.bntjgdliche==true">Kinder und
                                     Jugendliche<span fxHide.lt-md="true"><br>
                                         12 bis 17 Jahre</span> </span>
+                                </ng-container>
 
 
                             </p>
@@ -479,6 +481,7 @@
                     <div fxLayout="row wrap" fxLayoutGap="1rem" fxFlex=100>
 
                         <div *ngFor="let group of this.risktimes" fxFlex.lt-md=100>
+                            <ng-container *ngIf="(group.Stufe<7) || (group.Stufe==7 && this.params.bntjgdliche==true)">
                             <p class="mat-caption">
                                 <span *ngIf="group.Datum!='nie' && group.Datum!='fertig'" class="accentcolor bignum"
                                     style="font-size: 2rem;">
@@ -499,6 +502,7 @@
 
 
                             </p>
+                        </ng-container>
                         </div>
                     </div>
 
