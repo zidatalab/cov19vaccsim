@@ -21,6 +21,9 @@ export class AppComponent {
 
   ngOnInit() {
     this.today = new Date();
+    if (!this.loginoption){
+      localStorage.clear();
+    }
     this._auth.currentUser.subscribe(data => {
       if (data){
         this.loginstatus = true;
