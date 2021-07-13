@@ -51,7 +51,9 @@
                             Informationen zur Pandemie erhalten Sie bei
                             den <a href="https://www.zidatasciencelab.de/covid19dashboard/Start"><strong>Zi-Frühindikatoren
                                     zu
-                                    COVID-19</strong></a>.
+                                    COVID-19</strong></a>.<br><br> <span class="accentcolor"><strong><em>Der weitere Verlauf der Impfkampagne hängt mittlerweile weniger stark von der 
+                                    Impfstoffverfügbarkeit und Impfkapazität als in der ersten Jahreshälfte ab. Diese Simulation wird darum aktuell noch aktualisiert aber nicht mehr 
+                                    weiterentwickelt und perspektivisch durch themenspezifische Sonderauswertungen des <a href="https://www.zi.de">Zi</a> ersetzt.</em></strong></span>
                         </p>
 
                         <mat-form-field color="accent" appearance="outline">
@@ -214,7 +216,7 @@
                                     </p>
                                 </div>
                             </div>
-                            <div class="mat-padding">
+<!--                             <div class="mat-padding">
                                 <div>
                                     <p>
                                         <mat-slide-toggle [(ngModel)]="this.simple_alle_zulassen"
@@ -223,7 +225,7 @@
                                         </mat-slide-toggle>
                                     </p>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="mat-padding">
                                 <p>
                                     <mat-slide-toggle [(ngModel)]="this.ignorealter"
@@ -330,7 +332,7 @@
                                     </p>
                                 </div>
                             </div>
-                            <div fxFlex=30 fxFlex.lt-md=100>
+                            <!-- <div fxFlex=30 fxFlex.lt-md=100>
                                 <h3><strong>Zulassung</strong></h3>
                                 <div>
                                     <span>Art der Impfstoffe:</span>
@@ -368,7 +370,7 @@
                                     </p>
 
                                 </div>
-                            </div>
+                            </div> -->
                             <div fxFlex=30 fxFlex.lt-md=100>
                                 <h3><strong>Sonstiges</strong></h3>
                                 <div>
@@ -447,25 +449,29 @@
 
                         <div *ngFor="let group of this.risktimes_firstdose" fxFlex.lt-md=100>
                             <p class="mat-caption">
-                                <ng-container *ngIf="(group.Stufe<7) || (group.Stufe==7 && this.params.bntjgdliche==true)">
-                                <span *ngIf="group.Datum!='nie' && group.Datum!='fertig'" class="primarycolor bignum"
-                                    style="font-size: 2rem;">
-                                    {{group.Datum | date : 'dd.M.'}} </span>
-                                <span *ngIf="group.Datum=='nie'" class="primarycolor bignum" style="font-size: 2rem;">
-                                    später </span>
-                                <span *ngIf="group.Datum=='fertig'" class="primarycolor bignum"
-                                    style="font-size: 2rem;">
-                                    ✓</span>
-                                <span fxHide.lt-md="true"><br></span>
-                                <span *ngIf="group.Stufe<6">Risikostufe {{group.Stufe}}<span fxHide.lt-md="true"><br>
-                                        ({{group['Anteil']*100 | number:'1.0-0'}}% geimpft)</span>
-                                </span>
-                                <span *ngIf="group.Stufe==6">Risikostufe {{group.Stufe}}<span fxHide.lt-md="true"><br>
-                                        Bevölkerung 18+ Jahre</span>
-                                </span>
-                                <span *ngIf="group.Stufe==7 && this.params.bntjgdliche==true">Kinder und
-                                    Jugendliche<span fxHide.lt-md="true"><br>
-                                        12 bis 17 Jahre</span> </span>
+                                <ng-container
+                                    *ngIf="(group.Stufe<7) || (group.Stufe==7 && this.params.bntjgdliche==true)">
+                                    <span *ngIf="group.Datum!='nie' && group.Datum!='fertig'"
+                                        class="primarycolor bignum" style="font-size: 2rem;">
+                                        {{group.Datum | date : 'dd.M.'}} </span>
+                                    <span *ngIf="group.Datum=='nie'" class="primarycolor bignum"
+                                        style="font-size: 2rem;">
+                                        später </span>
+                                    <span *ngIf="group.Datum=='fertig'" class="primarycolor bignum"
+                                        style="font-size: 2rem;">
+                                        ✓</span>
+                                    <span fxHide.lt-md="true"><br></span>
+                                    <span *ngIf="group.Stufe<6">Risikostufe {{group.Stufe}}<span
+                                            fxHide.lt-md="true"><br>
+                                            ({{group['Anteil']*100 | number:'1.0-0'}}% geimpft)</span>
+                                    </span>
+                                    <span *ngIf="group.Stufe==6">Risikostufe {{group.Stufe}}<span
+                                            fxHide.lt-md="true"><br>
+                                            Bevölkerung 18+ Jahre</span>
+                                    </span>
+                                    <span *ngIf="group.Stufe==7 && this.params.bntjgdliche==true">Kinder und
+                                        Jugendliche<span fxHide.lt-md="true"><br>
+                                            12 bis 17 Jahre</span> </span>
                                 </ng-container>
 
 
@@ -482,27 +488,32 @@
 
                         <div *ngFor="let group of this.risktimes" fxFlex.lt-md=100>
                             <ng-container *ngIf="(group.Stufe<7) || (group.Stufe==7 && this.params.bntjgdliche==true)">
-                            <p class="mat-caption">
-                                <span *ngIf="group.Datum!='nie' && group.Datum!='fertig'" class="accentcolor bignum"
-                                    style="font-size: 2rem;">
-                                    {{group.Datum | date : 'dd.M.'}} </span>
-                                <span *ngIf="group.Datum=='nie'" class="accentcolor bignum" style="font-size: 2rem;">
-                                    später </span>
-                                <span *ngIf="group.Datum=='fertig'" class="accentcolor bignum" style="font-size: 2rem;">
-                                    ✓ </span>
-                                <span fxHide.lt-md="true"><br></span>
-                                <span *ngIf="group.Stufe<6">Risikostufe {{group.Stufe}}<span fxHide.lt-md="true"><br>
-                                        ({{group['Anteil']*100 | number:'1.0-0'}}% geimpft)</span>
-                                </span>
-                                <span *ngIf="group.Stufe==6">Risikostufe {{group.Stufe}}<span fxHide.lt-md="true"><br>
-                                        Bevölkerung 18+ Jahre</span></span>
-                                        <span *ngIf="group.Stufe==7 && this.params.bntjgdliche==true">Kinder und Jugendliche<span fxHide.lt-md="true"><br>
+                                <p class="mat-caption">
+                                    <span *ngIf="group.Datum!='nie' && group.Datum!='fertig'" class="accentcolor bignum"
+                                        style="font-size: 2rem;">
+                                        {{group.Datum | date : 'dd.M.'}} </span>
+                                    <span *ngIf="group.Datum=='nie'" class="accentcolor bignum"
+                                        style="font-size: 2rem;">
+                                        später </span>
+                                    <span *ngIf="group.Datum=='fertig'" class="accentcolor bignum"
+                                        style="font-size: 2rem;">
+                                        ✓ </span>
+                                    <span fxHide.lt-md="true"><br></span>
+                                    <span *ngIf="group.Stufe<6">Risikostufe {{group.Stufe}}<span
+                                            fxHide.lt-md="true"><br>
+                                            ({{group['Anteil']*100 | number:'1.0-0'}}% geimpft)</span>
+                                    </span>
+                                    <span *ngIf="group.Stufe==6">Risikostufe {{group.Stufe}}<span
+                                            fxHide.lt-md="true"><br>
+                                            Bevölkerung 18+ Jahre</span></span>
+                                    <span *ngIf="group.Stufe==7 && this.params.bntjgdliche==true">Kinder und
+                                        Jugendliche<span fxHide.lt-md="true"><br>
                                             12 bis 17 Jahre</span></span>
 
 
 
-                            </p>
-                        </ng-container>
+                                </p>
+                            </ng-container>
                         </div>
                     </div>
 
