@@ -606,7 +606,7 @@
                     <h2>Abgeschlossene Immunisierungen <span *ngIf="this.params.anteil_impfbereit<1.0"> der Impfwilligen
                         </span></h2>
                     <div>
-                        <app-plot [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 40, b: 30, t: 0 }"
+                        <app-plot style="background-color: orange;" [(data)]="this.new_simresult" [custommargins]="{ l: 0, r: 40, b: 30, t: 0 }"
                             xtickformat="%d.%m.<br>%Y" xvalue="date" [colorscheme]="['#196bad']"
                             [outcomes]="['patienten_durchgeimpft']" plottype="area">
                         </app-plot>
