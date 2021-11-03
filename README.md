@@ -1,3 +1,5 @@
+# PROJECT IS INACTIVE
+
 # Prototype of a Zi Dashboard based solely on Angular
 
 To install [nodejs](https://nodejs.org/en/download/) and [angular-cli](https://cli.angular.io/) needs to be installed on the system.
